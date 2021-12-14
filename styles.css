@@ -1,0 +1,268 @@
+*{
+  box-sizing: border-box;
+}
+
+body{
+  margin:0;
+  padding:0;
+  background-image:url("./images/bkg.jpg")
+}
+/* nav bar */
+.navbar{
+  display:flex;;
+  justify-content:space-between;
+  align-items:center;
+  background-color:#dc5d62;
+  color:#F7F6F2;
+  font-family: 'Montserrat', sans-serif;
+
+}
+
+.brand-title{
+  font-size:2rem;
+  margin:0.5rem;
+}
+
+.navbar-links ul {
+  margin:0;
+  padding:0;
+  display:flex;
+}
+
+.navbar-links li{
+  list-style:none;
+}
+
+.navbar-links li a{
+  text-decoration:none;
+  color:white;
+  padding:1rem;
+  display:block;
+}
+
+.navbar-links li:hover{
+  background-color:#38A3A5;
+}
+
+.log{
+  background-color:#38A3A5 ;
+}
+
+.toggle-button{
+  position:absolute;
+  top:.75rem;
+  right:1rem;
+  display:none;
+  flex-direction:column;
+  justify-content:space-between;
+  width:30px;
+  height:21px;
+}
+
+.toggle-button .bar{
+  height:3px;
+  width:100%;
+  background-color:white;
+  border-radius:10px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #dc5d62;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: #dc5d62;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.drop-menu:hover .dropdown-content {
+  display: block;
+}
+
+
+
+/* container for card*/
+.container{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+/* card */
+.card{
+  background-color: rgba(255, 255, 255, .15);
+   backdrop-filter: blur(5px);
+  width:290px;
+  margin:10px;
+  border-radius:15px;
+  text-align:center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.card-image img{
+  height: 200px;
+  width:100%;
+  margin-bottom: 15px;
+  background-size:cover;
+  border-radius:15px 15px 0 0;
+}
+
+.card p{
+  padding:10px;
+}
+.card a{
+
+  margin-bottom:0;
+  background-color:#dc5d62;
+  color:white;
+  padding:15px 20px;
+  display:block;
+  text-align:center;
+  margin: 20px 50px;
+  text-decoration: none;
+  border-radius:10px;
+}
+
+.card:hover{
+  background-color:#38A3A5;
+  color:white;
+  cursor: pointer;
+  transform: sclae(1.03);
+  transition:all 1s ease;
+
+}
+
+
+/* mobile */
+@media only screen and (max-width: 600px) {
+  /* nav bar */
+  .toggle-button{
+    display:flex;
+  }
+
+  .navbar-links{
+    display:none;
+    width:100%;
+  }
+
+  .navbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .navbar-links ul{
+    width:100%;
+    flex-direction:column;
+  }
+
+  .navbar-links li{
+    text-align:center;
+  }
+
+  .navbar-links.active{
+    display:flex;
+  }
+
+  .log{
+    display:none;
+  }
+
+  /* card */
+
+  .card{
+    width:70%;
+  }
+
+  /* contact */
+
+
+}
+
+
+/* contact page */
+.contact{
+  width:70%;
+  height:50vh;
+  background-color:rgba(255, 255, 255, .15);
+  margin-left:auto;
+  margin-right:auto;
+
+}
+.heading{
+  color:#F7F7F7;
+  margin-left:2rem;
+}
+
+form label{
+  font-size:20px;
+  color:#dc5d62;
+  font-family: 'Montserrat', sans-serif;
+}
+
+form input[type="text"]{
+    background-color:rgba(255, 255, 255, .15);
+    color:#38A3A5;
+}
+
+form input[type="email"]{
+    background-color:rgba(255, 255, 255, .15);
+    color:#38A3A5;
+}
+
+#exampleFormControlTextarea1{
+    background-color:rgba(255, 255, 255, .15);
+    color:#38A3A5;
+}
+.btn{
+  display:flex;
+  justify-content:center;
+}
+.btn button{
+  width:10rem;
+  border-radius:7px;
+  background-color:#dc5d62;
+  color:white;
+  border: 1px solid white;
+}
+.phone{
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width:60px;
+  height:60px;
+  background-color:#dc5d62;
+  border-radius:50px;
+}
+
+.phone i{
+  margin-top:0.75rem;
+  margin-left:0.7rem;
+}
+
+.dropup-content {
+  display: none;
+  position: absolute;
+  background-color: rgba(255, 255, 255, .15);
+  min-width: 160px;
+  bottom: 50px;
+  z-index: 1;
+}
+.dropup-content a {
+  color: #38A3A5;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.dropup-content a:hover {background-color: #ccc}
+
+.phone:hover .dropup-content {
+  display: block;
+}

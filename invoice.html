@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Invoice</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="./invoice.css">
+</head>
+
+<body>
+  <div class="nav-bar">  
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top py-5">
+    <a class="navbar-brand" href="https://www.decentcare.com.au"> <h1 class ="dc">Decent Care</h1> </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="./index.html"><h3>Forms</h3><span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link" href="./contact.html"> <h3>Contact</h3> <span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Download Forms
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="https://drive.google.com/file/d/1fypqphi58uo-OPEJQGEwUzRCsnUNGgiI/view?usp=sharing"> <h5>Complaint Form</h5> </a>
+            <a class="dropdown-item" href="https://drive.google.com/file/d/1wkvr2Kjy2--Uay-XJROIoIyiGqkCrHUX/view?usp=sharing"> <h5>Hazard Form</h5> </a>
+            <a class="dropdown-item" href="https://drive.google.com/file/d/1lx6aFSwP4QMS3oYwDk0EZnqG8GtiKt6m/view?usp=sharing"> <h5>Incident Report</h5></a>
+            <a class="dropdown-item" href="https://drive.google.com/file/d/1MlVzKcbBuBIfCbhPis_UxQHofenlCyST/view?usp=sharing"> <h5>Conflict Of Interest</h5></a>
+            <a class="dropdown-item" href="https://drive.google.com/file/d/1t95OJ0K1G9kLUB1EbLi52kfJqK4rMrEC/view?usp=sharing"> <h5>Goal Plan</h5></a>
+            <a class="dropdown-item" href="https://drive.google.com/file/d/1p-eRroVjnOEc3dre3LFf-SRQroU342MO/view?usp=sharing"> <h5>Finacial Transaction</h5>  </a>
+            <a class="dropdown-item" href="https://drive.google.com/file/d/1hBU2_nFdUVQQKTnOJW4O3DBVGhX7oEkD/view?usp=sharing"> <h5>Media Release</h5>  </a>
+
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="./importantNumber.html"><b>Important Numbers</b></a>
+          </div>
+        </li>
+
+  </nav>
+ </div>
+
+
+  <div class="print">
+
+
+    <div class="main">
+
+      <div class="row">
+        <div class="col col-lg-6">
+          <h2>TAX INVOICE</h2>
+          <label for="invoice-numbe">Invoice Number</label>
+          <input class="text-line invoNum" id="invoice-number" type="number"  value="">
+          <p id="date">10/10/2021</p>
+        </div>
+        <div class="col col-lg-6 col-md-12 col-sm-12">
+          <table class="table">
+            <tr>
+              <td> <label for="name">Name</label> </td>
+              <td><input class="form-control" id="name" type="text" name="name" value="" placeholder="NAME"></td>
+            </tr>
+            <tr>
+              <td> <label for="">Address</label> </td>
+              <td> <input class="form-control" id="address" type="text" name="address" value="" placeholder="Address"> </td>
+            </tr>
+            <tr>
+              <td> <label for="">ABN</label> </td>
+              <td> <input class="form-control" id="abn" type="text" name="abn" value="" placeholder="ABN"> </td>
+            </tr>
+            <tr>
+              <td> <label for="">Phone</label> </td>
+              <td> <input class="form-control" id="phone" type="text" name="phone" value="" placeholder="Phone"> </td>
+            </tr>
+            <tr>
+              <td> <label for="">Email</label> </td>
+              <td> <input class="form-control" id="email" type="email" name="email" value="" placeholder="Email"> </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="" for="inlineFormCustomSelect">BSB</label>
+              </td>
+              <td>
+                <input class=" form-control " id="bsb" type="text" name="name" value="" placeholder="BSB">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="" for="inlineFormCustomSelect">Account Number</label>
+              </td>
+              <td>
+                <input class=" form-control " id="accNum" type="text" name="name" value="" placeholder="Account Number">
+              </td>
+            </tr>
+          </table>
+
+
+      </div>
+
+      <div class="container">
+        <h5>Bill To</h5>
+        <p>Decent Care Pty Ltd</p>
+        <p>3/48 McCrae Street, Dandenong, Vic 3175</p>
+        <p>ABN: 71 628 245 821</p>
+        <p>Phone: 03 9706 7619</p>
+      </div>
+
+
+    </div>
+    <div class="container mt-2">
+      <div class="week">
+        <label for="" class="weekInput" style="color:#1F1D36">Week Start</label>
+        <input type="date" name="startDate" value="" placeholder="week start" id="weekStart">
+        <label for="" class="weekInput" style="color:#1F1D36">Week End</label>
+        <input type="date" name="startDate" value="" placeholder="week end" id="weekEnd">
+
+      </div>
+    </div>
+
+    <div class="second">
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Day</th>
+            <th scope="col">Description</th>
+            <th scope="col">Hours</th>
+            <th scope="col">Price</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <select class="custom-select mr-sm-2" id="day1">
+                <option selected>Select Day</option>
+                <option value="weekday">Weekday</option>
+                <option value="sat">Saturday</option>
+                <option value="sun">Sunday</option>
+                <option value="publicHoliday">Public Holiday</option>
+              </select>
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="description1">
+                <option selected>Select Item</option>
+                <option value="comAccess">Community Access</option>
+                <option value="selfCare">Assistance with self-care</option>
+                <option value="Cleaning">Cleaning</option>
+                <option value="commAccesslvl2">Community Access lvl2</option>
+                <option value="selfCarelvl2">Self-Care lvl2</option>
+                <option value="commAccesslvl3">Community Access lvl3</option>
+                <option value="selfCarelvl3">Self-Care lvl3</option>
+              </select>
+            </td>
+            <td>
+              <input type="number" name="hours" id="hours1" value="">
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="price1">
+                <option selected>0</option>
+                <option value="30">30</option>
+                <option value="32">32</option>
+                <option value="34">34</option>
+                <option value="36">36</option>
+                <option value="40">40</option>
+                <option value="42">42</option>
+                <option value="44">44</option>
+                <option value="46">46</option>
+                <option value="48">48</option>
+                <option value="50">50</option>
+                <option value="52">52</option>
+                <option value="54">54</option>
+
+              </select>
+            </td>
+            <td>
+              <h5 id="total1">000</h5>
+            </td>
+          </tr>
+          <!-- day2 -->
+          <tr>
+            <td>
+              <select class="custom-select mr-sm-2" id="day2">
+                <option selected>Select Day</option>
+                <option value="weekday">Weekday</option>
+                <option value="sat">Saturday</option>
+                <option value="sun">Sunday</option>
+                <option value="publicHoliday">Public Holiday</option>
+              </select>
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="description2">
+                <option selected>Select Item</option>
+                <option value="comAccess">Community Access</option>
+                <option value="selfCare">Assistance with self-care</option>
+                <option value="Cleaning">Cleaning</option>
+                <option value="commAccesslvl2">Community Access lvl2</option>
+                <option value="selfCarelvl2">Self-Care lvl2</option>
+                <option value="commAccesslvl3">Community Access lvl3</option>
+                <option value="selfCarelvl3">Self-Care lvl3</option>
+              </select>
+            </td>
+            <td>
+              <input type="number" name="hours" id="hours2" value="">
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="price2">
+                <option selected>0</option>
+                <option value="30">30</option>
+                <option value="32">32</option>
+                <option value="34">34</option>
+                <option value="36">36</option>
+                <option value="40">40</option>
+                <option value="42">42</option>
+                <option value="44">44</option>
+                <option value="46">46</option>
+                <option value="48">48</option>
+                <option value="50">50</option>
+                <option value="52">52</option>
+                <option value="54">54</option>
+
+              </select>
+            </td>
+            <td>
+              <h5 id="total2">000</h5>
+            </td>
+          </tr>
+
+          <!-- day3 -->
+          <tr>
+            <td>
+              <select class="custom-select mr-sm-2" id="day3">
+                <option selected>Select Day</option>
+                <option value="weekday">Weekday</option>
+                <option value="sat">Saturday</option>
+                <option value="sun">Sunday</option>
+                <option value="publicHoliday">Public Holiday</option>
+              </select>
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="description3">
+                <option selected>Select Item</option>
+                <option value="comAccess">Community Access</option>
+                <option value="selfCare">Assistance with self-care</option>
+                <option value="Cleaning">Cleaning</option>
+                <option value="commAccesslvl2">Community Access lvl2</option>
+                <option value="selfCarelvl2">Self-Care lvl2</option>
+                <option value="commAccesslvl3">Community Access lvl3</option>
+                <option value="selfCarelvl3">Self-Care lvl3</option>
+              </select>
+            </td>
+            <td>
+              <input type="number" name="hours" id="hours3" value="">
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="price3">
+                <option selected>0</option>
+                <option value="30">30</option>
+                <option value="32">32</option>
+                <option value="34">34</option>
+                <option value="36">36</option>
+                <option value="40">40</option>
+                <option value="42">42</option>
+                <option value="44">44</option>
+                <option value="46">46</option>
+                <option value="48">48</option>
+                <option value="50">50</option>
+                <option value="52">52</option>
+                <option value="54">54</option>
+
+              </select>
+            </td>
+            <td>
+              <h5 id="total3">000</h5>
+            </td>
+          </tr>
+
+          <!-- day 4 -->
+          <tr>
+            <td>
+              <select class="custom-select mr-sm-2" id="day4">
+                <option selected>Select Day</option>
+                <option value="weekday">Weekday</option>
+                <option value="sat">Saturday</option>
+                <option value="sun">Sunday</option>
+                <option value="publicHoliday">Public Holiday</option>
+              </select>
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="description4">
+                <option selected>Select Item</option>
+                <option value="comAccess">Community Access</option>
+                <option value="selfCare">Assistance with self-care</option>
+                <option value="Cleaning">Cleaning</option>
+                <option value="commAccesslvl2">Community Access lvl2</option>
+                <option value="selfCarelvl2">Self-Care lvl2</option>
+                <option value="commAccesslvl3">Community Access lvl3</option>
+                <option value="selfCarelvl3">Self-Care lvl3</option>
+              </select>
+            </td>
+            <td>
+              <input type="number" name="hours" id="hours4" value="">
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="price4">
+                <option selected>0</option>
+                <option value="30">30</option>
+                <option value="32">32</option>
+                <option value="34">34</option>
+                <option value="36">36</option>
+                <option value="40">40</option>
+                <option value="42">42</option>
+                <option value="44">44</option>
+                <option value="46">46</option>
+                <option value="48">48</option>
+                <option value="50">50</option>
+                <option value="52">52</option>
+                <option value="54">54</option>
+
+              </select>
+            </td>
+            <td>
+              <h5 id="total4">000</h5>
+            </td>
+          </tr>
+
+          <!-- day 5 -->
+          <tr>
+            <td>
+              <select class="custom-select mr-sm-2" id="day5">
+                <option selected>Select Day</option>
+                <option value="weekday">Weekday</option>
+                <option value="sat">Saturday</option>
+                <option value="sun">Sunday</option>
+                <option value="publicHoliday">Public Holiday</option>
+              </select>
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="description5">
+                <option selected>Select Item</option>
+                <option value="comAccess">Community Access</option>
+                <option value="selfCare">Assistance with self-care</option>
+                <option value="Cleaning">Cleaning</option>
+                <option value="commAccesslvl2">Community Access lvl2</option>
+                <option value="selfCarelvl2">Self-Care lvl2</option>
+                <option value="commAccesslvl3">Community Access lvl3</option>
+                <option value="selfCarelvl3">Self-Care lvl3</option>
+              </select>
+            </td>
+            <td>
+              <input type="number" name="hours" id="hours5" value="">
+            </td>
+            <td>
+              <select class="custom-select mr-sm-2" id="price5">
+                <option selected>0</option>
+                <option value="30">30</option>
+                <option value="32">32</option>
+                <option value="34">34</option>
+                <option value="36">36</option>
+                <option value="40">40</option>
+                <option value="42">42</option>
+                <option value="44">44</option>
+                <option value="46">46</option>
+                <option value="48">48</option>
+                <option value="50">50</option>
+                <option value="52">52</option>
+                <option value="54">54</option>
+
+              </select>
+            </td>
+            <td>
+              <h5 id="total5">000</h5>
+            </td>
+          </tr>
+        </tbody>
+
+        <thead>
+          <tr>
+            <th scope="col">Participant Name</th>
+            <th scope="col">Additional expense description</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- additional expense 1 -->
+          <tr>
+            <td>
+              <input type="text" class="form-control" id="particiapntName1" placeholder="Participant Name">
+            </td>
+            <td>
+              <input type="text" class="form-control" id="additionalDescription1" placeholder="Description">
+            </td>
+            <td>
+              <input type="text" class="form-control" id="expense1" placeholder="Amount" value="">
+            </td>
+          </tr>
+          <!-- additional expense 2 -->
+          <tr>
+            <td>
+              <input type="text" class="form-control" id="particiapntName1" placeholder="Participant Name">
+            </td>
+            <td>
+              <input type="text" class="form-control" id="additionalDescription1" placeholder="Description">
+            </td>
+            <td>
+              <input type="text" class="form-control" id="expense2" placeholder="Amount" value="">
+            </td>
+          </tr>
+          <!-- additional expense 3 -->
+          <tr>
+            <td>
+              <input type="text" class="form-control" id="particiapntName1" placeholder="Participant Name">
+            </td>
+            <td>
+              <input type="text" class="form-control" id="additionalDescription1" placeholder="Description">
+            </td>
+            <td>
+              <input type="text" class="form-control" id="expense3" placeholder="Amount" value="">
+            </td>
+          </tr>
+        </tbody>
+        <tr>
+          <td colspan="4">
+            <h3 class="total">Total</h3>
+          </td>
+          <td ><h3 id="sum">0000</h3></td>
+        </tr>
+      </table>
+
+
+
+    </div>
+    </div>
+    <div class="week">
+      <button type="button" id="calculate" class="btn btn-success">Calculate</button>
+      <button type="button" id="print" class="btn btn-danger">Print PDF</button>
+    </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="invoice.js" charset="utf-8"></script>
+
+  </script>
+</body>
+
+</html>

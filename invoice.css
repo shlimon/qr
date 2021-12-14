@@ -1,0 +1,89 @@
+body{
+
+  background-color:#1F1D36;
+}
+
+.print{
+  margin-top:12rem;
+}
+
+.main{
+  width:90%;
+  background-color:#f5f5ef;
+  margin-left:auto;
+  margin-right:auto;
+
+}
+/* .text-line {
+    background-color: transparent;
+    color: balck;
+    outline: none;
+    outline-style: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: solid #678983 1px;
+    padding: 3px 10px;
+} */
+.second{
+  margin-left:auto;
+  margin-right:auto;
+}
+.width{
+  width:30rem;
+}
+.invoNum{
+  width:10rem;
+}
+label{
+  margin:0;
+}
+.input-width{
+  width:15rem;
+}
+.abn{
+  margin-top: 5px;
+}
+.weekInput{
+  color:white;
+}
+p{
+  margin-top:1px;
+  margin-bottom:1px;
+}
+.second{
+  width:90%;
+  background-color:#EEEEEE;
+  margin-top:4px;
+
+}
+.week{
+  width:fit-content;
+  margin-right:auto;
+  margin-left:auto;
+}
+.total{
+  text-align:right;
+  color:green;
+}
+
+.contact{
+  margin-top:9rem;;
+}
+
+@media print{
+  .week{
+    display:none;
+  }
+  .nav-bar{
+    display:none;
+  }
+  .print{
+    margin-top:0;
+    padding-top:0;
+  }
+  .main{
+    margin-top:0;
+    padding-top:0;
+  }
+}
