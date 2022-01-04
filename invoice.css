@@ -72,9 +72,9 @@ p{
 }
 
 @media print{
-/*   .week{
+ .btn{
     display:none;
-  } */
+  } 
   .nav-bar{
     display:none;
   }
