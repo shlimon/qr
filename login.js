@@ -13,6 +13,9 @@ let password = $("#inputPassword").val();
  else if( email === "baljeet@decentcare.com.au" && password === "BaljeetTL2022"){
    window.open("./staff.html");
  }
+ else if( email === "priyanka@decentcare.com.au" && password === "PriyankaSC2022"){
+   window.open("./staff.html");
+ }
  else if( email === "julia@decentcare.com.au" && password === "JuliaSC2022"){
    window.open("./staff.html");
  }
