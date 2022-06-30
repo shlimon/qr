@@ -71,6 +71,8 @@ p{
   margin-top:9rem;;
 }
 
+
+
 @media print{
  .btn{
     display:none;
