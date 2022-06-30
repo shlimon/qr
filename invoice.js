@@ -103,9 +103,12 @@ $("#calculate").click(function() {
     var addExp1 = Number($("#expense1").val());
     var addExp2 = Number($("#expense2").val());
     var addExp3 = Number($("#expense3").val());
-    var addExp3 = Number($("#expense4").val());
-    var addExp3 = Number($("#expense5").val());
-    var addExp3 = Number($("#expense6").val());
+    var addExp4 = Number($("#expense4").val());
+    var addExp5 = Number($("#expense5").val());
+    var addExp6 = Number($("#expense6").val());
+    
+
+    
 
     var totalExp = addExp1 + addExp2 + addExp3 + addExp4 + addExp5 + addExp6 ;
 
