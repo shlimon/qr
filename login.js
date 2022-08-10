@@ -47,7 +47,13 @@ $("#login").click(function () {
     password === "BaljeetPG2022"
   ) {
     window.open("./management.html");
-  } else {
+  } else if (
+    email === "udi@decentcare.com.au" &&
+    password === "UdiPM2022"
+  ) {
+    window.open("./management.html");
+  } 
+  else {
     $(".error").css("display", "block");
   }
 });
