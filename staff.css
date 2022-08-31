@@ -40,9 +40,16 @@ body {
   padding: 10px;
 }
 
+.main{
+  margin-left: 300px;
+}
+
 @media screen and (max-height: 450px) {
   .sidenav {
     padding-top: 15px;
+  }
+  .main{
+    margin-left: 15px;
   }
 
   .sidenav a {
