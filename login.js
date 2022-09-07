@@ -52,8 +52,13 @@ $("#login").click(function () {
     password === "UdiPM2022"
   ) {
     window.open("./management.html");
-  } 
+  } else if (email === "accounts@decentcare.com.au" && password === "Accounts2020"){
+    window.open("./accounts.html");
+  }
   else {
     $(".error").css("display", "block");
   }
 });
+
+
+
