@@ -55,7 +55,7 @@ $("#login").click(function () {
   } else if (email === "accounts@decentcare.com.au" && password === "Accounts2020"){
     window.open("./accounts.html");
   }else if (email === "samia@decentcare.com.au" && password === "SamiaSC2022"){
-    window.open("./accounts.html");
+    window.open("./supportCoordination.html");
   }else {
     $(".error").css("display", "block");
   }
