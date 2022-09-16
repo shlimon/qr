@@ -34,7 +34,7 @@ $("#login").click(function () {
     email === "arsen@decentcare.com.au" &&
     password === "ArsenPM2022"
   ) {
-    window.open("./management.html");
+    window.open("./Master.html");
   } else if (email === "qias@decentcare.com.au" && password === "QaisSC2022") {
     window.open("./supportCoordination.html");
   } else if (
