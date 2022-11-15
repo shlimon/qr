@@ -47,22 +47,26 @@ $("#login").click(function () {
     password === "BaljeetPG2022"
   ) {
     window.open("./management.html");
-  } else if (
-    email === "udi@decentcare.com.au" &&
-    password === "UdiPM2022"
-  ) {
+  } else if (email === "udi@decentcare.com.au" && password === "UdiPM2022") {
     window.open("./management.html");
-  } else if (email === "accounts@decentcare.com.au" && password === "Accounts2020"){
+  } else if (
+    email === "accounts@decentcare.com.au" &&
+    password === "Accounts2020"
+  ) {
     window.open("./accounts.html");
-  }else if (email === "samia@decentcare.com.au" && password === "SamiaSC2022"){
+  } else if (
+    email === "samia@decentcare.com.au" &&
+    password === "SamiaSC2022"
+  ) {
     window.open("./supportCoordination.html");
-  }else if(email === "ibrahim@decentcare.com.au" && password === "IbrahimSC2022"){
+  } else if (
+    email === "ibrahim@decentcare.com.au" &&
+    password === "IbrahimSC2022"
+  ) {
     window.open("./supportCoordination.html");
-  }
-  else {
+  } else if (email === "anu@decentcare.com.au" && password === "AnuPM2022") {
+    window.open("./accounts.html");
+  } else {
     $(".error").css("display", "block");
   }
 });
-
-
-
