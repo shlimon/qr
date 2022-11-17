@@ -64,8 +64,13 @@ $("#login").click(function () {
     password === "IbrahimSC2022"
   ) {
     window.open("./supportCoordination.html");
+  } else if (
+    email === "helena@decentcare.com.au" &&
+    password === "HelenaSC2022"
+  ) {
+    window.open("./supportCoordination.html");
   } else if (email === "anu@decentcare.com.au" && password === "AnuPM2022") {
-    window.open("./accounts.html");
+    window.open("./s.html");
   } else {
     $(".error").css("display", "block");
   }
