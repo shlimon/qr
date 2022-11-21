@@ -1,58 +1,47 @@
 var today = new Date();
-var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var dd = String(today.getDate()).padStart(2, "0");
+var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
 var yyyy = today.getFullYear();
 
-today = dd + '/' + mm + '/' + yyyy;
+today = dd + "/" + mm + "/" + yyyy;
 
-
-
-
-
- var linvoice = Number(localStorage.getItem("invoiceNumber"));
-  linvoice++;
+var linvoice = Number(localStorage.getItem("invoiceNumber"));
+linvoice++;
 $("#invoice-number").val(linvoice);
 
-
-
-
-var name = ""
-var address = ""
-var abn = ""
-var phone = ""
-var email = ""
-var bsb = ""
-var account = ""
+var name = "";
+var address = "";
+var abn = "";
+var phone = "";
+var email = "";
+var bsb = "";
+var account = "";
 
 $("#date").text(today);
-var lName = localStorage.getItem("name")
+var lName = localStorage.getItem("name");
 name = $("#name").val(lName);
 
-var laddress = localStorage.getItem("address")
+var laddress = localStorage.getItem("address");
 address = $("#address").val(laddress);
 
-var labn = localStorage.getItem("abn")
+var labn = localStorage.getItem("abn");
 abn = $("#abn").val(labn);
 
-var lphone = localStorage.getItem("phone")
+var lphone = localStorage.getItem("phone");
 phone = $("#phone").val(lphone);
 
-var lemail = localStorage.getItem("email")
+var lemail = localStorage.getItem("email");
 email = $("#email").val(lemail);
 
-var lbsb = localStorage.getItem("bsb")
+var lbsb = localStorage.getItem("bsb");
 bsb = $("#bsb").val(lbsb);
 
-var laccount = localStorage.getItem("account")
+var laccount = localStorage.getItem("account");
 account = $("#accNum").val(laccount);
 
-
-
-$("#calculate").click(function() {
-
+$("#calculate").click(function () {
   invoiceNumber = Number($("#invoice-number").val());
-  localStorage.setItem("invoiceNumber",invoiceNumber );
-
+  localStorage.setItem("invoiceNumber", invoiceNumber);
 
   name = $("#name").val();
   localStorage.setItem("name", name);
@@ -71,10 +60,7 @@ $("#calculate").click(function() {
   var weekStart = $("#weekStart").val();
   var weekEnd = $("#weekEnd").val();
 
-
-  if (name === "" || address === "" || abn === "" || phone === "" || email === "" || bsb === "" || account === "" || weekStart === "" || weekEnd === "") {
-    alert("Please provide all the information")
-  } else {
+  function calcTotal() {
     var hour1 = Number($("#hours1").val());
     var price1 = Number($("#price1").val());
     var total1 = hour1 * price1;
@@ -106,21 +92,66 @@ $("#calculate").click(function() {
     var addExp4 = Number($("#expense4").val());
     var addExp5 = Number($("#expense5").val());
     var addExp6 = Number($("#expense6").val());
-    
 
-    
-
-    var totalExp = addExp1 + addExp2 + addExp3 + addExp4 + addExp5 + addExp6 ;
-
+    var totalExp = addExp1 + addExp2 + addExp3 + addExp4 + addExp5 + addExp6;
 
     var sum = total1 + total2 + total3 + total4 + total5 + totalExp;
 
-    $("#sum").text(sum);
+    return sum;
   }
 
-
+  if (
+    name === "" ||
+    address === "" ||
+    abn === "" ||
+    phone === "" ||
+    email === "" ||
+    bsb === "" ||
+    account === "" ||
+    weekStart === "" ||
+    weekEnd === ""
+  ) {
+    alert("Please provide all the information");
+  } else {
+    let checkBox = document.getElementById("gst");
+    if (checkBox.checked == true) {
+      let subtotal = calcTotal();
+      let gst = subtotal * 0.1;
+      let total = gst + subtotal;
+      $("#sum").text(subtotal);
+      $("#gst-calculated").text(gst);
+      $("#gst-total").text(total);
+    } else {
+      let subtotal = calcTotal();
+      $("#sum").text(subtotal);
+    }
+  }
 });
 
-$("#print").click(function(){
+function checkGST() {
+  let checkBox = document.getElementById("gst");
+
+  if (checkBox.checked == true) {
+    $(".total").hide();
+    $(".subtotal").show();
+    $("#gst-calculated").show();
+    $(".gst-calculated").show();
+    $(".gst-total").show();
+    $("#gst-total").show();
+
+    let subtotal = calcTotal();
+
+    $("#gst-total").text(total);
+  } else {
+    $(".total").show();
+    $(".subtotal").hide();
+    $("#gst-calculated").hide();
+    $(".gst-calculated").hide();
+    $(".gst-total").hide();
+    $("#gst-total").hide();
+  }
+}
+
+$("#print").click(function () {
   window.print();
-})
+});

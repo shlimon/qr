@@ -84,6 +84,12 @@
               <td> <input class="form-control" id="email" type="email" name="email" value="" placeholder="Email"> </td>
             </tr>
             <tr>
+              <td> <label for="">Registered For GST</label> </td>
+              <td><input type="checkbox" id="gst"  value="" onclick="checkGST()">
+                   <label for="gst"> YES </label>  
+              </td>
+            </tr>
+            <tr>
               <td>
                 <label class="" for="inlineFormCustomSelect">BSB</label>
               </td>
@@ -484,8 +490,21 @@
         <tr>
           <td colspan="4">
             <h3 class="total">Total</h3>
+            <h3 class="subtotal">Subtotal</h3>
           </td>
           <td ><h3 id="sum">0000</h3></td>
+        </tr>
+        <tr>
+          <td colspan="4" >
+            <h3 class="gst-calculated">GST</h3>
+          </td>
+          <td ><h3 id="gst-calculated">0000</h3></td>
+        </tr>
+        <tr>
+          <td colspan="4" >
+            <h3 class="gst-total">Total</h3>
+          </td>
+          <td ><h3 id="gst-total">0000</h3></td>
         </tr>
       </table>
 
