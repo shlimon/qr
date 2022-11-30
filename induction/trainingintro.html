@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="induction.css" />
+    <title>💥TRAINING</title>
+  </head>
+  <body>
+    <div class="nav">
+      <div class="back">
+        <a href="./induction.html"
+          ><img class="back-arrow" src="../images/back.png" alt="back"
+        /></a>
+      </div>
+    </div>
+
+    <div class="video-container">
+      <div class="console-container">
+        <span id="text"></span>
+        <div class="console-underscore" id="console">&#95;</div>
+      </div>
+      <div id="player"></div>
+
+      <a class="training-btn" id="bt" href="./inductionTraining.html"
+        >Start Training</a
+      >
+    </div>
+    <script src="http://www.youtube.com/player_api"></script>
+
+    <script>
+      // create youtube player https://youtu.be/X1h-QG3Fq5Y
+      var player;
+      function onYouTubePlayerAPIReady() {
+        player = new YT.Player("player", {
+          height: "500",
+          width: "1000",
+          videoId: "X1h-QG3Fq5Y",
+          events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+          },
+        });
+      }
+
+      // autoplay video
+      function onPlayerReady(event) {
+        event.target.pauseVideo();
+      }
+
+      // when video ends
+      function onPlayerStateChange(event) {
+        if (event.data === 0) {
+          document.getElementById("bt").style.display = "block";
+        }
+      }
+
+      // function([string1, string2],target id,[color1,color2])
+      consoleText(
+        [
+          "Hi There!!",
+          "Welcome to Decent Care Training",
+          "Watch the Video to proceed",
+        ],
+        "text",
+        ["tomato", "rebeccapurple", "lightblue"]
+      );
+
+      function consoleText(words, id, colors) {
+        if (colors === undefined) colors = ["#fff"];
+        var visible = true;
+        var con = document.getElementById("console");
+        var letterCount = 1;
+        var x = 1;
+        var waiting = false;
+        var target = document.getElementById(id);
+        target.setAttribute("style", "color:" + colors[0]);
+        window.setInterval(function () {
+          if (letterCount === 0 && waiting === false) {
+            waiting = true;
+            target.innerHTML = words[0].substring(0, letterCount);
+            window.setTimeout(function () {
+              var usedColor = colors.shift();
+              colors.push(usedColor);
+              var usedWord = words.shift();
+              words.push(usedWord);
+              x = 1;
+              target.setAttribute("style", "color:" + colors[0]);
+              letterCount += x;
+              waiting = false;
+            }, 1000);
+          } else if (letterCount === words[0].length + 1 && waiting === false) {
+            waiting = true;
+            window.setTimeout(function () {
+              x = -1;
+              letterCount += x;
+              waiting = false;
+            }, 1000);
+          } else if (waiting === false) {
+            target.innerHTML = words[0].substring(0, letterCount);
+            letterCount += x;
+          }
+        }, 120);
+        window.setInterval(function () {
+          if (visible === true) {
+            con.className = "console-underscore hidden";
+            visible = false;
+          } else {
+            con.className = "console-underscore";
+
+            visible = true;
+          }
+        }, 400);
+      }
+    </script>
+  </body>
+</html>

@@ -1,21 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="induction.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="induction.css" />
     <title>INDUCTION</title>
-</head>
-<body style="background-color: #3aa0f3 ;">
+  </head>
+  <body style="background-color: #3aa0f3">
     <div class="main">
-        <div class="bt">
-            <a class="link" href="./inductionTraining.html">DECENT CARE TRAINING MODULE</a>
+      <div class="projcard-container">
+        <div class="projcard projcard-blue" id="training">
+          <div class="projcard-innerbox">
+            <img class="projcard-img" src="./train/training.webp" />
+            <div class="projcard-textbox">
+              <div class="projcard-title">Decent Care e-Training Module</div>
+              <div class="projcard-subtitle">
+                Experience interactive learning
+              </div>
+              <div class="projcard-bar"></div>
+              <div class="projcard-description">
+                The online training will take between 2 -3 hrs to complete. Upon
+                successful completion fo your training you will be emailed a
+                certificate of completion. In order to complete the training you
+                will need to obtain 80%. You can attempt the training multiple
+                times.
+              </div>
+              <div class="projcard-tagbox">
+                <span class="projcard-tag"
+                  ><a style="color: #3aa0f3" href="./trainingintro.html"
+                    >Start</a
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="bt">
-            <a class="link" href="./uploader.html">DOCUMENT UPLOADER</a>
+        <div class="projcard projcard-red" id="uploader">
+          <div class="projcard-innerbox">
+            <img class="projcard-img" src="./train/upload.jpg" />
+            <div class="projcard-textbox">
+              <div class="projcard-title">Document Uploader</div>
+              <div class="projcard-subtitle">
+                Use the document uploader to upload all the documents
+              </div>
+              <div class="projcard-bar"></div>
+              <div class="projcard-description">
+                As per the NDIS guideline you will require to provide Decent
+                Care with list of documents. You will be able to access the
+                checklist in the Document uploader portal. If you are struggling
+                with obtaining certain documents feel free to call Decent Care
+                office at <b>03 9706 7619</b>.
+              </div>
+              <div class="projcard-tagbox">
+                <span class="projcard-tag" <span class="projcard-tag"
+                  ><a href="./trainingintro.html">Upload Documents</a></span
+                >
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</body>
+  </body>
+  <script>
+    document.getElementById("uploader").onclick = () => {
+      location.href = "./uploader.html";
+    };
+
+    document.getElementById("training").onclick = () => {
+      location.href = "./trainingintro.html";
+    };
+  </script>
 </html>
