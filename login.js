@@ -70,7 +70,7 @@ $("#login").click(function () {
   ) {
     window.open("./supportCoordination.html");
   } else if (email === "anu@decentcare.com.au" && password === "AnuPM2022") {
-    window.open("./s.html");
+    window.open("./accounts.html");
   } else {
     $(".error").css("display", "block");
   }
