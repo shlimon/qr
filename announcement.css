@@ -215,7 +215,7 @@ ul li input[type="checkbox"]:checked ~ i:after {
 }
 
 img {
-  width: 70%;
-  height: 30vw;
+  width: 60%;
+  height: 20vw;
   margin-left: auto;
 }
