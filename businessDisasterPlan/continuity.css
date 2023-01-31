@@ -11,6 +11,7 @@ body {
   display: flex;
   font-family: "Montserrat", sans-serif;
   color: #f7f6f2;
+  position: fixed;
 }
 
 img {
