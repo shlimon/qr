@@ -34,80 +34,103 @@
     </div>
 
     <div class="management">
-      <!-- Management Report -->
-      <div class="card" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Management Report</h5>
-
-          <a href="./staff/officeReport.html" class="btn btn-info">Fill in</a>
+      <!-- Monthly Management Meeting -->
+      <div class="card" id="managementMeeting" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/meeting.webp" alt="" />
+          <p>Monthly Management Meeting Report</p>
         </div>
       </div>
 
-      <!-- Staff Supervision -->
-      <div class="card" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Staff Supervision</h5>
-
-          <a href="./staff/staffSupervision.html" class="btn btn-info"
-            >Fill in</a
-          >
+      <!-- Monthly Supervision -->
+      <div class="card" id="supervision" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/supervision.webp" alt="" />
+          <p>Staff Supervision</p>
         </div>
       </div>
 
-      <!-- Staff Performace Review -->
-      <div class="card" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Staff Performance Review</h5>
-
-          <a href="./staff/staffPerformanceReview.html" class="btn btn-info"
-            >Fill in</a
-          >
+      <!-- Staff appraisal  -->
+      <div class="card" id="appraisal" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/appraisal.png" alt="" />
+          <p>Annual Staff Appraisal</p>
         </div>
       </div>
 
-      <div class="card" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Complaint Management Report</h5>
-
-          <a href="./staff/complaintmanagement.html" class="btn btn-info"
-            >Fill in</a
-          >
+      <!-- Complaint Investigation Report  -->
+      <div class="card" id="complaint" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/complaintReport.png" alt="" />
+          <p>Complaint Investigation Report</p>
         </div>
       </div>
 
-       <!-- Incident Management Summary  -->
-       <div class="card" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Incident Investigation</h5>
-
-          <a href="./staff/incidentinvestigation.html" class="btn btn-info"
-            >View</a
-          >
+      <!-- Incident Investigation Report  -->
+      <div class="card" id="incident" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/incidentReport.webp" alt="" />
+          <p>Incident Investigation Report</p>
         </div>
       </div>
 
-      <!-- Incident Management Summary  -->
-      <div class="card" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Complaint Record</h5>
-
-          <a href="./staff/incidentManagementSummary.html" class="btn btn-info"
-            >View</a
-          >
+      <!-- Record Of all complaint Report  -->
+      <div class="card" id="complaintRecord" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/complaintRecord.jfif" alt="" />
+          <p>Record of All Complaint Reports</p>
         </div>
       </div>
-      
-        
-      <!-- Incident Management Summary  -->
-      <div class="card" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Incident Record</h5>
 
-          <a href="./staff/incidentManagementSummary.html" class="btn btn-info"
-            >View</a
-          >
+      <!-- Record Of all Incident Report  -->
+      <div class="card" id="incidentRecord" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/incidentRecord.jpg" alt="" />
+          <p>Record of All Incident Reports</p>
         </div>
       </div>
-    
+
+      <!-- Emergency Business Plan -->
+      <div class="card" id="businessPlan" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/businessPlan.webp" alt="" />
+          <p>Emergency and Business Continuity Plan</p>
+        </div>
+      </div>
+    </div>
   </body>
+
+  <script>
+    function redirect(clicked_id) {
+      let page = clicked_id;
+
+      switch (page) {
+        case "managementMeeting":
+          location.href = "./staff/officeReport.html";
+          break;
+        case "supervision":
+          location.href = "./staff/staffSupervision.html";
+          break;
+        case "appraisal":
+          location.href = "./staff/staffPerformanceReview.html";
+          break;
+        case "complaint":
+          location.href = "./staff/complaintmanagement.html";
+          break;
+        case "incident":
+          location.href = "./staff/incidentinvestigation.html";
+          break;
+        case "complaintRecord":
+          location.href = "";
+          break;
+        case "incidentRecord":
+          location.href = "./staff/incidentManagementSummary.html";
+
+          break;
+        case "businessPlan":
+          location.href = "./businessDisasterPlan/continuityPlan.html";
+          break;
+      }
+    }
+  </script>
 </html>

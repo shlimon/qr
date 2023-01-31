@@ -40,7 +40,12 @@ body {
   padding: 10px;
 }
 
-.main{
+.management {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.main {
   margin-left: 300px;
 }
 
@@ -48,7 +53,7 @@ body {
   .sidenav {
     padding-top: 15px;
   }
-  .main{
+  .main {
     margin-left: 15px;
   }
 
@@ -82,6 +87,24 @@ body {
 .card {
   text-align: center;
   margin: 10px;
+  height: 200px;
+  width: 18rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border-style: solid hidden hidden hidden;
+}
+
+.img-container img {
+  background-size: cover;
+
+  height: 140px;
+  border-radius: 10px 10px 0 0;
+}
+
+.card:hover {
+  box-shadow: 0 34px 32px -33px rgba(0, 0, 0, 0.18);
+  transform: translate(0px, -3px);
 }
 
 .boxTwo {
@@ -116,3 +139,5 @@ textarea {
 .announcement {
   margin-left: 300px;
 }
+
+/* card management */
