@@ -1,0 +1,256 @@
+body {
+  font-family: "Montserrat", sans-serif;
+  background-color: #ecedf3;
+}
+
+.sidenav {
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #2d4263;
+  overflow-x: hidden;
+  padding-top: 30px;
+}
+
+.sidenav a {
+  padding: 40px 20px 20px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #fefbf3;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #c84b31;
+}
+
+.management {
+  margin-left: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.select-info {
+  width: 80%;
+  height: 10vh;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.data {
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+}
+
+.value {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+}
+
+.permonth {
+  width: 20%;
+  text-align: center;
+}
+
+.perweek {
+  width: 20%;
+  text-align: center;
+}
+
+.stat {
+  width: 20%;
+  text-align: center;
+}
+
+.calculated {
+  width: 20%;
+  text-align: center;
+}
+
+.header {
+  text-align: center;
+}
+
+.servicetype {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.plan-date {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+}
+
+.plan-date label {
+  margin-left: 7px;
+}
+
+.date-calculation {
+  margin-top: 30px;
+}
+
+.date-calculation h2 {
+  margin: 0;
+  padding: 0;
+}
+.date-calculation input {
+  height: 50px;
+}
+
+.week {
+  display: flex;
+  flex-direction: row;
+}
+
+.year {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.budget {
+  margin-top: 40px;
+  margin-left: 40px;
+}
+
+.budget input {
+  width: 100%;
+  height: 40px;
+  border-style: none none solid none;
+  font-size: 30px;
+}
+
+.box-one {
+  margin-top: 40px;
+  margin-left: 40px;
+}
+.box-one input {
+  width: 100%;
+  height: 40px;
+  border-style: none none solid none;
+  font-size: 30px;
+}
+.container-info {
+  margin-top: 2rem;
+  width: 80%;
+  height: 80vh;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+}
+
+.service {
+  /* background-color: #2d4263; */
+  height: fit-content;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.service select {
+  margin-top: 10px;
+  width: 20%;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  border-style: none none solid none;
+}
+
+.service input {
+  width: 10%;
+  height: 40px;
+  border-radius: 5px;
+  margin-top: 20px;
+  font-size: 20px;
+  border-style: none none solid none;
+}
+h2 {
+  color: #393e46;
+  margin-top: 35px;
+}
+
+.btn {
+  margin-top: 10px;
+  width: 2%;
+  height: 40px;
+  border-radius: 5px;
+  margin-top: 20px;
+  border-style: none;
+  background-color: #fff;
+}
+
+.btn :hover {
+  box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+}
+
+.float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #0c9;
+  color: #fff;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
+}
+.float img {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  border-radius: 50px;
+  box-shadow: 2px 2px 3px #999;
+}
+.my-float {
+  margin-top: 22px;
+}
+
+.calc-btn {
+  margin-top: 10px;
+  width: 150px;
+  height: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  font-size: 30px;
+  background-color: #66347f;
+  color: #fff;
+}
+
+.dollar {
+  padding: 0;
+}
+
+.sum {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+}

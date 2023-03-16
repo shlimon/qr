@@ -140,4 +140,37 @@ textarea {
   margin-left: 300px;
 }
 
-/* card management */
+/* Plan Breakdown Page */
+.header {
+  width: 90%;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+}
+
+.container-info {
+  margin-top: 2rem;
+  width: 90%;
+  height: 80vh;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+}
+
+.service {
+  background-color: #2d4263;
+  height: fit-content;
+}
+
+.service select {
+  margin-top: 10px;
+  width: 30%;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 10px;
+}

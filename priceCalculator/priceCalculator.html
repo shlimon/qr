@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plan Breakdown</title>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="./calculator.css" />
+  </head>
+  <body>
+    <div class="sidenav">
+      <a href="../supportCoordination.html">Support Coordination</a>
+      <a href="../directSupports.html">Direct Supports</a>
+      <a href="../management.html">Management</a>
+      <a href="../formsAndProcedures.html">Forms & Procedures</a>
+      <a href="../training/training.html">Training</a>
+      <a href="../policy/policy.html">Policy and Procedures</a>
+      <a href="../prcedure/precedure.html">Staff Handbook</a>
+      <a href="../announcement.html">Process Management</a>
+      <a href="./priceCalculator.html" style="color: #c84b31">Plan Breakdown</a>
+    </div>
+
+    <div class="management">
+      <!-- select date time and sservice -->
+      <div class="select-info">
+        <div class="data">
+          <div class="box-one">
+            <input
+              type="text"
+              name=""
+              id="duration"
+              placeholder="Plan Duration in Month"
+              value=""
+            />
+          </div>
+
+          <div class="budget">
+            <input
+              type="text"
+              id="budget"
+              placeholder="Participant Budget"
+              value=""
+            />
+          </div>
+        </div>
+        <!-- end of data -->
+        <div class="value">
+          <div class="permonth">
+            <h4 style="color: #393e46" id="month"></h4>
+            <h2 id="permonth"></h2>
+          </div>
+          <div class="perweek">
+            <h4 style="color: #393e46" id="week"></h4>
+            <h2 id="perweek"></h2>
+          </div>
+          <div class="calculated">
+            <h4 style="color: #393e46" id="totalWeek"></h4>
+            <h2 id="totalWeekPrice"></h2>
+          </div>
+          <div class="calculated">
+            <h4 style="color: #393e46" id="totalMonth"></h4>
+            <h2 id="totalMonthPrice"></h2>
+          </div>
+          <div class="stat">
+            <h4 style="color: #393e46" id="deficit"></h4>
+            <h2 id="calcDeficit"></h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- div end select info -->
+
+      <!-- the services box -->
+      <div class="container-info">
+        <!-- price one-->
+        <div class="service" id="one">
+          <select name="" id="serviceone">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codeone">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="priceone">$00</h2>
+          <!-- Quantity -->
+          <input
+            type="text"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qone"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totalone">000</h2>
+          </div>
+        </div>
+        <!-- price two-->
+        <div class="service" id="two">
+          <select name="" id="servicetwo">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codetwo">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="pricetwo">$00</h2>
+          <!-- Quantity -->
+          <input
+            type="text"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qtwo"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totaltwo">000</h2>
+          </div>
+
+          <!-- button -->
+        </div>
+        <!-- price three -->
+        <div class="service" id="three">
+          <select name="" id="servicethree">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codethree">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="pricethree">$00</h2>
+          <!-- Quantity -->
+          <input
+            type="text"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qthree"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totalthree">000</h2>
+          </div>
+
+          <!-- button -->
+        </div>
+        <!-- Four -->
+        <div class="service" id="four">
+          <select name="" id="servicefour">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codefour">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="pricefour">$00</h2>
+          <!-- Quantity -->
+          <input
+            type="text"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qfour"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totalfour">000</h2>
+          </div>
+          <!-- button -->
+        </div>
+        <!-- five -->
+        <div class="service" id="five">
+          <select name="" id="servicefive">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codefive">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="pricefive">$00</h2>
+          <!-- Quantity -->
+          <input
+            type="text"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qfive"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totalfive">000</h2>
+          </div>
+          <!-- button -->
+        </div>
+        <!-- six -->
+        <div class="service" id="six">
+          <select name="" id="servicesix">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codesix">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="pricesix">$00</h2>
+          <!-- Quantity -->
+          <input
+            type="text"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qsix"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totalsix">000</h2>
+          </div>
+          <!-- button -->
+        </div>
+
+        <!-- seven -->
+
+        <div class="service" id="seven">
+          <select name="" id="serviceseven">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codeseven">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="priceseven">$00</h2>
+          <!-- Quantity -->
+          <input
+            type="text"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qseven"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totalseven">000</h2>
+          </div>
+          <!-- button -->
+        </div>
+        <!-- Eight -->
+        <div class="service" id="eight">
+          <select name="" id="serviceeight">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codeeight">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="priceeight">$00</h2>
+          <!-- Quantity -->
+          <input
+            type="text"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qeight"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totaleight">000</h2>
+          </div>
+          <!-- button -->
+        </div>
+        <!-- Nine -->
+        <div class="service" id="nine">
+          <select name="" id="servicenine">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codenine" class="service-code">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="pricenine" class="service-price">$00</h2>
+          <!-- Quantity -->
+          <input
+            type="text"
+            class="service-qty"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qnine"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totalnine">000</h2>
+          </div>
+          <!-- button -->
+        </div>
+        <!-- ten -->
+        <div class="service" id="ten">
+          <select name="" id="serviceten">
+            <option value="">Select the Service</option>
+            <option value="acweekdays" id="ac">
+              Access Community - Weekday
+            </option>
+            <option value="acsaturday" id="ac">
+              Access Community – Saturday
+            </option>
+            <option value="acsunday" id="ac">Access Community – Sunday</option>
+            <option value="acpublicholiday" id="ac">
+              Access Community Public holiday
+            </option>
+            <option value="acevening" id="ac">
+              Access Community - Evening
+            </option>
+            <option value="asweekdays" id="as">
+              Assistance with self-care - Weekdays
+            </option>
+            <option value="assaturday" id="as">
+              Assistance with self-care – Saturday
+            </option>
+            <option value="assunday" id="as">
+              Assistance with self-care – Sunday
+            </option>
+            <option value="aspublicholiday" id="as">
+              Assistance with self-Care - Public Holiday
+            </option>
+            <option value="asnighttime" id="as">
+              Assistance with Self-Care - Night Time Sleepover
+            </option>
+            <option value="ga" id="ga">
+              Group Activities In A Centre - 1:5 - Weekday Daytime
+            </option>
+            <option value="cleaning" id="cleaning">
+              House Cleaning & Other Household Activities
+            </option>
+            <option value="improvedliving" id="il">
+              Improved daily living skills
+            </option>
+          </select>
+          <!-- service Code-->
+          <h2 id="codeten" class="service-code">00_000_0000_0_0</h2>
+          <!-- Service Price-->
+          <h2 id="priceten" class="service-price">$00</h2>
+          <!-- Quantity -->
+          <input
+            class="service-qty"
+            type="text"
+            placeholder="Quantity Per Week"
+            value=""
+            id="qten"
+          />
+          <!-- total -->
+          <div class="sum">
+            <h2 class="dollar">$</h2>
+            <h2 id="totalten">000</h2>
+          </div>
+          <!-- button -->
+        </div>
+
+        <!-- fab -->
+      </div>
+      <button class="calc-btn" id="" onclick="totalCalculation()">
+        Calculate
+      </button>
+      <a href="#" class="float" onclick="show()">
+        <img src="../images/add-button.png" alt="" />
+      </a>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="calculator.js" charset="utf-8"></script>
+  </body>
+</html>
