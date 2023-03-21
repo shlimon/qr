@@ -113,27 +113,27 @@ function totalCalculation() {
   var s10 = Number($("#totalten").text());
 
   var totalSum = s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8 + s9 + s10;
-  $("#totalWeek").text("Projected p/w").css("color", "#3E54AC");
+  $("#totalWeek").text("Forecasted p/w").css("color", "#3E54AC");
   $("#totalWeekPrice").text(totalSum.toFixed(2));
   var totalPerMonth = totalSum * 4;
-  $("#totalMonth").text("Projected p/m").css("color", "#3E54AC");
+  $("#totalMonth").text("Forecasted p/m").css("color", "#3E54AC");
   $("#totalMonthPrice").text(totalPerMonth.toFixed(2));
 
   var diff = budgetPerMonth - totalPerMonth;
 
   if (diff < 0) {
-    $("#deficit").text("Over By p/m").css("color", "#EA5455");
-    $("#calcDeficit").text(diff.toFixed(2));
+    $("#deficit").text("Over Budget p/m").css("color", "#EA5455");
+    $("#calcDeficit").text(diff.toFixed(2)).css("color", "#EA5455");
   } else {
-    $("#deficit").text("under By p/m");
-    $("#calcDeficit").text(diff.toFixed(2));
+    $("#deficit").text("Under Budget p/m").css("color", "#245953");
+    $("#calcDeficit").text(diff.toFixed(2)).css("color", "#245953");
   }
 }
 
 function servicePrice(serviceType) {
   switch (serviceType) {
     case "acweekdays":
-      return 62.16;
+      return 62.17;
       break;
     case "acsaturday":
       return 87.51;
@@ -188,10 +188,10 @@ function serviceCode(serviceType) {
       return "04_106_0125_6_1";
       break;
     case "acevening":
-      return "04_102_0125_6_1";
+      return "04_103_0125_6_1";
       break;
     case "acpublicholiday":
-      return "04_103_0125_6_1";
+      return "04_102_0125_6_1";
       break;
     case "asweekdays":
       return "01_011_0107_1_1";
@@ -212,7 +212,7 @@ function serviceCode(serviceType) {
       return "04_180_0136_6_1";
       break;
     case "cleaning":
-      return "04_180_0136_6_1";
+      return "01_020_0120_1_1";
       break;
     case "improvedliving":
       return "15_037_0117_1_3";

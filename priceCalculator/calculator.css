@@ -61,21 +61,29 @@ body {
 .permonth {
   width: 20%;
   text-align: center;
+  border-style: solid;
+  border-width: thin;
 }
 
 .perweek {
   width: 20%;
   text-align: center;
+  border-style: solid;
+  border-width: thin;
 }
 
 .stat {
   width: 20%;
   text-align: center;
+  border-style: solid;
+  border-width: thin;
 }
 
 .calculated {
   width: 20%;
   text-align: center;
+  border-style: solid;
+  border-width: thin;
 }
 
 .header {
@@ -140,7 +148,7 @@ label {
   width: 100%;
   height: 40px;
   border-style: none none solid none;
-  font-size: 30px;
+  font-size: 1.75rem;
 }
 
 .box-one {
@@ -151,7 +159,7 @@ label {
   width: 100%;
   height: 40px;
   border-style: none none solid none;
-  font-size: 30px;
+  font-size: 1.75rem;
 }
 .container-info {
   margin-top: 2rem;
