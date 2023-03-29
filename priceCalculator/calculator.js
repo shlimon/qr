@@ -29,10 +29,10 @@ function display() {
   $("#budget").on("input", function () {
     budget = Number($("#budget").val());
     budgetPerMonth = budget / planDurationInMonth;
-    $("#month").text("Can Spend Monthly");
+    $("#month").text("Monthly Budget");
     $("#permonth").text("$" + budgetPerMonth.toFixed(1));
     budgetPerWeek = budgetPerMonth / 4;
-    $("#week").text("Can Spend Weekly");
+    $("#week").text("Weekly Budget");
     $("#perweek").text("$" + budgetPerWeek.toFixed(1));
   });
 }
@@ -168,8 +168,23 @@ function servicePrice(serviceType) {
     case "cleaning":
       return 51.81;
       break;
-    case "improvedliving":
-      return 62.17;
+    case "supportCoordinationLevel2":
+      return 100.14;
+      break;
+    case "psysocialRecoveryCoaching":
+      return 93.34;
+      break;
+    case "occupationalTherpay":
+      return 193.99;
+      break;
+    case "Physiotherapist":
+      return 193.99;
+      break;
+    case "exercisePhysiologist":
+      return 166.99;
+      break;
+    case "psychologist":
+      return 214.41;
       break;
     default:
       return "00";
@@ -216,6 +231,24 @@ function serviceCode(serviceType) {
       break;
     case "improvedliving":
       return "15_037_0117_1_3";
+      break;
+    case "supportCoordinationLevel2":
+      return "07_002_0106_8_3";
+      break;
+    case "psysocialRecoveryCoaching":
+      return "07_101_0106_6_3";
+      break;
+    case "occupationalTherpay":
+      return "15_617_0128_1_3";
+      break;
+    case "Physiotherapist":
+      return "15_055_0128_1_3";
+      break;
+    case "exercisePhysiologist":
+      return "15_200_0126_1_3";
+      break;
+    case "psychologist":
+      return "15_054_0128_1_3";
       break;
     default:
       return "00_000_0000_0_0";

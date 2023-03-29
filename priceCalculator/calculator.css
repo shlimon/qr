@@ -35,7 +35,7 @@ body {
 
 .select-info {
   width: 80%;
-  height: 10vh;
+  height: 13vh;
   background-color: #fff;
   border-radius: 10px;
   margin-left: auto;
@@ -63,6 +63,7 @@ body {
   text-align: center;
   border-style: solid;
   border-width: thin;
+  border-color: #999;
 }
 
 .perweek {
@@ -70,6 +71,7 @@ body {
   text-align: center;
   border-style: solid;
   border-width: thin;
+  border-color: #999;
 }
 
 .stat {
@@ -77,6 +79,8 @@ body {
   text-align: center;
   border-style: solid;
   border-width: thin;
+  border-color: #999;
+  border-radius: 0 10px 10px 0;
 }
 
 .calculated {
@@ -84,6 +88,7 @@ body {
   text-align: center;
   border-style: solid;
   border-width: thin;
+  border-color: #999;
 }
 
 .header {
