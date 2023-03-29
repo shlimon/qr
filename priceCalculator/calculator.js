@@ -168,6 +168,9 @@ function servicePrice(serviceType) {
     case "cleaning":
       return 51.81;
       break;
+    case "improvedliving":
+      return 70.87;
+      break;
     case "supportCoordinationLevel2":
       return 100.14;
       break;
@@ -230,7 +233,7 @@ function serviceCode(serviceType) {
       return "01_020_0120_1_1";
       break;
     case "improvedliving":
-      return "15_037_0117_1_3";
+      return "09_009_0117_6_3";
       break;
     case "supportCoordinationLevel2":
       return "07_002_0106_8_3";
