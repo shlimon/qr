@@ -31,7 +31,7 @@ function display() {
     budgetPerMonth = budget / planDurationInMonth;
     $("#month").text("Monthly Budget");
     $("#permonth").text("$" + budgetPerMonth.toFixed(1));
-    budgetPerWeek = budgetPerMonth / 4;
+    budgetPerWeek = budgetPerMonth / 4.3452381;
     $("#week").text("Weekly Budget");
     $("#perweek").text("$" + budgetPerWeek.toFixed(1));
   });
