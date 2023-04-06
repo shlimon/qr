@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Human Resources</title>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body>
+    <div class="sidenav">
+      <a href="./supportCoordination.html">Support Coordination</a>
+      <a href="./directSupports.html" >Direct Supports</a>
+      <a href="./hr.html" style="color: #c84b31">HR</a>
+      <a href="./management.html" >Management</a>
+      <a href="./formsAndProcedures.html">Forms & Procedures</a>
+      <a href="./training/training.html">Training</a>
+      <a href="./policy/policy.html">Policy and Procedures</a>
+      <a href="./prcedure/precedure.html">Staff Handbook</a>
+      <a href="./announcement.html">Process Management</a>
+      <a href="./priceCalculator/priceCalculator.html">Plan Breakdown</a>
+    </div>
+
+    <div class="management">
+      <!-- Monthly Management Meeting -->
+    <div class="flow-chart">
+        <div class="container">
+            <h1>Flow Chart For New Team Member</h1>
+            <div class="accordion">
+              <dl>
+                <dt><a class="accordionTitle" href="#">STEP ONE </a></dt>
+                <dd class="accordionItem accordionItemCollapsed">
+                  <p>Interviewing the candidate. If the candidate qualified for selection please send the candidate a onboarding email <button>Send onboarding email</button>. <b>Please ensure that the candidate is not employed at any other organisation or has different profession. In that case you will need to complete a conflict of Interest Form <button onclick="coi()">Conflict of Interest</button></b>. If the candidate is selected for the position please provide a copy of Fair Work Information Statement</p>
+                </dd>
+                <dt><a href="#" class="accordionTitle">STEP TWO </a></dt>
+                <dd class="accordionItem accordionItemCollapsed">
+                  <p>Once the candidate completes the training and has uploaded all the documents, an email will be sent to <em>hr@decentcare.com.au</em>. <br>
+                    <b>Please Follow the steps below</b>
+                    <ol>
+                        <li>Verify all the documents to ensure that there are no expired documentation</li>
+                        <li>If the candidate is on an Australian Visa, check the working conditions of the visa.</li>
+                        <li>Place all the documents in the DC Cloud under the new team members name</li>
+                        <li>After the verification of the Documents draft a contract that can be sent vid Panda Doc along with other documents</li>
+                        
+                    </ol>
+                </p>
+                </dd>
+                <dt><a href="#" class="accordionTitle">STEP THREE </a></dt>
+                <dd class="accordionItem accordionItemCollapsed">
+                  <p>In this step an account needs to be created in the LookOut App<br>
+                    <b>Please Follow the steps below</b>
+                    <ol ">
+                        <li>After the verification a profile in LookOut needs to be created. <a href="https://www.decentcare.thelookoutapp.com">LookOut Dashboard</a></li>
+                        <li>Create a Helper under the Helper section</li>
+                        <li>Upload all the Documentation in the Helper Verification</li>
+                        <li>Upload the Contract in the verification with the contract due date.</li>
+                        <li>Approve the ticket, this would have been sent initially to hr@decentcare.com.au when the candidate uploaded all the documentation</li>
+                        <li>After the approval an email should be sent to accounts@decentcare.com.au to set up the payroll for the new team member and book an appointment for meet and greet session</li>
+                        
+                    </ol>
+                </p>
+                </dd>
+                
+                <dt><a href="#" class="accordionTitle">STEP FOUR</a></dt>
+                <dd class="accordionItem accordionItemCollapsed">
+                  <p>After Commencing the work an appointment needs to be booked after a month to ensure all the OH&S protocol has been followed and the worker is being provided with appropriate breaks and is happy with the Team Leader or managers.</p>
+                </dd>
+              </dl>
+            </div>
+  </div>
+    </div>
+
+      
+      </div>
+    </div>
+
+    <script>
+
+        // Conflict of interest
+        function coi(){
+        location.href = "flowchart.html";
+        }
+
+        ( function( window ) {
+'use strict';
+function classReg( className ) {
+  return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
+}
+var hasClass, addClass, removeClass;
+
+if ( 'classList' in document.documentElement ) {
+  hasClass = function( elem, c ) {
+    return elem.classList.contains( c );
+  };
+  addClass = function( elem, c ) {
+    elem.classList.add( c );
+  };
+  removeClass = function( elem, c ) {
+    elem.classList.remove( c );
+  };
+}
+else {
+  hasClass = function( elem, c ) {
+    return classReg( c ).test( elem.className );
+  };
+  addClass = function( elem, c ) {
+    if ( !hasClass( elem, c ) ) {
+      elem.className = elem.className + ' ' + c;
+    }
+  };
+  removeClass = function( elem, c ) {
+    elem.className = elem.className.replace( classReg( c ), ' ' );
+  };
+}
+
+function toggleClass( elem, c ) {
+  var fn = hasClass( elem, c ) ? removeClass : addClass;
+  fn( elem, c );
+}
+var classie = {
+  hasClass: hasClass,
+  addClass: addClass,
+  removeClass: removeClass,
+  toggleClass: toggleClass,
+  has: hasClass,
+  add: addClass,
+  remove: removeClass,
+  toggle: toggleClass
+};
+if ( typeof define === 'function' && define.amd ) {
+  define( classie );
+} else {
+  window.classie = classie;
+}
+})( window );
+var $ = function(selector){
+  return document.querySelector(selector);
+}
+var accordion = $('.accordion');
+accordion.addEventListener("click",function(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  if(e.target && e.target.nodeName == "A") {
+    var classes = e.target.className.split(" ");
+    if(classes) {
+      for(var x = 0; x < classes.length; x++) {
+        if(classes[x] == "accordionTitle") {
+          var title = e.target;
+          var content = e.target.parentNode.nextElementSibling;
+          classie.toggle(title, 'accordionTitleActive');
+          if(classie.has(content, 'accordionItemCollapsed')) {
+            if(classie.has(content, 'animateOut')){
+              classie.remove(content, 'animateOut');
+            }
+            classie.add(content, 'animateIn');
+          }else{
+             classie.remove(content, 'animateIn');
+             classie.add(content, 'animateOut');
+          }
+          classie.toggle(content, 'accordionItemCollapsed');      
+        }
+      }
+    }  
+  }
+});
+    </script>
+
+  </body>
+
+  
+</html>
