@@ -60,6 +60,14 @@
         </div>
       </div>
 
+      <!-- DS Team Leader Weekly Agenda  -->
+      <div class="card" id="tlagenda" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/tlagenda.jpg" alt="" />
+          <p>DS Team Leader Weekly Agenda</p>
+        </div>
+      </div>
+
       <!-- Complaint Investigation Report  -->
       <div class="card" id="complaint" onclick="redirect(this.id)">
         <div class="img-container">
@@ -131,6 +139,9 @@
           break;
         case "businessPlan":
           location.href = "./businessDisasterPlan/continuityPlan.html";
+          break;
+        case "tlagenda":
+          location.href = "./staff/teamleader.html";
           break;
       }
     }
