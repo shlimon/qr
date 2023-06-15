@@ -107,6 +107,16 @@
           <p>Emergency and Business Continuity Plan</p>
         </div>
       </div>
+
+       <!-- organisational Structure -->
+       <div class="card" id="organisation" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/organisational.png" alt="" />
+          <p>Organisational Structure</p>
+        </div>
+      </div>
+
+
     </div>
   </body>
 
@@ -142,6 +152,9 @@
           break;
         case "tlagenda":
           location.href = "./staff/teamleader.html";
+          break;
+          case "organisation":
+          location.href = "./organisation/organisation.html";
           break;
       }
     }
