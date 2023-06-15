@@ -47,4 +47,14 @@ body {
   
   .main {
     margin-left: 300px;
+    display: flex;
+    justify-content: space-between;
   }
+
+  .pdf{
+    width: 49%;
+  }
+
+.img-container{
+    width: 49%;
+}
