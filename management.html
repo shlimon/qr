@@ -92,6 +92,14 @@
         </div>
       </div>
 
+      <!-- Billing Run Approval  -->
+      <div class="card" id="billingRun" onclick="redirect(this.id)">
+        <div class="img-container">
+          <img class="img-card" src="./images/billingrun.png" alt="" />
+          <p>Billing Run Approval</p>
+        </div>
+      </div>
+
       <!-- Record Of all Incident Report  -->
       <div class="card" id="incidentRecord" onclick="redirect(this.id)">
         <div class="img-container">
@@ -155,6 +163,9 @@
           break;
           case "organisation":
           location.href = "./organisation/organisation.html";
+          break;
+          case "billingRun":
+          location.href = "./staff/billingrun.html";
           break;
       }
     }

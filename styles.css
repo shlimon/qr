@@ -251,7 +251,7 @@ form input[type="email"]{
   display: none;
   position: absolute;
   background-color: rgba(255, 255, 255, .15);
-  min-width: 160px;
+  min-width: 100px;
   bottom: 50px;
   z-index: 1;
 }
