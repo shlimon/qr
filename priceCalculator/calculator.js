@@ -133,49 +133,49 @@ function totalCalculation() {
 function servicePrice(serviceType) {
   switch (serviceType) {
     case "acweekdays":
-      return 62.17;
+      return 65.47;
       break;
     case "acsaturday":
-      return 87.51;
+      return 92.12;
       break;
     case "acsunday":
-      return 112.85;
+      return 118.78;
       break;
     case "acevening":
-      return 68.5;
+      return 72.13;
       break;
     case "acpublicholiday":
-      return 138.2;
+      return 145.44;
       break;
     case "asweekdays":
-      return 62.17;
+      return 65.47;
       break;
     case "assaturday":
-      return 87.51;
+      return 92.12;
       break;
     case "assunday":
-      return 112.85;
+      return 118.78;
       break;
     case "aspublicholiday":
-      return 138.2;
+      return 145.44;
       break;
     case "asnighttime":
-      return 262.16;
+      return 276.27;
       break;
     case "ga":
       return 20.68;
       break;
     case "cleaning":
-      return 51.81;
+      return 53.09;
       break;
     case "improvedliving":
-      return 70.87;
+      return 74.63;
       break;
     case "supportCoordinationLevel2":
       return 100.14;
       break;
     case "psysocialRecoveryCoaching":
-      return 93.34;
+      return 98.30;
       break;
     case "occupationalTherpay":
       return 193.99;
