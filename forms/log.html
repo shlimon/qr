@@ -1304,7 +1304,7 @@
           setTravelType(type);
           setFormData({
             ...formData,
-            travelDate: type === 'under-50' ? getTodayDate() : '',
+            travelDate:  getTodayDate() ,
             totalKm: '', // Clear KM when changing type
           });
           setKmError('');
@@ -1330,6 +1330,16 @@
             if (travelType === 'under-50' && kmValue > 50) {
               setKmError(
                 'For travel over 50 KM, please select the "Over 50 KM Travel" option.'
+              );
+              setFormData({
+                ...formData,
+                [name]: value,
+              });
+              return;
+            }
+            if (travelType === 'over-50' && kmValue < 51) {
+              setKmError(
+                'For travel under 50 KM, please select the "Under 50 KM Travel" option.'
               );
               setFormData({
                 ...formData,
@@ -1459,7 +1469,7 @@
 
             {error && <div className="error">{error}</div>}
             {success && <div className="success">{success}</div>}
-            {kmError && <div className="error">{kmError}</div>}
+            
 
             <div className="form-group">
               <label htmlFor="participant">Select Participant</label>
@@ -1553,8 +1563,7 @@
               </div>
             )}
 
-            {(travelType === 'under-50' ||
-              (travelType === 'over-50' && requestData)) && (
+            
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="travelDate">Travel Date</label>
@@ -1564,17 +1573,9 @@
                     name="travelDate"
                     value={formData.travelDate}
                     onChange={handleFormChange}
-                    max={travelType === 'under-50' ? getTodayDate() : undefined}
                     required
+                    disabled
                   />
-                  {travelType === 'over-50' &&
-                    requestData &&
-                    !requestData.noRequest && (
-                      <small>
-                        Suggested date from request:{' '}
-                        {formatDate(requestData.dateForTravel)}
-                      </small>
-                    )}
                 </div>
 
                 <div className="checkbox-container">
@@ -1616,6 +1617,10 @@
                       )}
                     </div>
 
+                    <div>
+                        {kmError && <div className="error">{kmError}</div>}
+                    </div>
+
                     <div className="form-group">
                       <label htmlFor="signature">Signature</label>
                       <SignatureCanvas
@@ -1642,7 +1647,7 @@
                   {submitting ? 'Submitting...' : 'Submit Travel Log'}
                 </button>
               </form>
-            )}
+        
           </div>
         );
       }
