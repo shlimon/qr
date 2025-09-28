@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+     <link rel="stylesheet" href="../styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KM Travel Log</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script
+      crossorigin
+      src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <style>
+    
+      .brand-title {
+        font-size: 2rem;
+        margin: 0.5rem;
+        font-weight: 600;
+      }
+
+      .log {
+        background-color: #38a3a5;
+      }
+
+      /* Container */
+      .container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: calc(100vh - 80px);
+      }
+
+      /* Card Styles */
+      .card {
+        background-color: white;
+        backdrop-filter: blur(5px);
+        width: 100%;
+        max-width: 800px;
+        margin: 10px;
+        border-radius: 15px;
+        text-align: center;
+        font-family: 'Montserrat', sans-serif;
+        padding: 30px;
+      }
+
+      .card:hover {
+        background-color: white;
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      .login-form {
+        max-width: 400px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .login-form h1 {
+        color: #4a5568;
+        margin-bottom: 30px;
+        font-size: 2rem;
+        font-weight: 600;
+      }
+
+      /* Form Styles */
+      .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #4a5568;
+        font-size: 20px;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 16px;
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #333;
+        transition: border-color 0.3s ease;
+        font-family: 'Montserrat', sans-serif;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #4a5568;
+      }
+
+      .form-group input::placeholder {
+        color: rgba(51, 51, 51, 0.7);
+      }
+
+      /* Button Styles */
+      .btn {
+        display: flex;
+        justify-content: center;
+        background-color: #16aa52;
+        color: white;
+        border: 1px solid white;
+        padding: 12px 24px;
+        border-radius: 7px;
+        font-size: 16px;
+        font-weight: 600;
+        
+        transition: all 0.3s ease;
+        width: 100%;
+        font-family: 'Montserrat', sans-serif;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        background-color: #0d8043;
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-secondary {
+        background: transparent;
+        border: 2px solid #38a3a5;
+        color: #38a3a5;
+        box-shadow: none;
+      }
+
+      .btn-secondary:hover {
+        background: #38a3a5;
+        color: white;
+      }
+
+      .back-btn {
+        background: #f7fafc;
+        color: #4a5568;
+        border: 1px solid #e2e8f0;
+        padding: 8px 16px;
+        border-radius: 6px;
+        
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        font-family: 'Montserrat', sans-serif;
+      }
+
+      .back-btn:hover {
+        background: white;
+        color: #333;
+        transform: none;
+      }
+
+      /* Options Grid */
+      .options-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .option-card {
+        background: #f7fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .option-card:hover {
+        border-color: #4a5568;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(74, 85, 104, 0.2);
+        background: white;
+        color: #333;
+      }
+
+      .option-card h3 {
+        color: #4a5568;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .option-card p {
+        color: #718096;
+        margin-bottom: 20px;
+      }
+
+      .option-card .icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        color: #4a5568;
+      }
+
+      /* Status Messages */
+      .loading {
+        text-align: center;
+        padding: 20px;
+        color: #4a5568;
+        font-size: 18px;
+      }
+
+      .error {
+        color: #e53e3e;
+        background: #fed7d7;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .success {
+        color: #38a169;
+        background: #c6f6d5;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      /* Header Styles */
+      .header h1 {
+        color: #f7f6f2;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        font-weight: 600;
+      }
+
+      .header p {
+        color: rgba(247, 246, 242, 0.9);
+        font-size: 1.1rem;
+      }
+
+      /* Travel Options */
+      .travel-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .travel-option {
+        background: #f7fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        
+        transition: all 0.3s ease;
+      }
+
+      .travel-option:hover {
+        border-color: #4a5568;
+        background: white;
+        color: #333;
+      }
+
+      .travel-option.selected {
+        border-color: #4a5568;
+        background: #e6f3ff;
+        color: #4a5568;
+      }
+
+      .travel-option h4 {
+        margin-bottom: 8px;
+        font-size: 1.1rem;
+        color: #4a5568;
+        font-weight: 600;
+      }
+
+      .travel-option p {
+        font-size: 0.9rem;
+        color: #718096;
+      }
+
+      .travel-option.selected p {
+        color: #4a5568;
+      }
+
+      /* Dashboard Styles */
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        color: #4a5568;
+      }
+
+      .dashboard-header h2 {
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+
+      .dashboard-header h3 {
+        font-weight: 500;
+      }
+
+      .dashboard-header p {
+        color: #718096;
+      }
+
+      .logout-btn {
+        background: none;
+        border: 1px solid white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        
+        color: #ffffff;
+        font-family: 'Montserrat', sans-serif;
+        transition: all 0.3s ease;
+        background-color: #d64141;
+      }
+
+      .logout-btn:hover {
+        background: #f44b4b;
+      }
+
+      /* Table Styles */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      table th {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 2px solid #e2e8f0;
+        background: #f7fafc;
+        color: #4a5568;
+        font-weight: 600;
+      }
+
+      table td {
+        padding: 12px;
+        border-bottom: 1px solid #e2e8f0;
+        color: #4a5568;
+      }
+
+      table tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* Signature Canvas */
+      .signature-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .signature-placeholder {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #a0aec0;
+        font-style: italic;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .signature-canvas {
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        cursor: crosshair;
+        width: 100%;
+        max-width: 400px;
+        background: white;
+      }
+
+      .clear-signature-btn {
+        margin-top: 10px;
+        padding: 8px 16px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        border-radius: 6px;
+        
+        color: #718096;
+        font-family: 'Montserrat', sans-serif;
+        transition: all 0.3s ease;
+      }
+
+      .clear-signature-btn:hover {
+        background: white;
+        color: #333;
+      }
+
+      /* Checkbox Styles */
+      .checkbox-container {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        color: #4a5568;
+      }
+
+      .checkbox-container input[type='checkbox'] {
+        margin-right: 10px;
+        width: 18px;
+        height: 18px;
+        accent-color: #4a5568;
+      }
+
+      /* Info Box Styles */
+      .info-box {
+        background: #f7fafc;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border: 1px solid #e2e8f0;
+      }
+
+      .info-box h4 {
+        margin-bottom: 15px;
+        color: #4a5568;
+        font-weight: 600;
+      }
+
+      .info-box p {
+        margin-bottom: 8px;
+        color: #718096;
+      }
+
+      .status-message {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 6px;
+        font-weight: 500;
+      }
+
+      .status-warning {
+        background: #fed7d7;
+        color: #e53e3e;
+        border: 1px solid rgba(229, 62, 62, 0.3);
+      }
+
+      .status-success {
+        background: #c6f6d5;
+        color: #38a169;
+        border: 1px solid rgba(56, 161, 105, 0.3);
+      }
+
+      .status-info {
+        background: #bee3f8;
+        color: #3182ce;
+        border: 1px solid rgba(49, 130, 206, 0.3);
+      }
+
+      .no-data {
+        text-align: center;
+        padding: 40px;
+        color: #718096;
+        background: #f7fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+      }
+
+      /* Small text */
+      small {
+        color: #718096;
+        display: block;
+        margin-top: 5px;
+      }
+
+      /* Mobile Responsiveness */
+      @media only screen and (max-width: 768px) {
+        .options-grid,
+        .travel-options {
+          grid-template-columns: 1fr;
+        }
+
+        .dashboard-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 15px;
+        }
+
+        .card {
+          margin: 10px 5px;
+          padding: 20px;
+          width: 70%;
+        }
+
+        .brand-title {
+          font-size: 1.5rem;
+        }
+
+        table {
+          font-size: 14px;
+        }
+
+        table th,
+        table td {
+          padding: 8px;
+        }
+      }
+
+      @media only screen and (max-width: 600px) {
+        .container {
+          padding: 10px;
+        }
+
+        .card {
+          width: 95%;
+          padding: 15px;
+        }
+      }
+
+      /* Floating phone button */
+      .phone {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 60px;
+        height: 60px;
+        background-color: #4a5568;
+        border-radius: 50px;
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        z-index: 1000;
+      }
+
+      .phone:hover .dropup-content {
+        display: block;
+      }
+
+      .dropup-content {
+        display: none;
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(5px);
+        min-width: 100px;
+        bottom: 65px;
+        right: 0;
+        z-index: 1;
+        border-radius: 8px;
+      }
+
+      .dropup-content a {
+        color: #4a5568;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        font-family: 'Montserrat', sans-serif;
+      }
+
+      .dropup-content a:hover {
+        background-color: white;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="brand-title">Decent Care</div>
+      <a href="#" class="toggle-button">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </a>
+      <div class="navbar-links">
+        <ul>
+          <li><a href="../index.html">Forms</a></li>
+          <li><a href="../invoice.html">Invoice</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li class="drop-menu">
+            <a href="#" class="dropbtn">Download</a>
+            <div class="dropdown-content">
+              <a
+                href="https://drive.google.com/file/d/1fypqphi58uo-OPEJQGEwUzRCsnUNGgiI/view?usp=sharing"
+              >
+                <h5>Complaint Form</h5>
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1wkvr2Kjy2--Uay-XJROIoIyiGqkCrHUX/view?usp=sharing"
+              >
+                <h5>Hazard Form</h5>
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1lx6aFSwP4QMS3oYwDk0EZnqG8GtiKt6m/view?usp=sharing"
+              >
+                <h5>Incident Report</h5></a
+              >
+              <a
+                href="https://drive.google.com/file/d/1MlVzKcbBuBIfCbhPis_UxQHofenlCyST/view?usp=sharing"
+              >
+                <h5>Conflict Of Interest</h5></a
+              >
+              <a
+                href="https://drive.google.com/file/d/1t95OJ0K1G9kLUB1EbLi52kfJqK4rMrEC/view?usp=sharing"
+              >
+                <h5>Goal Plan</h5></a
+              >
+              <a
+                href="https://drive.google.com/file/d/1p-eRroVjnOEc3dre3LFf-SRQroU342MO/view?usp=sharing"
+              >
+                <h5>Finacial Transaction</h5>
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1hBU2_nFdUVQQKTnOJW4O3DBVGhX7oEkD/view?usp=sharing"
+              >
+                <h5>Media Release</h5>
+              </a>
+            </div>
+          </li>
+          <li class="drop-menu">
+            <a href="#" class="dropbtn">Emergency Numbers</a>
+            <div class="dropdown-content">
+              <a href="tel:000">Ambulance, Fire & Police</a>
+              <a href="tel:131444">Police Assistance Line</a>
+              <a href="tel:131114">Life Line</a>
+              <a href="tel:1300659467">Suicide Call Back Service</a>
+              <a href="tel:1300789978">MensLine Australia</a>
+              <a href="tel:1300224636">Beyond Blue</a>
+              <a href="tel:1800650890">Head Space</a>
+              <a href="tel:1800551800">Kids Helpline</a>
+              <a href="tel:131114">State Emergency Services (SES)</a>
+              <a href="tel:1800022">After Hours GP Helpline</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      const API_BASE = 'http://localhost:4000/api/km';
+
+      // Utility functions for localStorage
+      const setStorageItem = (key, value) => {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+          console.error('Error saving to localStorage:', error);
+        }
+      };
+
+      const getStorageItem = (key) => {
+        try {
+          const item = localStorage.getItem(key);
+          return item ? JSON.parse(item) : null;
+        } catch (error) {
+          console.error('Error reading from localStorage:', error);
+          return null;
+        }
+      };
+
+      const removeStorageItem = (key) => {
+        try {
+          localStorage.removeItem(key);
+        } catch (error) {
+          console.error('Error removing from localStorage:', error);
+        }
+      };
+
+      function App() {
+        const [user, setUser] = useState(null);
+        const [currentView, setCurrentView] = useState('options');
+        const [loading, setLoading] = useState(true);
+
+        useEffect(() => {
+          // Check if user data exists in memory storage
+          const savedUser = getStorageItem('kmTravelUser');
+          if (savedUser) {
+            setUser(savedUser);
+          }
+          setLoading(false);
+        }, []);
+
+        const handleLogin = async (userData) => {
+          setUser(userData);
+          // Save user data to memory storage
+          setStorageItem('kmTravelUser', userData);
+        };
+
+        const handleLogout = () => {
+          setUser(null);
+          setCurrentView('options');
+          // Remove user data from memory storage
+          removeStorageItem('kmTravelUser');
+        };
+
+        const handleBack = () => {
+          setCurrentView('options');
+        };
+
+        if (loading) {
+          return (
+            <div className="container">
+              <div className="loading">Loading...</div>
+            </div>
+          );
+        }
+
+        return (
+          <div className="container">
+            {!user ? (
+              <LoginForm onLogin={handleLogin} />
+            ) : (
+              <Dashboard
+                user={user}
+                currentView={currentView}
+                setCurrentView={setCurrentView}
+                onLogout={handleLogout}
+                onBack={handleBack}
+              />
+            )}
+            
+            {/* Floating Phone Button */}
+            <div className="phone">
+              📞
+              <div className="dropup-content">
+                <a href="tel:+1234567890">Call Support</a>
+                <a href="mailto:support@kmtravel.com">Email</a>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function LoginForm({ onLogin }) {
+        const [formData, setFormData] = useState({
+          name: '',
+          phone: '',
+          dob: '',
+        });
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState('');
+
+        const handleChange = (e) => {
+          setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+          });
+        };
+
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          setLoading(true);
+          setError('');
+
+          try {
+            const response = await fetch(`${API_BASE}/staffs/sw-login`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              onLogin(result.data);
+            } else {
+              setError(result.message || 'Login failed');
+            }
+          } catch (err) {
+            setError('Network error. Please try again.');
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        return (
+          <div className="card">
+            <div className="login-form">
+              <h1>Provide Your Information</h1>
+
+              {error && <div className="error">{error}</div>}
+
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="name">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="phone">Phone</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+61412345670"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="dob">Date of Birth</label>
+                  <input
+                    type="date"
+                    id="dob"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <button type="submit" className="btn" disabled={loading}>
+                  {loading ? 'Logging in...' : 'Login'}
+                </button>
+              </form>
+            </div>
+          </div>
+        );
+      }
+
+      function Dashboard({
+        user,
+        currentView,
+        setCurrentView,
+        onLogout,
+        onBack,
+      }) {
+        return (
+          <div className="card">
+            <div className="dashboard-header">
+              <div style={{ textAlign: 'left' }}>
+                <h2>Travel Log</h2>
+                <h3>{user.name}</h3>
+                <p style={{padding: '10px 0'}}>{user.email}</p>
+              </div>
+              <button onClick={onLogout} className="logout-btn">
+                Logout
+              </button>
+            </div>
+
+            {currentView !== 'options' && (
+              <button className="back-btn" onClick={onBack}>
+                ← Back to Options
+              </button>
+            )}
+
+            {currentView === 'options' && (
+              <OptionsSelection setCurrentView={setCurrentView} />
+            )}
+            {currentView === 'request-permission' && (
+              <RequestPermission user={user} />
+            )}
+            {currentView === 'travel-log' && <TravelLog user={user} />}
+          </div>
+        );
+      }
+
+      function OptionsSelection({ setCurrentView }) {
+        return (
+          <div>
+            <h3
+              style={{
+                textAlign: 'center',
+                marginBottom: '30px',
+                color: '#4a5568',
+                fontWeight: 600,
+              }}
+            >
+              Choose an Option
+            </h3>
+            <div className="options-grid">
+              <div
+                className="option-card"
+                onClick={() => setCurrentView('request-permission')}
+              >
+                <div className="icon">📋</div>
+                <h3>Request Permission</h3>
+                <p>Submit travel permission requests for participants</p>
+                <button
+                  className="btn"
+                  style={{ width: 'auto', padding: '8px 16px' }}
+                >
+                  Get Started
+                </button>
+              </div>
+
+              <div
+                className="option-card"
+                onClick={() => setCurrentView('travel-log')}
+              >
+                <div className="icon">📊</div>
+                <h3>Travel Log</h3>
+                <p>Log completed travel details and submit records</p>
+                <button
+                  className="btn"
+                  style={{ width: 'auto', padding: '8px 16px' }}
+                >
+                  Get Started
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function RequestPermission({ user }) {
+        const [participants, setParticipants] = useState([]);
+        const [requests, setRequests] = useState([]);
+        const [loading, setLoading] = useState(true);
+        const [error, setError] = useState('');
+        const [success, setSuccess] = useState('');
+        const [showForm, setShowForm] = useState(false);
+        const [formData, setFormData] = useState({
+          requestedFor: '',
+          requestTravel: '',
+          dateForTravel: '',
+        });
+        const [submitting, setSubmitting] = useState(false);
+
+        useEffect(() => {
+          fetchData();
+        }, []);
+
+        const fetchData = async () => {
+          setLoading(true);
+          try {
+            // Fetch participants and requests in parallel
+            const [participantsResponse, requestsResponse] = await Promise.all([
+              fetch(`${API_BASE}/participants`, {
+                headers: {
+                  name: user.name,
+                  phone: user.phone,
+                  dob: user.dob,
+                },
+              }),
+              fetch(`${API_BASE}/requests?request=my-request`, {
+                headers: {
+                  name: user.name,
+                  phone: user.phone,
+                  dob: user.dob,
+                },
+              }),
+            ]);
+
+            const participantsResult = await participantsResponse.json();
+            const requestsResult = await requestsResponse.json();
+
+            if (participantsResult.success) {
+              setParticipants(participantsResult.data);
+            } else {
+              setError(
+                participantsResult.message || 'Failed to fetch participants'
+              );
+            }
+
+            if (requestsResult.success) {
+              setRequests(requestsResult.data);
+            } else {
+              setError(requestsResult.message || 'Failed to fetch requests');
+            }
+          } catch (err) {
+            setError('Network error. Please try again.');
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const handleChange = (e) => {
+          setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+          });
+        };
+
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          setSubmitting(true);
+          setError('');
+          setSuccess('');
+
+          try {
+            const response = await fetch(`${API_BASE}/requests`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                name: user.name,
+                phone: user.phone,
+                dob: user.dob,
+              },
+              body: JSON.stringify({
+                requestedFor: formData.requestedFor,
+                requestTravel: parseInt(formData.requestTravel),
+                dateForTravel: new Date(formData.dateForTravel).toISOString(),
+              }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              setSuccess('Request submitted successfully!');
+              setFormData({
+                requestedFor: '',
+                requestTravel: '',
+                dateForTravel: '',
+              });
+              setShowForm(false);
+              // Refresh the requests list
+              fetchData();
+            } else {
+              setError(result.message || 'Failed to submit request');
+            }
+          } catch (err) {
+            setError('Network error. Please try again.');
+          } finally {
+            setSubmitting(false);
+          }
+        };
+
+        const getTodayDate = () => {
+          const today = new Date();
+          return today.toISOString().split('T')[0];
+        };
+
+        const formatDate = (dateString) => {
+          return new Date(dateString).toLocaleString();
+        };
+
+        const getStatusColor = (status) => {
+          switch (status) {
+            case 'Approved':
+              return '#38a169';
+            case 'Rejected':
+              return '#e53e3e';
+            case 'Pending':
+              return '#d69e2e';
+            default:
+              return '#718096';
+          }
+        };
+
+        if (loading) {
+          return <div className="loading">Loading data...</div>;
+        }
+
+        return (
+          <div>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '20px',
+              }}
+            >
+              <h3 style={{ color: '#4a5568', fontWeight: 600 }}>Request Travel Permission</h3>
+              <button
+                className="btn"
+                onClick={() => setShowForm(!showForm)}
+                style={{ width: 'auto', padding: '8px 16px' }}
+              >
+                {showForm ? 'Cancel' : 'New Request'}
+              </button>
+            </div>
+
+            {error && <div className="error">{error}</div>}
+            {success && <div className="success">{success}</div>}
+
+            {showForm && (
+              <div className="info-box">
+                <h4>New Travel Request</h4>
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="requestedFor">Participant</label>
+                    <select
+                      id="requestedFor"
+                      name="requestedFor"
+                      value={formData.requestedFor}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Select a participant</option>
+                      {participants.map((participant) => (
+                        <option key={participant._id} value={participant._id}>
+                          {participant.name} ({participant.community})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="dateForTravel">Date of Travel</label>
+                    <input
+                      type="date"
+                      id="dateForTravel"
+                      name="dateForTravel"
+                      value={formData.dateForTravel}
+                      onChange={handleChange}
+                      min={getTodayDate()}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="requestTravel">
+                      Approximate Intended Travel KM
+                    </label>
+                    <input
+                      type="number"
+                      id="requestTravel"
+                      name="requestTravel"
+                      value={formData.requestTravel}
+                      onChange={handleChange}
+                      placeholder="Enter KM (e.g., 75)"
+                      min="1"
+                      required
+                    />
+                  </div>
+
+                  <button type="submit" className="btn" disabled={submitting}>
+                    {submitting ? 'Submitting...' : 'Submit Request'}
+                  </button>
+                </form>
+              </div>
+            )}
+
+            {!showForm && requests.length > 0 && (
+              <div style={{ overflowX: 'auto' }}>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Participant</th>
+                      <th>Travel KM</th>
+                      <th>Status</th>
+                      <th>Requested Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {requests.map((request, index) => (
+                      <tr key={request._id}>
+                        <td>{request.requestedFor.name}</td>
+                        <td>{request.requestTravel}</td>
+                        <td>
+                          <span
+                            style={{
+                              color: getStatusColor(request.status),
+                              fontWeight: '600',
+                              padding: '4px 8px',
+                              borderRadius: '4px',
+                              background: getStatusColor(request.status) + '20',
+                            }}
+                          >
+                            {request.status}
+                          </span>
+                        </td>
+                        <td>{formatDate(request.createdAt)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {!showForm && requests.length === 0 && (
+              <div className="no-data">
+                No requests found. Click "New Request" to create your first
+                travel request.
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      function TravelLog({ user }) {
+        const [participants, setParticipants] = useState([]);
+        const [selectedParticipant, setSelectedParticipant] = useState('');
+        const [travelType, setTravelType] = useState('');
+        const [requestData, setRequestData] = useState(null);
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState('');
+        const [success, setSuccess] = useState('');
+        const [formData, setFormData] = useState({
+          totalKm: '',
+          agreed: false,
+          signature: '',
+          travelDate: '',
+        });
+        const [submitting, setSubmitting] = useState(false);
+        const [kmError, setKmError] = useState('');
+
+        useEffect(() => {
+          fetchParticipants();
+        }, []);
+
+        const fetchParticipants = async () => {
+          setLoading(true);
+          try {
+            const response = await fetch(`${API_BASE}/participants`, {
+              headers: {
+                name: user.name,
+                phone: user.phone,
+                dob: user.dob,
+              },
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              setParticipants(result.data);
+            } else {
+              setError(result.message || 'Failed to fetch participants');
+            }
+          } catch (err) {
+            setError('Network error. Please try again.');
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const fetchRequestData = async (participantId) => {
+          setLoading(true);
+          setError('');
+          try {
+            const response = await fetch(
+              `${API_BASE}/requests/participant/${participantId}`,
+              {
+                headers: {
+                  name: user.name,
+                  phone: user.phone,
+                  dob: user.dob,
+                },
+              }
+            );
+
+            const result = await response.json();
+
+            if (result.success) {
+              // Check if data is empty object or null
+              if (result.data && Object.keys(result.data).length > 0) {
+                setRequestData(result.data);
+              } else {
+                // No request data available
+                setRequestData({ noRequest: true });
+              }
+            } else {
+              setError(result.message || 'Failed to fetch request data');
+              setRequestData(null);
+            }
+          } catch (err) {
+            setError('Network error. Please try again.');
+            setRequestData(null);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const handleParticipantChange = (e) => {
+          const participantId = e.target.value;
+          setSelectedParticipant(participantId);
+          setRequestData(null);
+          setTravelType('');
+          setFormData({
+            totalKm: '',
+            agreed: false,
+            signature: '',
+            travelDate: '',
+          });
+          setKmError('');
+        };
+
+        const handleTravelTypeChange = (type) => {
+          setTravelType(type);
+          setFormData({
+            ...formData,
+            travelDate:  getTodayDate() ,
+            totalKm: '', // Clear KM when changing type
+          });
+          setKmError('');
+
+          if (type === 'over-50' && selectedParticipant) {
+            fetchRequestData(selectedParticipant);
+          } else if (type === 'under-50') {
+            // For under 50km, we don't need to fetch request data
+            setRequestData(null);
+          }
+        };
+
+        const handleFormChange = (e) => {
+          const { name, value, type, checked } = e.target;
+
+          if (name === 'totalKm') {
+            const kmValue = parseInt(value);
+
+            // Clear any existing KM error
+            setKmError('');
+
+            // Validate KM based on travel type
+            if (travelType === 'under-50' && kmValue > 50) {
+              setKmError(
+                'For travel over 50 KM, please select the "Over 50 KM Travel" option.'
+              );
+              setFormData({
+                ...formData,
+                [name]: value,
+              });
+              return;
+            }
+            if (travelType === 'over-50' && kmValue < 51) {
+              setKmError(
+                'For travel under 50 KM, please select the "Under 50 KM Travel" option.'
+              );
+              setFormData({
+                ...formData,
+                [name]: value,
+              });
+              return;
+            }
+          }
+
+          setFormData({
+            ...formData,
+            [name]: type === 'checkbox' ? checked : value,
+          });
+        };
+
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+
+          // Final validation before submission
+          const kmValue = parseInt(formData.totalKm);
+          if (travelType === 'under-50' && kmValue > 50) {
+            setKmError(
+              'For travel over 50 KM, please select the "Over 50 KM Travel" option.'
+            );
+            return;
+          }
+
+          setSubmitting(true);
+          setError('');
+          setSuccess('');
+          setKmError('');
+
+          try {
+            let approval = 'Not Approved';
+            let travelDate = formData.travelDate;
+            let requestPayload = {
+              participant: selectedParticipant,
+              staff: user._id,
+              traveled: parseInt(formData.totalKm),
+              date: new Date(travelDate).toISOString(),
+              approval: approval,
+              signature: formData.signature,
+            };
+
+            if (
+              travelType === 'over-50' &&
+              requestData &&
+              !requestData.noRequest
+            ) {
+              approval =
+                requestData.status === 'Approved'
+                  ? 'Prior Approved'
+                  : 'Not Approved';
+              requestPayload.requestId = requestData._id;
+            }
+
+            requestPayload.approval = approval;
+
+            const response = await fetch(`${API_BASE}/travels`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                name: user.name,
+                phone: user.phone,
+                dob: user.dob,
+              },
+              body: JSON.stringify(requestPayload),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              setSuccess('Travel log submitted successfully!');
+              setFormData({
+                totalKm: '',
+                agreed: false,
+                signature: '',
+                travelDate: '',
+              });
+              setSelectedParticipant('');
+              setTravelType('');
+              setRequestData(null);
+            } else {
+              setError(result.message || 'Failed to submit travel log');
+            }
+          } catch (err) {
+            setError('Network error. Please try again.');
+          } finally {
+            setSubmitting(false);
+          }
+        };
+
+        const formatDate = (dateString) => {
+          return new Date(dateString).toLocaleDateString();
+        };
+
+        const getStatusMessage = (status) => {
+          switch (status) {
+            case 'Pending':
+              return {
+                type: 'warning',
+                message: 'Your request is Pending and not at this stage.',
+              };
+            case 'Declined':
+              return {
+                type: 'warning',
+                message: 'Your request is Declined and not at this stage.',
+              };
+            case 'Approved':
+              return {
+                type: 'success',
+                message: 'Your requested travel log is accepted.',
+              };
+            default:
+              return { type: 'info', message: `Status: ${status}` };
+          }
+        };
+
+        const getTodayDate = () => {
+          const today = new Date();
+          return today.toISOString().split('T')[0];
+        };
+
+        return (
+          <div>
+            <h3 style={{ marginBottom: '20px', color: '#4a5568', fontWeight: 600 }}>Travel Log</h3>
+
+            {error && <div className="error">{error}</div>}
+            {success && <div className="success">{success}</div>}
+            
+
+            <div className="form-group">
+              <label htmlFor="participant">Select Participant</label>
+              <select
+                id="participant"
+                value={selectedParticipant}
+                onChange={handleParticipantChange}
+                disabled={loading}
+              >
+                <option value="">Select a participant</option>
+                {participants.map((participant) => (
+                  <option key={participant._id} value={participant._id}>
+                    {participant.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {selectedParticipant && (
+              <div>
+                <h4 style={{ marginBottom: '15px', marginTop: '20px', color: '#4a5568', fontWeight: 600 }}>
+                  Travel Type
+                </h4>
+                <div className="travel-options">
+                  <div
+                    className={`travel-option ${
+                      travelType === 'under-50' ? 'selected' : ''
+                    }`}
+                    onClick={() => handleTravelTypeChange('under-50')}
+                  >
+                    <h4>Under 50 KM Travel</h4>
+                    <p>No permission required</p>
+                  </div>
+                  <div
+                    className={`travel-option ${
+                      travelType === 'over-50' ? 'selected' : ''
+                    }`}
+                    onClick={() => handleTravelTypeChange('over-50')}
+                  >
+                    <h4>Over 50 KM Travel</h4>
+                    <p>Need permission</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {loading && <div className="loading">Loading request data...</div>}
+
+            {travelType === 'over-50' && requestData && (
+              <div className="info-box">
+                {requestData.noRequest ? (
+                  <div>
+                    <h4>Request Information</h4>
+                    <div className="status-message status-warning">
+                      No prior request found for this participant. You can still
+                      log travel over 50km without prior approval.
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <h4>Request Information</h4>
+                    <p>
+                      <strong>Requested by:</strong>{' '}
+                      {requestData.requestedBy.name}
+                    </p>
+                    <p>
+                      <strong>Requested for:</strong>{' '}
+                      {requestData.requestedFor.name}
+                    </p>
+                    <p>
+                      <strong>Requested Travel:</strong>{' '}
+                      {requestData.requestTravel} KM
+                    </p>
+                    <p>
+                      <strong>Status:</strong> {requestData.status}
+                    </p>
+
+                    <div
+                      className={`status-message ${
+                        getStatusMessage(requestData.status).type === 'warning'
+                          ? 'status-warning'
+                          : getStatusMessage(requestData.status).type === 'success'
+                          ? 'status-success'
+                          : 'status-info'
+                      }`}
+                    >
+                      {getStatusMessage(requestData.status).message}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="travelDate">Travel Date</label>
+                  <input
+                    type="date"
+                    id="travelDate"
+                    name="travelDate"
+                    value={formData.travelDate}
+                    onChange={handleFormChange}
+                    required
+                    disabled
+                  />
+                </div>
+
+                <div className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    name="agreed"
+                    checked={formData.agreed}
+                    onChange={handleFormChange}
+                    required
+                  />
+                  <label>
+                    I agree the KM travelled is true and accurate
+                  </label>
+                </div>
+
+                {formData.agreed && (
+                  <>
+                    <div className="form-group">
+                      <label htmlFor="totalKm">Total KM Travelled</label>
+                      <input
+                        type="number"
+                        id="totalKm"
+                        name="totalKm"
+                        value={formData.totalKm}
+                        onChange={handleFormChange}
+                        placeholder={
+                          travelType === 'under-50'
+                            ? 'Enter KM (up to 50 KM allowed)'
+                            : 'Enter actual KM travelled'
+                        }
+                        min="0"
+                        max={travelType === 'under-50' ? '50' : undefined}
+                        required
+                      />
+                      {travelType === 'under-50' && (
+                        <small>
+                          Must be 50 KM or less for this option
+                        </small>
+                      )}
+                    </div>
+
+                    <div>
+                        {kmError && <div className="error">{kmError}</div>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="signature">Signature</label>
+                      <SignatureCanvas
+                        onSignatureChange={(signature) =>
+                          setFormData({ ...formData, signature })
+                        }
+                      />
+                    </div>
+                  </>
+                )}
+
+                <button
+                  type="submit"
+                  className="btn"
+                  disabled={
+                    submitting ||
+                    !formData.agreed ||
+                    !formData.signature ||
+                    !formData.totalKm ||
+                    !formData.travelDate ||
+                    kmError !== ''
+                  }
+                >
+                  {submitting ? 'Submitting...' : 'Submit Travel Log'}
+                </button>
+              </form>
+        
+          </div>
+        );
+      }
+
+      // Enhanced signature canvas component with placeholder
+      function SignatureCanvas({ onSignatureChange }) {
+        const canvasRef = React.useRef(null);
+        const [isDrawing, setIsDrawing] = React.useState(false);
+        const [hasSignature, setHasSignature] = React.useState(false);
+
+        React.useEffect(() => {
+          const canvas = canvasRef.current;
+          const ctx = canvas.getContext('2d');
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+        }, []);
+
+        const startDrawing = (e) => {
+          setIsDrawing(true);
+          setHasSignature(true);
+          const canvas = canvasRef.current;
+          const rect = canvas.getBoundingClientRect();
+          const ctx = canvas.getContext('2d');
+          ctx.beginPath();
+          ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        };
+
+        const draw = (e) => {
+          if (!isDrawing) return;
+          const canvas = canvasRef.current;
+          const rect = canvas.getBoundingClientRect();
+          const ctx = canvas.getContext('2d');
+          ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+          ctx.stroke();
+        };
+
+        const stopDrawing = () => {
+          if (isDrawing) {
+            setIsDrawing(false);
+            const canvas = canvasRef.current;
+            const dataURL = canvas.toDataURL();
+            onSignatureChange(dataURL);
+          }
+        };
+
+        const clearSignature = () => {
+          const canvas = canvasRef.current;
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          setHasSignature(false);
+          onSignatureChange('');
+        };
+
+        return (
+          <div>
+            <div className="signature-container">
+              <canvas
+                ref={canvasRef}
+                width={400}
+                height={150}
+                onMouseDown={startDrawing}
+                onMouseMove={draw}
+                onMouseUp={stopDrawing}
+                onMouseLeave={stopDrawing}
+                className="signature-canvas"
+              />
+              {!hasSignature && (
+                <div className="signature-placeholder">
+                  Click and drag to sign here
+                </div>
+              )}
+            </div>
+            <div>
+              <button
+                type="button"
+                onClick={clearSignature}
+                className="clear-signature-btn"
+              >
+                Clear Signature
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+     <script src="../index.js" charset="utf-8"></script>
+  </body>
+</html>
