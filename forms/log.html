@@ -2,10 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-     <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KM Travel Log</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <script
       crossorigin
       src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"
@@ -16,7 +19,6 @@
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
     <style>
-    
       .brand-title {
         font-size: 2rem;
         margin: 0.5rem;
@@ -118,7 +120,7 @@
         border-radius: 7px;
         font-size: 16px;
         font-weight: 600;
-        
+
         transition: all 0.3s ease;
         width: 100%;
         font-family: 'Montserrat', sans-serif;
@@ -153,7 +155,7 @@
         border: 1px solid #e2e8f0;
         padding: 8px 16px;
         border-radius: 6px;
-        
+
         font-size: 14px;
         margin-bottom: 20px;
         display: inline-flex;
@@ -183,7 +185,7 @@
         border-radius: 12px;
         padding: 30px;
         text-align: center;
-        
+
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
@@ -269,7 +271,7 @@
         border-radius: 8px;
         padding: 20px;
         text-align: center;
-        
+
         transition: all 0.3s ease;
       }
 
@@ -328,7 +330,7 @@
         border: 1px solid white;
         padding: 8px 16px;
         border-radius: 6px;
-        
+
         color: #ffffff;
         font-family: 'Montserrat', sans-serif;
         transition: all 0.3s ease;
@@ -402,7 +404,7 @@
         border: 1px solid #e2e8f0;
         background: white;
         border-radius: 6px;
-        
+
         color: #718096;
         font-family: 'Montserrat', sans-serif;
         transition: all 0.3s ease;
@@ -542,7 +544,7 @@
         height: 60px;
         background-color: #4a5568;
         border-radius: 50px;
-        
+
         display: flex;
         align-items: center;
         justify-content: center;
@@ -657,67 +659,123 @@
     <div id="root"></div>
 
     <script type="text/babel">
-      const { useState, useEffect } = React;
+      const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
       const API_BASE = 'https://dc-central-api-v2.onrender.com/api/km';
+      // const API_BASE = 'http://localhost:4000/api/km';
 
-      // Utility functions for localStorage
-      const setStorageItem = (key, value) => {
-        try {
-          localStorage.setItem(key, JSON.stringify(value));
-        } catch (error) {
-          console.error('Error saving to localStorage:', error);
-        }
+      // Utility functions for in-memory storage
+      const storage = {
+        data: {},
+        setItem: (key, value) => {
+          storage.data[key] = value;
+        },
+        getItem: (key) => {
+          return storage.data[key] || null;
+        },
+        removeItem: (key) => {
+          delete storage.data[key];
+        },
       };
 
-      const getStorageItem = (key) => {
-        try {
-          const item = localStorage.getItem(key);
-          return item ? JSON.parse(item) : null;
-        } catch (error) {
-          console.error('Error reading from localStorage:', error);
-          return null;
-        }
+      // Custom hooks
+      // Custom hooks
+      const useLocalStorage = (key, initialValue) => {
+        const [value, setValue] = useState(() => {
+          try {
+            const stored = localStorage.getItem(key);
+            return stored ? JSON.parse(stored) : initialValue;
+          } catch (error) {
+            console.error('Error reading from localStorage:', error);
+            return initialValue;
+          }
+        });
+
+        const setStoredValue = useCallback(
+          (newValue) => {
+            try {
+              setValue(newValue);
+              localStorage.setItem(key, JSON.stringify(newValue));
+            } catch (error) {
+              console.error('Error writing to localStorage:', error);
+            }
+          },
+          [key]
+        );
+
+        return [value, setStoredValue];
       };
 
-      const removeStorageItem = (key) => {
-        try {
-          localStorage.removeItem(key);
-        } catch (error) {
-          console.error('Error removing from localStorage:', error);
-        }
+      const useClickOutside = (ref, handler) => {
+        useEffect(() => {
+          const listener = (event) => {
+            if (!ref.current || ref.current.contains(event.target)) return;
+            handler(event);
+          };
+          document.addEventListener('mousedown', listener);
+          return () => document.removeEventListener('mousedown', listener);
+        }, [ref, handler]);
+      };
+
+      // Utility functions
+      const getTodayDate = () => new Date().toISOString().split('T')[0];
+
+      const formatDate = (dateString) => new Date(dateString).toLocaleString();
+
+      const getStatusColor = (status) => {
+        const colors = {
+          Approved: '#38a169',
+          Rejected: '#e53e3e',
+          Pending: '#d69e2e',
+        };
+        return colors[status] || '#718096';
+      };
+
+      const getStatusMessage = (status) => {
+        const messages = {
+          Pending: {
+            type: 'warning',
+            message: 'Your request is Pending and not at this stage.',
+          },
+          Declined: {
+            type: 'warning',
+            message: 'Your request is Declined and not at this stage.',
+          },
+          Approved: {
+            type: 'success',
+            message: 'Your requested travel log is accepted.',
+          },
+        };
+        return (
+          messages[status] || { type: 'info', message: `Status: ${status}` }
+        );
+      };
+
+      // API helper
+      const apiCall = async (endpoint, options = {}) => {
+        const response = await fetch(`${API_BASE}${endpoint}`, options);
+        return response.json();
       };
 
       function App() {
-        const [user, setUser] = useState(null);
+        const [user, setUser] = useLocalStorage('kmTravelUser', null);
         const [currentView, setCurrentView] = useState('options');
-        const [loading, setLoading] = useState(true);
+        const [loading, setLoading] = useState(false);
 
-        useEffect(() => {
-          // Check if user data exists in memory storage
-          const savedUser = getStorageItem('kmTravelUser');
-          if (savedUser) {
-            setUser(savedUser);
-          }
-          setLoading(false);
-        }, []);
+        const handleLogin = useCallback(
+          (userData) => {
+            setUser(userData);
+          },
+          [setUser]
+        );
 
-        const handleLogin = async (userData) => {
-          setUser(userData);
-          // Save user data to memory storage
-          setStorageItem('kmTravelUser', userData);
-        };
-
-        const handleLogout = () => {
+        const handleLogout = useCallback(() => {
           setUser(null);
           setCurrentView('options');
-          // Remove user data from memory storage
-          removeStorageItem('kmTravelUser');
-        };
+          storage.removeItem('kmTravelUser');
+        }, [setUser]);
 
-        const handleBack = () => {
-          setCurrentView('options');
-        };
+        const handleBack = useCallback(() => setCurrentView('options'), []);
 
         if (loading) {
           return (
@@ -740,8 +798,7 @@
                 onBack={handleBack}
               />
             )}
-            
-            {/* Floating Phone Button */}
+
             <div className="phone">
               📞
               <div className="dropup-content">
@@ -762,12 +819,10 @@
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState('');
 
-        const handleChange = (e) => {
-          setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-          });
-        };
+        const handleChange = useCallback((e) => {
+          const { name, value } = e.target;
+          setFormData((prev) => ({ ...prev, [name]: value }));
+        }, []);
 
         const handleSubmit = async (e) => {
           e.preventDefault();
@@ -775,15 +830,11 @@
           setError('');
 
           try {
-            const response = await fetch(`${API_BASE}/staffs/sw-login`, {
+            const result = await apiCall('/staffs/sw-login', {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(formData),
             });
-
-            const result = await response.json();
 
             if (result.success) {
               onLogin(result.data);
@@ -801,9 +852,7 @@
           <div className="card">
             <div className="login-form">
               <h1>Provide Your Information</h1>
-
               {error && <div className="error">{error}</div>}
-
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
@@ -816,7 +865,6 @@
                     required
                   />
                 </div>
-
                 <div className="form-group">
                   <label htmlFor="phone">Phone</label>
                   <input
@@ -829,7 +877,6 @@
                     required
                   />
                 </div>
-
                 <div className="form-group">
                   <label htmlFor="dob">Date of Birth</label>
                   <input
@@ -841,7 +888,6 @@
                     required
                   />
                 </div>
-
                 <button type="submit" className="btn" disabled={loading}>
                   {loading ? 'Logging in...' : 'Login'}
                 </button>
@@ -864,7 +910,7 @@
               <div style={{ textAlign: 'left' }}>
                 <h2>Travel Log</h2>
                 <h3>{user.name}</h3>
-                <p style={{padding: '10px 0'}}>{user.email}</p>
+                <p style={{ padding: '10px 0' }}>{user.email}</p>
               </div>
               <button onClick={onLogout} className="logout-btn">
                 Logout
@@ -889,6 +935,21 @@
       }
 
       function OptionsSelection({ setCurrentView }) {
+        const options = [
+          {
+            id: 'request-permission',
+            icon: '📋',
+            title: 'Request Permission',
+            description: 'Submit travel permission requests for participants',
+          },
+          {
+            id: 'travel-log',
+            icon: '📊',
+            title: 'Travel Log',
+            description: 'Log completed travel details and submit records',
+          },
+        ];
+
         return (
           <div>
             <h3
@@ -902,36 +963,112 @@
               Choose an Option
             </h3>
             <div className="options-grid">
-              <div
-                className="option-card"
-                onClick={() => setCurrentView('request-permission')}
-              >
-                <div className="icon">📋</div>
-                <h3>Request Permission</h3>
-                <p>Submit travel permission requests for participants</p>
-                <button
-                  className="btn"
-                  style={{ width: 'auto', padding: '8px 16px' }}
+              {options.map((option) => (
+                <div
+                  key={option.id}
+                  className="option-card"
+                  onClick={() => setCurrentView(option.id)}
                 >
-                  Get Started
-                </button>
-              </div>
-
-              <div
-                className="option-card"
-                onClick={() => setCurrentView('travel-log')}
-              >
-                <div className="icon">📊</div>
-                <h3>Travel Log</h3>
-                <p>Log completed travel details and submit records</p>
-                <button
-                  className="btn"
-                  style={{ width: 'auto', padding: '8px 16px' }}
-                >
-                  Get Started
-                </button>
-              </div>
+                  <div className="icon">{option.icon}</div>
+                  <h3>{option.title}</h3>
+                  <p>{option.description}</p>
+                  <button
+                    className="btn"
+                    style={{ width: 'auto', padding: '8px 16px' }}
+                  >
+                    Get Started
+                  </button>
+                </div>
+              ))}
             </div>
+          </div>
+        );
+      }
+
+      function SearchableDropdown({
+        participants,
+        onSelect,
+        value,
+        onChange,
+        placeholder,
+        disabled = false,
+      }) {
+        const [showDropdown, setShowDropdown] = useState(false);
+        const dropdownRef = useRef(null);
+
+        const filteredParticipants = useMemo(() => {
+          if (!value.trim()) return participants;
+          return participants.filter((p) =>
+            p.name.toLowerCase().includes(value.toLowerCase())
+          );
+        }, [value, participants]);
+
+        useClickOutside(dropdownRef, () => setShowDropdown(false));
+
+        return (
+          <div ref={dropdownRef} style={{ position: 'relative' }}>
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => {
+                onChange(e.target.value);
+                setShowDropdown(true);
+              }}
+              onFocus={() => setShowDropdown(true)}
+              placeholder={placeholder}
+              disabled={disabled}
+              autoComplete="off"
+              required
+            />
+            {showDropdown && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  right: 0,
+                  backgroundColor: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  zIndex: 1000,
+                  marginTop: '4px',
+                }}
+              >
+                {filteredParticipants.length > 0 ? (
+                  filteredParticipants.map((participant) => (
+                    <div
+                      key={participant._id}
+                      onClick={() => {
+                        onSelect(participant);
+                        setShowDropdown(false);
+                      }}
+                      style={{
+                        padding: '12px 16px',
+                        cursor: 'pointer',
+                        borderBottom: '1px solid #f7fafc',
+                        transition: 'background-color 0.2s',
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.target.style.backgroundColor = '#f7fafc')
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.backgroundColor = 'white')
+                      }
+                    >
+                      {participant.name}{' '}
+                      {participant.community && `(${participant.community})`}
+                    </div>
+                  ))
+                ) : (
+                  <div style={{ padding: '12px 16px', color: '#718096' }}>
+                    No participants found
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         );
       }
@@ -943,6 +1080,7 @@
         const [error, setError] = useState('');
         const [success, setSuccess] = useState('');
         const [showForm, setShowForm] = useState(false);
+        const [searchQuery, setSearchQuery] = useState('');
         const [formData, setFormData] = useState({
           requestedFor: '',
           requestTravel: '',
@@ -950,33 +1088,22 @@
         });
         const [submitting, setSubmitting] = useState(false);
 
-        useEffect(() => {
-          fetchData();
-        }, []);
+        const authHeaders = useMemo(
+          () => ({
+            name: user.name,
+            phone: user.phone,
+            dob: user.dob,
+          }),
+          [user]
+        );
 
-        const fetchData = async () => {
+        const fetchData = useCallback(async () => {
           setLoading(true);
           try {
-            // Fetch participants and requests in parallel
-            const [participantsResponse, requestsResponse] = await Promise.all([
-              fetch(`${API_BASE}/participants`, {
-                headers: {
-                  name: user.name,
-                  phone: user.phone,
-                  dob: user.dob,
-                },
-              }),
-              fetch(`${API_BASE}/requests?request=my-request`, {
-                headers: {
-                  name: user.name,
-                  phone: user.phone,
-                  dob: user.dob,
-                },
-              }),
+            const [participantsResult, requestsResult] = await Promise.all([
+              apiCall('/participants', { headers: authHeaders }),
+              apiCall('/requests?request=my-request', { headers: authHeaders }),
             ]);
-
-            const participantsResult = await participantsResponse.json();
-            const requestsResult = await requestsResponse.json();
 
             if (participantsResult.success) {
               setParticipants(participantsResult.data);
@@ -988,22 +1115,27 @@
 
             if (requestsResult.success) {
               setRequests(requestsResult.data);
-            } else {
-              setError(requestsResult.message || 'Failed to fetch requests');
             }
           } catch (err) {
             setError('Network error. Please try again.');
           } finally {
             setLoading(false);
           }
-        };
+        }, [authHeaders]);
 
-        const handleChange = (e) => {
-          setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-          });
-        };
+        useEffect(() => {
+          fetchData();
+        }, [fetchData]);
+
+        const handleParticipantSelect = useCallback((participant) => {
+          setFormData((prev) => ({ ...prev, requestedFor: participant._id }));
+          setSearchQuery(participant.name);
+        }, []);
+
+        const handleChange = useCallback((e) => {
+          const { name, value } = e.target;
+          setFormData((prev) => ({ ...prev, [name]: value }));
+        }, []);
 
         const handleSubmit = async (e) => {
           e.preventDefault();
@@ -1012,13 +1144,11 @@
           setSuccess('');
 
           try {
-            const response = await fetch(`${API_BASE}/requests`, {
+            const result = await apiCall('/requests', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                name: user.name,
-                phone: user.phone,
-                dob: user.dob,
+                ...authHeaders,
               },
               body: JSON.stringify({
                 requestedFor: formData.requestedFor,
@@ -1027,8 +1157,6 @@
               }),
             });
 
-            const result = await response.json();
-
             if (result.success) {
               setSuccess('Request submitted successfully!');
               setFormData({
@@ -1036,8 +1164,8 @@
                 requestTravel: '',
                 dateForTravel: '',
               });
+              setSearchQuery('');
               setShowForm(false);
-              // Refresh the requests list
               fetchData();
             } else {
               setError(result.message || 'Failed to submit request');
@@ -1049,31 +1177,7 @@
           }
         };
 
-        const getTodayDate = () => {
-          const today = new Date();
-          return today.toISOString().split('T')[0];
-        };
-
-        const formatDate = (dateString) => {
-          return new Date(dateString).toLocaleString();
-        };
-
-        const getStatusColor = (status) => {
-          switch (status) {
-            case 'Approved':
-              return '#38a169';
-            case 'Rejected':
-              return '#e53e3e';
-            case 'Pending':
-              return '#d69e2e';
-            default:
-              return '#718096';
-          }
-        };
-
-        if (loading) {
-          return <div className="loading">Loading data...</div>;
-        }
+        if (loading) return <div className="loading">Loading data...</div>;
 
         return (
           <div>
@@ -1085,10 +1189,22 @@
                 marginBottom: '20px',
               }}
             >
-              <h3 style={{ color: '#4a5568', fontWeight: 600 }}>Request Travel Permission</h3>
+              <h3 style={{ color: '#4a5568', fontWeight: 600 }}>
+                Request Travel Permission
+              </h3>
               <button
                 className="btn"
-                onClick={() => setShowForm(!showForm)}
+                onClick={() => {
+                  setShowForm(!showForm);
+                  if (!showForm) {
+                    setSearchQuery('');
+                    setFormData({
+                      requestedFor: '',
+                      requestTravel: '',
+                      dateForTravel: '',
+                    });
+                  }
+                }}
                 style={{ width: 'auto', padding: '8px 16px' }}
               >
                 {showForm ? 'Cancel' : 'New Request'}
@@ -1104,20 +1220,13 @@
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label htmlFor="requestedFor">Participant</label>
-                    <select
-                      id="requestedFor"
-                      name="requestedFor"
-                      value={formData.requestedFor}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select a participant</option>
-                      {participants.map((participant) => (
-                        <option key={participant._id} value={participant._id}>
-                          {participant.name} ({participant.community})
-                        </option>
-                      ))}
-                    </select>
+                    <SearchableDropdown
+                      participants={participants}
+                      onSelect={handleParticipantSelect}
+                      value={searchQuery}
+                      onChange={setSearchQuery}
+                      placeholder="Type to search or click to see all participants..."
+                    />
                   </div>
 
                   <div className="form-group">
@@ -1168,7 +1277,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {requests.map((request, index) => (
+                    {requests.map((request) => (
                       <tr key={request._id}>
                         <td>{request.requestedFor.name}</td>
                         <td>{request.requestTravel}</td>
@@ -1206,6 +1315,7 @@
       function TravelLog({ user }) {
         const [participants, setParticipants] = useState([]);
         const [selectedParticipant, setSelectedParticipant] = useState('');
+        const [searchQuery, setSearchQuery] = useState('');
         const [travelType, setTravelType] = useState('');
         const [requestData, setRequestData] = useState(null);
         const [loading, setLoading] = useState(false);
@@ -1220,23 +1330,21 @@
         const [submitting, setSubmitting] = useState(false);
         const [kmError, setKmError] = useState('');
 
-        useEffect(() => {
-          fetchParticipants();
-        }, []);
+        const authHeaders = useMemo(
+          () => ({
+            name: user.name,
+            phone: user.phone,
+            dob: user.dob,
+          }),
+          [user]
+        );
 
-        const fetchParticipants = async () => {
+        const fetchParticipants = useCallback(async () => {
           setLoading(true);
           try {
-            const response = await fetch(`${API_BASE}/participants`, {
-              headers: {
-                name: user.name,
-                phone: user.phone,
-                dob: user.dob,
-              },
+            const result = await apiCall('/participants', {
+              headers: authHeaders,
             });
-
-            const result = await response.json();
-
             if (result.success) {
               setParticipants(result.data);
             } else {
@@ -1247,50 +1355,45 @@
           } finally {
             setLoading(false);
           }
-        };
+        }, [authHeaders]);
 
-        const fetchRequestData = async (participantId) => {
-          setLoading(true);
-          setError('');
-          try {
-            const response = await fetch(
-              `${API_BASE}/requests/participant/${participantId}`,
-              {
-                headers: {
-                  name: user.name,
-                  phone: user.phone,
-                  dob: user.dob,
-                },
-              }
-            );
+        useEffect(() => {
+          fetchParticipants();
+        }, [fetchParticipants]);
 
-            const result = await response.json();
+        const fetchRequestData = useCallback(
+          async (participantId) => {
+            setLoading(true);
+            setError('');
+            try {
+              const result = await apiCall(
+                `/requests/participant/${participantId}`,
+                {
+                  headers: authHeaders,
+                }
+              );
 
-            if (result.success) {
-              // Check if data is empty object or null
-              if (result.data && Object.keys(result.data).length > 0) {
-                setRequestData(result.data);
+              if (result.success) {
+                setRequestData(
+                  result.data && Object.keys(result.data).length > 0
+                    ? result.data
+                    : { noRequest: true }
+                );
               } else {
-                // No request data available
-                setRequestData({ noRequest: true });
+                setError(result.message || 'Failed to fetch request data');
+                setRequestData(null);
               }
-            } else {
-              setError(result.message || 'Failed to fetch request data');
+            } catch (err) {
+              setError('Network error. Please try again.');
               setRequestData(null);
+            } finally {
+              setLoading(false);
             }
-          } catch (err) {
-            setError('Network error. Please try again.');
-            setRequestData(null);
-          } finally {
-            setLoading(false);
-          }
-        };
+          },
+          [authHeaders]
+        );
 
-        const handleParticipantChange = (e) => {
-          const participantId = e.target.value;
-          setSelectedParticipant(participantId);
-          setRequestData(null);
-          setTravelType('');
+        const resetForm = useCallback(() => {
           setFormData({
             totalKm: '',
             agreed: false,
@@ -1298,72 +1401,73 @@
             travelDate: '',
           });
           setKmError('');
-        };
+        }, []);
 
-        const handleTravelTypeChange = (type) => {
-          setTravelType(type);
-          setFormData({
-            ...formData,
-            travelDate:  getTodayDate() ,
-            totalKm: '', // Clear KM when changing type
-          });
-          setKmError('');
-
-          if (type === 'over-50' && selectedParticipant) {
-            fetchRequestData(selectedParticipant);
-          } else if (type === 'under-50') {
-            // For under 50km, we don't need to fetch request data
+        const handleParticipantSelect = useCallback(
+          (participant) => {
+            setSelectedParticipant(participant._id);
+            setSearchQuery(participant.name);
             setRequestData(null);
-          }
-        };
+            setTravelType('');
+            resetForm();
+          },
+          [resetForm]
+        );
 
-        const handleFormChange = (e) => {
-          const { name, value, type, checked } = e.target;
-
-          if (name === 'totalKm') {
-            const kmValue = parseInt(value);
-
-            // Clear any existing KM error
+        const handleTravelTypeChange = useCallback(
+          (type) => {
+            setTravelType(type);
+            setFormData((prev) => ({
+              ...prev,
+              travelDate: getTodayDate(),
+              totalKm: '',
+            }));
             setKmError('');
 
-            // Validate KM based on travel type
-            if (travelType === 'under-50' && kmValue > 50) {
-              setKmError(
-                'For travel over 50 KM, please select the "Over 50 KM Travel" option.'
-              );
-              setFormData({
-                ...formData,
-                [name]: value,
-              });
-              return;
+            if (type === 'over-50' && selectedParticipant) {
+              fetchRequestData(selectedParticipant);
+            } else if (type === 'under-50') {
+              setRequestData(null);
             }
-            if (travelType === 'over-50' && kmValue < 51) {
-              setKmError(
-                'For travel under 50 KM, please select the "Under 50 KM Travel" option.'
-              );
-              setFormData({
-                ...formData,
-                [name]: value,
-              });
-              return;
-            }
-          }
+          },
+          [selectedParticipant, fetchRequestData]
+        );
 
-          setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value,
-          });
-        };
+        const validateKm = useCallback((value, type) => {
+          const kmValue = parseInt(value);
+          if (type === 'under-50' && kmValue > 50) {
+            return 'For travel over 50 KM, please select the "Over 50 KM Travel" option.';
+          }
+          if (type === 'over-50' && kmValue < 51) {
+            return 'For travel under 50 KM, please select the "Under 50 KM Travel" option.';
+          }
+          return '';
+        }, []);
+
+        const handleFormChange = useCallback(
+          (e) => {
+            const { name, value, type, checked } = e.target;
+
+            if (name === 'totalKm') {
+              const error = validateKm(value, travelType);
+              setKmError(error);
+            }
+
+            setFormData((prev) => ({
+              ...prev,
+              [name]: type === 'checkbox' ? checked : value,
+            }));
+          },
+          [travelType, validateKm]
+        );
 
         const handleSubmit = async (e) => {
           e.preventDefault();
 
-          // Final validation before submission
           const kmValue = parseInt(formData.totalKm);
-          if (travelType === 'under-50' && kmValue > 50) {
-            setKmError(
-              'For travel over 50 KM, please select the "Over 50 KM Travel" option.'
-            );
+          const validationError = validateKm(formData.totalKm, travelType);
+          if (validationError) {
+            setKmError(validationError);
             return;
           }
 
@@ -1374,13 +1478,12 @@
 
           try {
             let approval = 'Not Approved';
-            let travelDate = formData.travelDate;
-            let requestPayload = {
+            const requestPayload = {
               participant: selectedParticipant,
               staff: user._id,
-              traveled: parseInt(formData.totalKm),
-              date: new Date(travelDate).toISOString(),
-              approval: approval,
+              traveled: kmValue,
+              date: new Date(formData.travelDate).toISOString(),
+              approval,
               signature: formData.signature,
             };
 
@@ -1394,32 +1497,23 @@
                   ? 'Prior Approved'
                   : 'Not Approved';
               requestPayload.requestId = requestData._id;
+              requestPayload.approval = approval;
             }
 
-            requestPayload.approval = approval;
-
-            const response = await fetch(`${API_BASE}/travels`, {
+            const result = await apiCall('/travels', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                name: user.name,
-                phone: user.phone,
-                dob: user.dob,
+                ...authHeaders,
               },
               body: JSON.stringify(requestPayload),
             });
 
-            const result = await response.json();
-
             if (result.success) {
               setSuccess('Travel log submitted successfully!');
-              setFormData({
-                totalKm: '',
-                agreed: false,
-                signature: '',
-                travelDate: '',
-              });
+              resetForm();
               setSelectedParticipant('');
+              setSearchQuery('');
               setTravelType('');
               setRequestData(null);
             } else {
@@ -1432,65 +1526,53 @@
           }
         };
 
-        const formatDate = (dateString) => {
-          return new Date(dateString).toLocaleDateString();
-        };
-
-        const getStatusMessage = (status) => {
-          switch (status) {
-            case 'Pending':
-              return {
-                type: 'warning',
-                message: 'Your request is Pending and not at this stage.',
-              };
-            case 'Declined':
-              return {
-                type: 'warning',
-                message: 'Your request is Declined and not at this stage.',
-              };
-            case 'Approved':
-              return {
-                type: 'success',
-                message: 'Your requested travel log is accepted.',
-              };
-            default:
-              return { type: 'info', message: `Status: ${status}` };
-          }
-        };
-
-        const getTodayDate = () => {
-          const today = new Date();
-          return today.toISOString().split('T')[0];
-        };
+        const isFormValid = useMemo(() => {
+          return (
+            formData.agreed &&
+            formData.signature &&
+            formData.totalKm &&
+            formData.travelDate &&
+            !kmError
+          );
+        }, [formData, kmError]);
 
         return (
           <div>
-            <h3 style={{ marginBottom: '20px', color: '#4a5568', fontWeight: 600 }}>Travel Log</h3>
+            <h3
+              style={{
+                marginBottom: '20px',
+                color: '#4a5568',
+                fontWeight: 600,
+              }}
+            >
+              Travel Log
+            </h3>
 
             {error && <div className="error">{error}</div>}
             {success && <div className="success">{success}</div>}
-            
 
             <div className="form-group">
-              <label htmlFor="participant">Select Participant</label>
-              <select
-                id="participant"
-                value={selectedParticipant}
-                onChange={handleParticipantChange}
+              <label htmlFor="participant">Search Participant</label>
+              <SearchableDropdown
+                participants={participants}
+                onSelect={handleParticipantSelect}
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Type to search or click to see all participants..."
                 disabled={loading}
-              >
-                <option value="">Select a participant</option>
-                {participants.map((participant) => (
-                  <option key={participant._id} value={participant._id}>
-                    {participant.name}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
 
             {selectedParticipant && (
               <div>
-                <h4 style={{ marginBottom: '15px', marginTop: '20px', color: '#4a5568', fontWeight: 600 }}>
+                <h4
+                  style={{
+                    marginBottom: '15px',
+                    marginTop: '20px',
+                    color: '#4a5568',
+                    fontWeight: 600,
+                  }}
+                >
                   Travel Type
                 </h4>
                 <div className="travel-options">
@@ -1546,14 +1628,9 @@
                     <p>
                       <strong>Status:</strong> {requestData.status}
                     </p>
-
                     <div
-                      className={`status-message ${
-                        getStatusMessage(requestData.status).type === 'warning'
-                          ? 'status-warning'
-                          : getStatusMessage(requestData.status).type === 'success'
-                          ? 'status-success'
-                          : 'status-info'
+                      className={`status-message status-${
+                        getStatusMessage(requestData.status).type
                       }`}
                     >
                       {getStatusMessage(requestData.status).message}
@@ -1563,7 +1640,7 @@
               </div>
             )}
 
-            
+            {travelType && (
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="travelDate">Travel Date</label>
@@ -1581,12 +1658,13 @@
                 <div className="checkbox-container">
                   <input
                     type="checkbox"
+                    id="agreed"
                     name="agreed"
-                    checked={formData.agreed}
+                    checked={formData.agreed1}
                     onChange={handleFormChange}
                     required
                   />
-                  <label>
+                  <label htmlFor="agreed">
                     I agree the KM travelled is true and accurate
                   </label>
                 </div>
@@ -1611,21 +1689,17 @@
                         required
                       />
                       {travelType === 'under-50' && (
-                        <small>
-                          Must be 50 KM or less for this option
-                        </small>
+                        <small>Must be 50 KM or less for this option</small>
                       )}
                     </div>
 
-                    <div>
-                        {kmError && <div className="error">{kmError}</div>}
-                    </div>
+                    {kmError && <div className="error">{kmError}</div>}
 
                     <div className="form-group">
                       <label htmlFor="signature">Signature</label>
                       <SignatureCanvas
                         onSignatureChange={(signature) =>
-                          setFormData({ ...formData, signature })
+                          setFormData((prev) => ({ ...prev, signature }))
                         }
                       />
                     </div>
@@ -1635,30 +1709,22 @@
                 <button
                   type="submit"
                   className="btn"
-                  disabled={
-                    submitting ||
-                    !formData.agreed ||
-                    !formData.signature ||
-                    !formData.totalKm ||
-                    !formData.travelDate ||
-                    kmError !== ''
-                  }
+                  disabled={submitting || !isFormValid}
                 >
                   {submitting ? 'Submitting...' : 'Submit Travel Log'}
                 </button>
               </form>
-        
+            )}
           </div>
         );
       }
 
-      // Enhanced signature canvas component with placeholder
       function SignatureCanvas({ onSignatureChange }) {
-        const canvasRef = React.useRef(null);
-        const [isDrawing, setIsDrawing] = React.useState(false);
-        const [hasSignature, setHasSignature] = React.useState(false);
+        const canvasRef = useRef(null);
+        const [isDrawing, setIsDrawing] = useState(false);
+        const [hasSignature, setHasSignature] = useState(false);
 
-        React.useEffect(() => {
+        useEffect(() => {
           const canvas = canvasRef.current;
           const ctx = canvas.getContext('2d');
           ctx.strokeStyle = '#000000';
@@ -1666,41 +1732,55 @@
           ctx.lineCap = 'round';
         }, []);
 
-        const startDrawing = (e) => {
-          setIsDrawing(true);
-          setHasSignature(true);
-          const canvas = canvasRef.current;
+        const getCoordinates = useCallback((e, canvas) => {
           const rect = canvas.getBoundingClientRect();
-          const ctx = canvas.getContext('2d');
-          ctx.beginPath();
-          ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-        };
+          return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+          };
+        }, []);
 
-        const draw = (e) => {
-          if (!isDrawing) return;
-          const canvas = canvasRef.current;
-          const rect = canvas.getBoundingClientRect();
-          const ctx = canvas.getContext('2d');
-          ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-          ctx.stroke();
-        };
+        const startDrawing = useCallback(
+          (e) => {
+            setIsDrawing(true);
+            setHasSignature(true);
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d');
+            const coords = getCoordinates(e, canvas);
+            ctx.beginPath();
+            ctx.moveTo(coords.x, coords.y);
+          },
+          [getCoordinates]
+        );
 
-        const stopDrawing = () => {
+        const draw = useCallback(
+          (e) => {
+            if (!isDrawing) return;
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d');
+            const coords = getCoordinates(e, canvas);
+            ctx.lineTo(coords.x, coords.y);
+            ctx.stroke();
+          },
+          [isDrawing, getCoordinates]
+        );
+
+        const stopDrawing = useCallback(() => {
           if (isDrawing) {
             setIsDrawing(false);
             const canvas = canvasRef.current;
             const dataURL = canvas.toDataURL();
             onSignatureChange(dataURL);
           }
-        };
+        }, [isDrawing, onSignatureChange]);
 
-        const clearSignature = () => {
+        const clearSignature = useCallback(() => {
           const canvas = canvasRef.current;
           const ctx = canvas.getContext('2d');
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           setHasSignature(false);
           onSignatureChange('');
-        };
+        }, [onSignatureChange]);
 
         return (
           <div>
@@ -1736,6 +1816,6 @@
 
       ReactDOM.render(<App />, document.getElementById('root'));
     </script>
-     <script src="../index.js" charset="utf-8"></script>
+    <script src="../index.js" charset="utf-8"></script>
   </body>
 </html>
