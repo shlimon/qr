@@ -232,6 +232,7 @@
         border-radius: 8px;
         margin-bottom: 20px;
         text-align: center;
+        margin-top: 10px;
       }
 
       .success {
@@ -581,6 +582,19 @@
         background-color: white;
         color: #333;
       }
+
+      .participant-info {
+        margin-top: 8px;
+        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        background: rgba(132, 255, 146, 0.205);
+        font-size: 14px;
+        color: #2d3748;
+      }
+      .participant-info div {
+        margin: 10px 0;
+      }
     </style>
   </head>
   <body>
@@ -735,11 +749,11 @@
         const messages = {
           Pending: {
             type: 'warning',
-            message: 'Your request is Pending and not at this stage.',
+            message: 'Your request travel log is Pending.',
           },
           Declined: {
             type: 'warning',
-            message: 'Your request is Declined and not at this stage.',
+            message: 'Your request travel log is Declined.',
           },
           Approved: {
             type: 'success',
@@ -1104,6 +1118,8 @@
         const [success, setSuccess] = useState('');
         const [showForm, setShowForm] = useState(false);
         const [searchQuery, setSearchQuery] = useState('');
+        const [participantError, setParticipantError] = useState('');
+        const [foundParticipant, setFoundParticipant] = useState(null);
         const [formData, setFormData] = useState({
           requestedFor: '',
           requestTravel: '',
@@ -1150,10 +1166,34 @@
           fetchData();
         }, [fetchData]);
 
-        const handleParticipantSelect = useCallback((participant) => {
-          setFormData((prev) => ({ ...prev, requestedFor: participant._id }));
-          setSearchQuery(participant.name);
-        }, []);
+        // Validate participant by exact name (case-insensitive)
+        const handleParticipantChange = (e) => {
+          const value = e.target.value;
+          setSearchQuery(value);
+
+          if (!value.trim()) {
+            setFormData((prev) => ({ ...prev, requestedFor: '' }));
+            setParticipantError('');
+            setFoundParticipant(null);
+            return;
+          }
+
+          const participant = participants.find(
+            (p) => p.name.toLowerCase() === value.toLowerCase()
+          );
+
+          if (participant) {
+            setFormData((prev) => ({ ...prev, requestedFor: participant._id }));
+            setParticipantError('');
+            setFoundParticipant(participant);
+          } else {
+            setFormData((prev) => ({ ...prev, requestedFor: '' }));
+            setParticipantError(
+              'Participant not found, please ensure you have spelled the name correctly.'
+            );
+            setFoundParticipant(null);
+          }
+        };
 
         const handleChange = useCallback((e) => {
           const { name, value } = e.target;
@@ -1165,6 +1205,23 @@
           setSubmitting(true);
           setError('');
           setSuccess('');
+
+          if (!formData.requestedFor) {
+            setError(
+              'Please enter a valid participant name before submitting.'
+            );
+            setSubmitting(false);
+            return;
+          }
+
+          if (
+            !formData.requestTravel ||
+            parseInt(formData.requestTravel, 10) <= 50
+          ) {
+            setError('Approximate Intended Travel KM must be more than 50.');
+            setSubmitting(false);
+            return;
+          }
 
           try {
             const result = await apiCall('/requests', {
@@ -1189,6 +1246,8 @@
               });
               setSearchQuery('');
               setShowForm(false);
+              setParticipantError('');
+              setFoundParticipant(null);
               fetchData();
             } else {
               setError(result.message || 'Failed to submit request');
@@ -1226,6 +1285,8 @@
                       requestTravel: '',
                       dateForTravel: '',
                     });
+                    setParticipantError('');
+                    setFoundParticipant(null);
                   }
                 }}
                 style={{ width: 'auto', padding: '8px 16px' }}
@@ -1239,17 +1300,32 @@
 
             {showForm && (
               <div className="info-box">
-                <h4>New Travel Request</h4>
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
-                    <label htmlFor="requestedFor">Participant</label>
-                    <SearchableDropdown
-                      participants={participants}
-                      onSelect={handleParticipantSelect}
+                    <label htmlFor="requestedFor">Participant Name</label>
+                    <input
+                      type="text"
+                      id="requestedFor"
+                      name="requestedFor"
                       value={searchQuery}
-                      onChange={setSearchQuery}
-                      placeholder="Type to search or click to see all participants..."
+                      onChange={handleParticipantChange}
+                      placeholder="Enter participant name"
+                      required
                     />
+                    {participantError && (
+                      <div className="error">{participantError}</div>
+                    )}
+                    {foundParticipant && (
+                      <div className="participant-info">
+                        <div>
+                          <strong>Name:</strong> {foundParticipant.name}
+                        </div>
+                        <div>
+                          <strong>Community:</strong>{' '}
+                          {foundParticipant.community}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="form-group">
@@ -1269,6 +1345,7 @@
                     <label htmlFor="requestTravel">
                       Approximate Intended Travel KM
                     </label>
+
                     <input
                       type="number"
                       id="requestTravel"
@@ -1276,7 +1353,8 @@
                       value={formData.requestTravel}
                       onChange={handleChange}
                       placeholder="Enter KM (e.g., 75)"
-                      min="1"
+                      min="51"
+                      onWheel={(e) => e.currentTarget.blur()}
                       required
                     />
                   </div>
@@ -1352,6 +1430,8 @@
         });
         const [submitting, setSubmitting] = useState(false);
         const [kmError, setKmError] = useState('');
+        const [participantError, setParticipantError] = useState('');
+        const [foundParticipant, setFoundParticipant] = useState(null);
 
         const authHeaders = useMemo(
           () => ({
@@ -1426,16 +1506,37 @@
           setKmError('');
         }, []);
 
-        const handleParticipantSelect = useCallback(
-          (participant) => {
+        // Participant input validation
+        const handleParticipantChange = (e) => {
+          const value = e.target.value;
+          setSearchQuery(value);
+
+          if (!value.trim()) {
+            setSelectedParticipant('');
+            setParticipantError('');
+            setFoundParticipant(null);
+            return;
+          }
+
+          const participant = participants.find(
+            (p) => p.name.toLowerCase() === value.toLowerCase()
+          );
+
+          if (participant) {
             setSelectedParticipant(participant._id);
-            setSearchQuery(participant.name);
+            setFoundParticipant(participant);
+            setParticipantError('');
+            resetForm();
             setRequestData(null);
             setTravelType('');
-            resetForm();
-          },
-          [resetForm]
-        );
+          } else {
+            setSelectedParticipant('');
+            setFoundParticipant(null);
+            setParticipantError(
+              'Participant not found, please ensure you have spelled the name correctly.'
+            );
+          }
+        };
 
         const handleTravelTypeChange = useCallback(
           (type) => {
@@ -1539,6 +1640,7 @@
               setSearchQuery('');
               setTravelType('');
               setRequestData(null);
+              setFoundParticipant(null);
             } else {
               setError(result.message || 'Failed to submit travel log');
             }
@@ -1575,19 +1677,32 @@
             {success && <div className="success">{success}</div>}
 
             <div className="form-group">
-              <label htmlFor="participant">Search Participant</label>
-              <SearchableDropdown
-                participants={participants}
-                onSelect={handleParticipantSelect}
+              <label htmlFor="participant">Participant Name</label>
+              <input
+                type="text"
+                id="participant"
                 value={searchQuery}
-                onChange={setSearchQuery}
-                placeholder="Type to search or click to see all participants..."
-                disabled={loading}
+                onChange={handleParticipantChange}
+                placeholder="Enter participant name"
+                required
               />
+              {participantError && (
+                <div className="error">{participantError}</div>
+              )}
+              {foundParticipant && (
+                <div className="participant-info">
+                  <div>
+                    <strong>Name:</strong> {foundParticipant.name}
+                  </div>
+                  <div>
+                    <strong>Community:</strong> {foundParticipant.community}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {selectedParticipant && (
-              <div>
+            {foundParticipant && (
+              <>
                 <h4
                   style={{
                     marginBottom: '15px',
@@ -1618,7 +1733,7 @@
                     <p>Need permission</p>
                   </div>
                 </div>
-              </div>
+              </>
             )}
 
             {loading && <div className="loading">Loading request data...</div>}
@@ -1634,23 +1749,23 @@
                     </div>
                   </div>
                 ) : (
-                  <div>
+                  <div className="participant-info">
                     <h4>Request Information</h4>
-                    <p>
+                    <div>
                       <strong>Requested by:</strong>{' '}
                       {requestData.requestedBy.name}
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                       <strong>Requested for:</strong>{' '}
                       {requestData.requestedFor.name}
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                       <strong>Requested Travel:</strong>{' '}
                       {requestData.requestTravel} KM
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                       <strong>Status:</strong> {requestData.status}
-                    </p>
+                    </div>
                     <div
                       className={`status-message status-${
                         getStatusMessage(requestData.status).type
@@ -1683,7 +1798,7 @@
                     type="checkbox"
                     id="agreed"
                     name="agreed"
-                    checked={formData.agreed1}
+                    checked={formData.agreed}
                     onChange={handleFormChange}
                     required
                   />
@@ -1710,6 +1825,7 @@
                         min="0"
                         max={travelType === 'under-50' ? '50' : undefined}
                         required
+                        onWheel={(e) => e.currentTarget.blur()}
                       />
                       {travelType === 'under-50' && (
                         <small>Must be 50 KM or less for this option</small>
