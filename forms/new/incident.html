@@ -9,10 +9,8 @@
       crossorigin
       src="https://unpkg.com/react@18/umd/react.production.min.js"
     ></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -27,19 +25,19 @@
         margin: 0 auto;
         background: white;
         padding: 40px;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Montserrat', sans-serif;
       }
       h1 {
         color: #000;
         margin-bottom: 40px;
-        font-size: 2em;
+        font-size: 24px;
         font-weight: 600;
       }
       .section-title {
-        font-size: 1.2em;
-        color: #000;
+        font-size: 16px;
+        color: #4a5568;
         margin: 40px 0 25px 0;
-        font-weight: 600;
+        font-weight: 500;
         padding-bottom: 10px;
         border-bottom: 2px solid #e0e0e0;
       }
@@ -50,8 +48,8 @@
         margin-bottom: 25px;
       }
       form label {
-        font-size: 20px;
-        color: #293029;
+        font-size: 14px;
+        color: #4a5568;
         font-family: 'Montserrat', sans-serif;
       }
       label {
@@ -168,7 +166,7 @@
       }
       .error-message {
         color: #dc3545;
-        font-size: 14px;
+        font-size: 12px;
         margin-top: 5px;
       }
       .success-message {
@@ -192,9 +190,9 @@
       h3 {
         margin-top: 25px;
         margin-bottom: 15px;
-        color: #333;
-        font-size: 1em;
-        font-weight: 600;
+        color: #4a5568;
+        font-size: 16px;
+        font-weight: 500;
       }
       @media (max-width: 768px) {
         .container {
@@ -632,6 +630,7 @@
                   <input
                     type="time"
                     id="timeOfIncident"
+                    placeholder="HH:MM"
                     name="timeOfIncident"
                     value={formData.timeOfIncident}
                     onChange={handleChange}
@@ -751,7 +750,10 @@
               <div className="form-group">
                 <label htmlFor="incidentDescription">
                   Describe how the incident occurred and if there was any damage
-                  to property or equipment *
+                  to property or equipment (include: leading up to the event,
+                  the actual event, and any equipment, work practices, tasks, or
+                  processes that may have been involved -upload a separate sheet
+                  if necessary) *
                 </label>
                 <textarea
                   id="incidentDescription"
@@ -798,20 +800,8 @@
                     <textarea
                       id="treatmentProvided"
                       name="treatmentProvided"
+                      placeholder="If yes, please provide details (e.g., first aid given by who, referred to e.g. GP)"
                       value={formData.treatmentProvided}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="natureOfInjury">
-                      Nature of injury e.g., sprain, cut, burn *
-                    </label>
-                    <textarea
-                      id="natureOfInjury"
-                      name="natureOfInjury"
-                      value={formData.natureOfInjury}
                       onChange={handleChange}
                       required
                     />
@@ -858,6 +848,19 @@
                       />
                     </div>
                   )}
+
+                  <div className="form-group">
+                    <label htmlFor="natureOfInjury">
+                      Nature of injury e.g., sprain, cut, burn *
+                    </label>
+                    <textarea
+                      id="natureOfInjury"
+                      name="natureOfInjury"
+                      value={formData.natureOfInjury}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
                 </>
               )}
 
