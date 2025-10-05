@@ -408,12 +408,11 @@
         const [formData, setFormData] = useState({
           participant: '',
           dateRecorded: '',
-          reportedBy: '',
-          contactDetails: '',
           dateOfIncident: '',
           timeOfIncident: '',
           streetAddress: '',
           streetAddress2: '',
+          incidentOnProvisionOfService: '',
           city: '',
           state: '',
           postalCode: '',
@@ -472,14 +471,45 @@
           setSuccessMessage('');
 
           try {
+            const formattedData = {
+              participant: formData.participant,
+              incidentOnProvisionOfService:
+                formData.incidentOnProvisionOfService === 'yes' ||
+                formData.incidentOnProvisionOfService === true,
+              incidentDetails: {
+                dateOfIncident: formData.dateOfIncident,
+                timeOfIncident: formData.timeOfIncident,
+                incidentRecordDate: formData.dateRecorded || new Date(),
+                location: {
+                  streetAddress: formData.streetAddress,
+                  streetAddress2: formData.streetAddress2,
+                  city: formData.city,
+                  state: formData.state,
+                  postalCode: formData.postalCode,
+                },
+              },
+              witnesses:
+                formData.hasWitnesses === 'yes' ||
+                formData.hasWitnesses === true,
+              witnessDetails: formData.witnessDetails || '',
+              descriptionOfIncident: formData.incidentDescription,
+              didInjured:
+                formData.resultedInInjury === 'yes' ||
+                formData.resultedInInjury === true,
+              treatmentProvided: formData.treatmentProvided || '',
+              natureOfInjury: formData.natureOfInjury || '',
+              equipmentInvolved:
+                formData.equipmentInvolved === 'yes' ||
+                formData.equipmentInvolved === true,
+              equipmentDetails: formData.equipmentDetails || '',
+            };
+
             const response = await fetch(
-              'http://localhost:4000/api/km/travels',
+              'http://localhost:4000/api/app-data/incident-reports',
               {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formattedData),
               }
             );
 
@@ -490,8 +520,6 @@
               setFormData({
                 participant: '',
                 dateRecorded: '',
-                reportedBy: '',
-                contactDetails: '',
                 dateOfIncident: '',
                 timeOfIncident: '',
                 streetAddress: '',
@@ -503,6 +531,7 @@
                 witnessDetails: '',
                 incidentDescription: '',
                 resultedInInjury: '',
+                incidentOnProvisionOfService: '',
                 treatmentProvided: '',
                 natureOfInjury: '',
                 equipmentInvolved: '',
@@ -565,6 +594,34 @@
                   placeholder="Search participant by name or NDIS..."
                   required={true}
                 />
+                <div className="form-group">
+                  <label>Did this incident result in an injury? *</label>
+                  <div className="radio-group">
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="incidentOnProvisionOfService"
+                        value="yes"
+                        checked={
+                          formData.incidentOnProvisionOfService === 'yes'
+                        }
+                        onChange={handleChange}
+                        required
+                      />
+                      Yes
+                    </label>
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="incidentOnProvisionOfService"
+                        value="no"
+                        checked={formData.incidentOnProvisionOfService === 'no'}
+                        onChange={handleChange}
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
 
                 <h2 className="section-title">Incident Details</h2>
 
@@ -582,34 +639,6 @@
                       required
                     />
                   </div>
-
-                  <div className="form-group">
-                    <label htmlFor="reportedBy">Incident Reported By *</label>
-                    <input
-                      type="text"
-                      id="reportedBy"
-                      name="reportedBy"
-                      value={formData.reportedBy}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="contactDetails">Contact Details *</label>
-                  <input
-                    type="number"
-                    id="contactDetails"
-                    name="contactDetails"
-                    value={formData.contactDetails}
-                    onChange={handleChange}
-                    required
-                    onWheel={(e) => e.currentTarget.blur()}
-                  />
-                </div>
-
-                <div className="grid-2">
                   <div className="form-group">
                     <label htmlFor="dateOfIncident">
                       Date of the Incident *
@@ -623,7 +652,9 @@
                       required
                     />
                   </div>
+                </div>
 
+                <div className="grid-2">
                   <div className="form-group">
                     <label htmlFor="timeOfIncident">
                       Time of the Incident *
@@ -651,6 +682,7 @@
                     value={formData.streetAddress}
                     onChange={handleChange}
                     required
+                    placeholder="Street address"
                   />
                 </div>
 
@@ -664,6 +696,7 @@
                     name="streetAddress2"
                     value={formData.streetAddress2}
                     onChange={handleChange}
+                    placeholder="Street address line 2"
                   />
                 </div>
 
@@ -677,6 +710,7 @@
                       value={formData.city}
                       onChange={handleChange}
                       required
+                      placeholder="City"
                     />
                   </div>
 
@@ -689,6 +723,7 @@
                       value={formData.state}
                       onChange={handleChange}
                       required
+                      placeholder="State / Province"
                     />
                   </div>
                 </div>
@@ -702,6 +737,7 @@
                     value={formData.postalCode}
                     onChange={handleChange}
                     required
+                    placeholder="Postal / Zip code"
                   />
                 </div>
 
@@ -744,6 +780,7 @@
                       value={formData.witnessDetails}
                       onChange={handleChange}
                       required
+                      placeholder="Witness details"
                     />
                   </div>
                 )}
@@ -762,6 +799,7 @@
                     value={formData.incidentDescription}
                     onChange={handleChange}
                     required
+                    placeholder="Describe the incident in detail"
                   />
                 </div>
 
@@ -846,6 +884,7 @@
                           value={formData.equipmentDetails}
                           onChange={handleChange}
                           required
+                          placeholder="Details of the equipment involved"
                         />
                       </div>
                     )}
@@ -860,6 +899,7 @@
                         value={formData.natureOfInjury}
                         onChange={handleChange}
                         required
+                        placeholder="Nature of injury"
                       />
                     </div>
                   </>
