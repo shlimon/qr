@@ -4,16 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Participant Incident Report</title>
+
+    <!-- Load ALL your CSS files here -->
     <link rel="stylesheet" href="../../styles.css" />
-    <script
-      crossorigin
-      src="https://unpkg.com/react@18/umd/react.production.min.js"
-    ></script>
+    <link rel="stylesheet" href="./newStyles.css" />
+
+    <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
+    <!-- React CDN -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
     <script
       crossorigin
       src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
@@ -34,7 +40,7 @@
         font-weight: 600;
       }
       .section-title {
-        font-size: 16px;
+        font-size: 20px;
         color: #4a5568;
         margin: 40px 0 25px 0;
         font-weight: 500;
@@ -165,9 +171,12 @@
         cursor: not-allowed;
       }
       .error-message {
+        margin: 20px 0;
         color: #dc3545;
-        font-size: 12px;
+        font-size: 14px;
         margin-top: 5px;
+        padding: 15px;
+        background: #ff001518;
       }
       .success-message {
         background: #d4edda;
@@ -205,7 +214,6 @@
     </style>
   </head>
   <body>
-    <!-- Navigation Bar -->
     <nav class="navbar">
       <div class="brand-title">Decent Care</div>
       <a href="#" class="toggle-button">
@@ -278,9 +286,13 @@
     </nav>
     <div id="root"></div>
 
+    <!-- Include the auth system -->
+    <script type="text/babel" src="./auth.js"></script>
+
     <script type="text/babel">
       const { useState, useEffect, useRef } = React;
 
+      // Your SearchableSelect component
       function SearchableSelect({
         label,
         options,
@@ -385,16 +397,15 @@
         );
       }
 
-      function IncidentReportForm() {
-        const [staffList, setStaffList] = useState([]);
+      // Your IncidentReportForm component
+      function IncidentReportForm({ user, onLogout }) {
         const [participantList, setParticipantList] = useState([]);
         const [loading, setLoading] = useState(true);
+        const [error, setError] = useState('');
         const [submitting, setSubmitting] = useState(false);
         const [successMessage, setSuccessMessage] = useState('');
-        const [error, setError] = useState('');
 
         const [formData, setFormData] = useState({
-          staff: '',
           participant: '',
           dateRecorded: '',
           reportedBy: '',
@@ -422,23 +433,19 @@
 
         const fetchData = async () => {
           try {
-            const [staffResponse, participantResponse] = await Promise.all([
-              fetch('http://localhost:4000/api/km/staffs'),
-              fetch('http://localhost:4000/api/km/participants'),
-            ]);
+            const response = await fetch(
+              'http://localhost:4000/api/app-data/participants'
+            );
+            const data = await response.json();
 
-            const staffData = await staffResponse.json();
-            const participantData = await participantResponse.json();
-
-            if (staffData.success) {
-              setStaffList(staffData.data);
+            if (data.success) {
+              setParticipantList(data.data);
+            } else {
+              setError('Failed to load participants.');
             }
-            if (participantData.success) {
-              setParticipantList(participantData.data);
-            }
-            setLoading(false);
           } catch (err) {
             setError('Failed to load data. Please refresh the page.');
+          } finally {
             setLoading(false);
           }
         };
@@ -481,7 +488,6 @@
             if (response.ok) {
               setSuccessMessage('Incident report submitted successfully!');
               setFormData({
-                staff: '',
                 participant: '',
                 dateRecorded: '',
                 reportedBy: '',
@@ -525,12 +531,6 @@
           );
         }
 
-        const staffOptions = staffList.map((staff) => ({
-          id: staff._id,
-          name: staff.name,
-          extra: `${staff.email} - ${staff.type}`,
-        }));
-
         const participantOptions = participantList.map((participant) => ({
           id: participant._id,
           name: participant.name,
@@ -539,345 +539,353 @@
 
         return (
           <div className="container">
-            <h1>Participant Incident Report</h1>
+            <div className="card">
+              {error && <div className="error-message">{error}</div>}
 
-            {successMessage && (
-              <div className="success-message">{successMessage}</div>
-            )}
-            {error && <div className="error-message">{error}</div>}
-
-            <form onSubmit={handleSubmit}>
-              <h2 className="section-title">
-                Staff Completing This Incident Form
-              </h2>
-              <SearchableSelect
-                label="Select Staff"
-                options={staffOptions}
-                value={formData.staff}
-                onChange={(value) => handleSelectChange('staff', value)}
-                placeholder="Search staff by name or email..."
-                required={true}
-              />
-
-              <h2 className="section-title">Participant Details</h2>
-              <SearchableSelect
-                label="Select Participant"
-                options={participantOptions}
-                value={formData.participant}
-                onChange={(value) => handleSelectChange('participant', value)}
-                placeholder="Search participant by name or NDIS..."
-                required={true}
-              />
-
-              <h2 className="section-title">Incident Details</h2>
-
-              <div className="grid-2">
-                <div className="form-group">
-                  <label htmlFor="dateRecorded">
-                    Date that the incident was recorded on *
-                  </label>
-                  <input
-                    type="date"
-                    id="dateRecorded"
-                    name="dateRecorded"
-                    value={formData.dateRecorded}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="reportedBy">Incident Reported By *</label>
-                  <input
-                    type="text"
-                    id="reportedBy"
-                    name="reportedBy"
-                    value={formData.reportedBy}
-                    onChange={handleChange}
-                    required
-                  />
+              <div className="header-section">
+                <div className="dashboard-header">
+                  <div style={{ textAlign: 'left' }}>
+                    <h2>Travel Log</h2>
+                    <h3>{user.name}</h3>
+                    <p style={{ padding: '10px 0' }}>{user.email}</p>
+                  </div>
+                  <button onClick={onLogout} className="logout-btn">
+                    Logout
+                  </button>
                 </div>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="contactDetails">Contact Details *</label>
-                <input
-                  type="number"
-                  id="contactDetails"
-                  name="contactDetails"
-                  value={formData.contactDetails}
-                  onChange={handleChange}
-                  required
-                  onWheel={(e) => e.currentTarget.blur()}
+              <form onSubmit={handleSubmit}>
+                <h2 className="section-title">Participant Details</h2>
+                <SearchableSelect
+                  label="Select Participant"
+                  options={participantOptions}
+                  value={formData.participant}
+                  onChange={(value) => handleSelectChange('participant', value)}
+                  placeholder="Search participant by name or NDIS..."
+                  required={true}
                 />
-              </div>
 
-              <div className="grid-2">
-                <div className="form-group">
-                  <label htmlFor="dateOfIncident">Date of the Incident *</label>
-                  <input
-                    type="date"
-                    id="dateOfIncident"
-                    name="dateOfIncident"
-                    value={formData.dateOfIncident}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                <h2 className="section-title">Incident Details</h2>
 
-                <div className="form-group">
-                  <label htmlFor="timeOfIncident">Time of the Incident *</label>
-                  <input
-                    type="time"
-                    id="timeOfIncident"
-                    placeholder="HH:MM"
-                    name="timeOfIncident"
-                    value={formData.timeOfIncident}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <h3>Exact Location of the Incident</h3>
-
-              <div className="form-group">
-                <label htmlFor="streetAddress">Street Address *</label>
-                <input
-                  type="text"
-                  id="streetAddress"
-                  name="streetAddress"
-                  value={formData.streetAddress}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="streetAddress2">
-                  Street Address Line 2 (optional)
-                </label>
-                <input
-                  type="text"
-                  id="streetAddress2"
-                  name="streetAddress2"
-                  value={formData.streetAddress2}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="grid-2">
-                <div className="form-group">
-                  <label htmlFor="city">City *</label>
-                  <input
-                    type="text"
-                    id="city"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="state">State / Province *</label>
-                  <input
-                    type="text"
-                    id="state"
-                    name="state"
-                    value={formData.state}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="postalCode">Postal / Zip Code *</label>
-                <input
-                  type="text"
-                  id="postalCode"
-                  name="postalCode"
-                  value={formData.postalCode}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Were there any witnesses? *</label>
-                <div className="radio-group">
-                  <label className="radio-label">
-                    <input
-                      type="radio"
-                      name="hasWitnesses"
-                      value="yes"
-                      checked={formData.hasWitnesses === 'yes'}
-                      onChange={handleChange}
-                      required
-                    />
-                    Yes
-                  </label>
-                  <label className="radio-label">
-                    <input
-                      type="radio"
-                      name="hasWitnesses"
-                      value="no"
-                      checked={formData.hasWitnesses === 'no'}
-                      onChange={handleChange}
-                    />
-                    No
-                  </label>
-                </div>
-              </div>
-
-              {formData.hasWitnesses === 'yes' && (
-                <div className="form-group">
-                  <label htmlFor="witnessDetails">
-                    Please List the witnesses full names as well as a contact
-                    number for each *
-                  </label>
-                  <textarea
-                    id="witnessDetails"
-                    name="witnessDetails"
-                    value={formData.witnessDetails}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              )}
-
-              <div className="form-group">
-                <label htmlFor="incidentDescription">
-                  Describe how the incident occurred and if there was any damage
-                  to property or equipment (include: leading up to the event,
-                  the actual event, and any equipment, work practices, tasks, or
-                  processes that may have been involved -upload a separate sheet
-                  if necessary) *
-                </label>
-                <textarea
-                  id="incidentDescription"
-                  name="incidentDescription"
-                  value={formData.incidentDescription}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Did this incident result in an injury? *</label>
-                <div className="radio-group">
-                  <label className="radio-label">
-                    <input
-                      type="radio"
-                      name="resultedInInjury"
-                      value="yes"
-                      checked={formData.resultedInInjury === 'yes'}
-                      onChange={handleChange}
-                      required
-                    />
-                    Yes
-                  </label>
-                  <label className="radio-label">
-                    <input
-                      type="radio"
-                      name="resultedInInjury"
-                      value="no"
-                      checked={formData.resultedInInjury === 'no'}
-                      onChange={handleChange}
-                    />
-                    No
-                  </label>
-                </div>
-              </div>
-
-              {formData.resultedInInjury === 'yes' && (
-                <>
+                <div className="grid-2">
                   <div className="form-group">
-                    <label htmlFor="treatmentProvided">
-                      Was any treatment provided? *
+                    <label htmlFor="dateRecorded">
+                      Date that the incident was recorded on *
+                    </label>
+                    <input
+                      type="date"
+                      id="dateRecorded"
+                      name="dateRecorded"
+                      value={formData.dateRecorded}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="reportedBy">Incident Reported By *</label>
+                    <input
+                      type="text"
+                      id="reportedBy"
+                      name="reportedBy"
+                      value={formData.reportedBy}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="contactDetails">Contact Details *</label>
+                  <input
+                    type="number"
+                    id="contactDetails"
+                    name="contactDetails"
+                    value={formData.contactDetails}
+                    onChange={handleChange}
+                    required
+                    onWheel={(e) => e.currentTarget.blur()}
+                  />
+                </div>
+
+                <div className="grid-2">
+                  <div className="form-group">
+                    <label htmlFor="dateOfIncident">
+                      Date of the Incident *
+                    </label>
+                    <input
+                      type="date"
+                      id="dateOfIncident"
+                      name="dateOfIncident"
+                      value={formData.dateOfIncident}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="timeOfIncident">
+                      Time of the Incident *
+                    </label>
+                    <input
+                      type="time"
+                      id="timeOfIncident"
+                      placeholder="HH:MM"
+                      name="timeOfIncident"
+                      value={formData.timeOfIncident}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <h3>Exact Location of the Incident</h3>
+
+                <div className="form-group">
+                  <label htmlFor="streetAddress">Street Address *</label>
+                  <input
+                    type="text"
+                    id="streetAddress"
+                    name="streetAddress"
+                    value={formData.streetAddress}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="streetAddress2">
+                    Street Address Line 2 (optional)
+                  </label>
+                  <input
+                    type="text"
+                    id="streetAddress2"
+                    name="streetAddress2"
+                    value={formData.streetAddress2}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="grid-2">
+                  <div className="form-group">
+                    <label htmlFor="city">City *</label>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="state">State / Province *</label>
+                    <input
+                      type="text"
+                      id="state"
+                      name="state"
+                      value={formData.state}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="postalCode">Postal / Zip Code *</label>
+                  <input
+                    type="text"
+                    id="postalCode"
+                    name="postalCode"
+                    value={formData.postalCode}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Were there any witnesses? *</label>
+                  <div className="radio-group">
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="hasWitnesses"
+                        value="yes"
+                        checked={formData.hasWitnesses === 'yes'}
+                        onChange={handleChange}
+                        required
+                      />
+                      Yes
+                    </label>
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="hasWitnesses"
+                        value="no"
+                        checked={formData.hasWitnesses === 'no'}
+                        onChange={handleChange}
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+
+                {formData.hasWitnesses === 'yes' && (
+                  <div className="form-group">
+                    <label htmlFor="witnessDetails">
+                      Please List the witnesses full names as well as a contact
+                      number for each *
                     </label>
                     <textarea
-                      id="treatmentProvided"
-                      name="treatmentProvided"
-                      placeholder="If yes, please provide details (e.g., first aid given by who, referred to e.g. GP)"
-                      value={formData.treatmentProvided}
+                      id="witnessDetails"
+                      name="witnessDetails"
+                      value={formData.witnessDetails}
                       onChange={handleChange}
                       required
                     />
                   </div>
+                )}
 
-                  <div className="form-group">
-                    <label>Was any equipment involved in the injury? *</label>
-                    <div className="radio-group">
-                      <label className="radio-label">
-                        <input
-                          type="radio"
-                          name="equipmentInvolved"
-                          value="yes"
-                          checked={formData.equipmentInvolved === 'yes'}
-                          onChange={handleChange}
-                          required
-                        />
-                        Yes
-                      </label>
-                      <label className="radio-label">
-                        <input
-                          type="radio"
-                          name="equipmentInvolved"
-                          value="no"
-                          checked={formData.equipmentInvolved === 'no'}
-                          onChange={handleChange}
-                        />
-                        No
-                      </label>
-                    </div>
+                <div className="form-group">
+                  <label htmlFor="incidentDescription">
+                    Describe how the incident occurred and if there was any
+                    damage to property or equipment (include: leading up to the
+                    event, the actual event, and any equipment, work practices,
+                    tasks, or processes that may have been involved -upload a
+                    separate sheet if necessary) *
+                  </label>
+                  <textarea
+                    id="incidentDescription"
+                    name="incidentDescription"
+                    value={formData.incidentDescription}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Did this incident result in an injury? *</label>
+                  <div className="radio-group">
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="resultedInInjury"
+                        value="yes"
+                        checked={formData.resultedInInjury === 'yes'}
+                        onChange={handleChange}
+                        required
+                      />
+                      Yes
+                    </label>
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="resultedInInjury"
+                        value="no"
+                        checked={formData.resultedInInjury === 'no'}
+                        onChange={handleChange}
+                      />
+                      No
+                    </label>
                   </div>
+                </div>
 
-                  {formData.equipmentInvolved === 'yes' && (
+                {formData.resultedInInjury === 'yes' && (
+                  <>
                     <div className="form-group">
-                      <label htmlFor="equipmentDetails">
-                        Provide Details *
+                      <label htmlFor="treatmentProvided">
+                        Was any treatment provided? *
                       </label>
                       <textarea
-                        id="equipmentDetails"
-                        name="equipmentDetails"
-                        value={formData.equipmentDetails}
+                        id="treatmentProvided"
+                        name="treatmentProvided"
+                        placeholder="If yes, please provide details (e.g., first aid given by who, referred to e.g. GP)"
+                        value={formData.treatmentProvided}
                         onChange={handleChange}
                         required
                       />
                     </div>
-                  )}
 
-                  <div className="form-group">
-                    <label htmlFor="natureOfInjury">
-                      Nature of injury e.g., sprain, cut, burn *
-                    </label>
-                    <textarea
-                      id="natureOfInjury"
-                      name="natureOfInjury"
-                      value={formData.natureOfInjury}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </>
-              )}
+                    <div className="form-group">
+                      <label>Was any equipment involved in the injury? *</label>
+                      <div className="radio-group">
+                        <label className="radio-label">
+                          <input
+                            type="radio"
+                            name="equipmentInvolved"
+                            value="yes"
+                            checked={formData.equipmentInvolved === 'yes'}
+                            onChange={handleChange}
+                            required
+                          />
+                          Yes
+                        </label>
+                        <label className="radio-label">
+                          <input
+                            type="radio"
+                            name="equipmentInvolved"
+                            value="no"
+                            checked={formData.equipmentInvolved === 'no'}
+                            onChange={handleChange}
+                          />
+                          No
+                        </label>
+                      </div>
+                    </div>
 
-              <button
-                type="submit"
-                className="submit-btn"
-                disabled={submitting}
-              >
-                {submitting ? 'Submitting...' : 'Submit Incident Report'}
-              </button>
-            </form>
+                    {formData.equipmentInvolved === 'yes' && (
+                      <div className="form-group">
+                        <label htmlFor="equipmentDetails">
+                          Provide Details *
+                        </label>
+                        <textarea
+                          id="equipmentDetails"
+                          name="equipmentDetails"
+                          value={formData.equipmentDetails}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                    )}
+
+                    <div className="form-group">
+                      <label htmlFor="natureOfInjury">
+                        Nature of injury e.g., sprain, cut, burn *
+                      </label>
+                      <textarea
+                        id="natureOfInjury"
+                        name="natureOfInjury"
+                        value={formData.natureOfInjury}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </>
+                )}
+
+                <button
+                  type="submit"
+                  className="submit-btn"
+                  disabled={submitting}
+                >
+                  {submitting ? 'Submitting...' : 'Submit Incident Report'}
+                </button>
+              </form>
+            </div>
           </div>
         );
       }
 
-      ReactDOM.render(<IncidentReportForm />, document.getElementById('root'));
+      // Wrap your component with authentication
+      const ProtectedIncidentReportForm = withAuth(IncidentReportForm);
+
+      // Render the protected component
+      ReactDOM.render(
+        <ProtectedIncidentReportForm />,
+        document.getElementById('root')
+      );
     </script>
-    <script src="../../index.js" charset="utf-8"></script>
   </body>
 </html>
