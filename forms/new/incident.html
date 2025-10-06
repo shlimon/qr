@@ -27,79 +27,6 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
   <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-      <div class="brand-title">Decent Care</div>
-      <a href="#" class="toggle-button">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </a>
-      <div class="navbar-links">
-        <ul>
-          <li><a href="../index.html">Forms</a></li>
-          <li><a href="../invoice.html">Invoice</a></li>
-          <li><a href="../contact.html">Contact</a></li>
-          <li class="drop-menu">
-            <a href="#" class="dropbtn">Download</a>
-            <div class="dropdown-content">
-              <a
-                href="https://drive.google.com/file/d/1fypqphi58uo-OPEJQGEwUzRCsnUNGgiI/view?usp=sharing"
-              >
-                <h5>Complaint Form</h5>
-              </a>
-              <a
-                href="https://drive.google.com/file/d/1wkvr2Kjy2--Uay-XJROIoIyiGqkCrHUX/view?usp=sharing"
-              >
-                <h5>Hazard Form</h5>
-              </a>
-              <a
-                href="https://drive.google.com/file/d/1lx6aFSwP4QMS3oYwDk0EZnqG8GtiKt6m/view?usp=sharing"
-              >
-                <h5>Incident Report</h5></a
-              >
-              <a
-                href="https://drive.google.com/file/d/1MlVzKcbBuBIfCbhPis_UxQHofenlCyST/view?usp=sharing"
-              >
-                <h5>Conflict Of Interest</h5></a
-              >
-              <a
-                href="https://drive.google.com/file/d/1t95OJ0K1G9kLUB1EbLi52kfJqK4rMrEC/view?usp=sharing"
-              >
-                <h5>Goal Plan</h5></a
-              >
-              <a
-                href="https://drive.google.com/file/d/1p-eRroVjnOEc3dre3LFf-SRQroU342MO/view?usp=sharing"
-              >
-                <h5>Finacial Transaction</h5>
-              </a>
-              <a
-                href="https://drive.google.com/file/d/1hBU2_nFdUVQQKTnOJW4O3DBVGhX7oEkD/view?usp=sharing"
-              >
-                <h5>Media Release</h5>
-              </a>
-            </div>
-          </li>
-          <li class="drop-menu">
-            <a href="#" class="dropbtn">Emergency Numbers</a>
-            <div class="dropdown-content">
-              <a href="tel:000">Ambulance, Fire & Police</a>
-              <a href="tel:131444">Police Assistance Line</a>
-              <a href="tel:131114">Life Line</a>
-              <a href="tel:1300659467">Suicide Call Back Service</a>
-              <a href="tel:1300789978">MensLine Australia</a>
-              <a href="tel:1300224636">Beyond Blue</a>
-              <a href="tel:1800650890">Head Space</a>
-              <a href="tel:1800551800">Kids Helpline</a>
-              <a href="tel:131114">State Emergency Services (SES)</a>
-              <a href="tel:1800022">After Hours GP Helpline</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <!-- Navigation Bar -->
-
     <div id="root"></div>
 
     <!-- Include the auth system -->
@@ -108,10 +35,10 @@
     <script type="text/babel">
       const { useState, useEffect, useRef, useMemo } = React;
 
-      // const API_BASE = 'https://dc-central-api-v2.onrender.com/api/km';
-      const API_BASE = 'http://localhost:4000/api/km';
+      const API_BASE = 'https://dc-central-api-v2.onrender.com/api/km';
+      // const API_BASE = 'http://localhost:4000/api/km';
 
-      // Your SearchableSelect component
+      // Your SearchableSelect component with EXACT MATCH only
       function SearchableSelect({
         label,
         options,
@@ -145,12 +72,14 @@
             document.removeEventListener('mousedown', handleClickOutside);
         }, []);
 
-        const filteredOptions = options.filter(
-          (opt) =>
-            opt.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (opt.extra &&
-              opt.extra.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
+        // EXACT MATCH ONLY - no partial matches for privacy
+        const filteredOptions = useMemo(() => {
+          if (!searchTerm.trim()) return [];
+
+          return options.filter(
+            (opt) => opt.name.toLowerCase() === searchTerm.toLowerCase()
+          );
+        }, [searchTerm, options]);
 
         const handleSelect = (option) => {
           onChange(option.id);
@@ -160,9 +89,12 @@
         };
 
         const handleInputChange = (e) => {
-          setSearchTerm(e.target.value);
+          const value = e.target.value;
+          setSearchTerm(value);
           setIsOpen(true);
-          if (!e.target.value) {
+
+          // Clear selection if input changes
+          if (displayValue && value !== displayValue) {
             onChange('');
             setDisplayValue('');
           }
@@ -183,32 +115,28 @@
                 placeholder={placeholder}
                 required={required}
               />
-              {isOpen && (
+              {isOpen && filteredOptions.length > 0 && (
                 <div className="dropdown-list">
-                  {filteredOptions.length > 0 ? (
-                    filteredOptions.map((option) => (
-                      <div
-                        key={option.id}
-                        className="dropdown-item"
-                        onClick={() => handleSelect(option)}
-                      >
-                        <div style={{ fontWeight: '500' }}>{option.name}</div>
-                        {option.extra && (
-                          <div
-                            style={{
-                              fontSize: '12px',
-                              color: '#666',
-                              marginTop: '4px',
-                            }}
-                          >
-                            {option.extra}
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="no-results">No results found</div>
-                  )}
+                  {filteredOptions.map((option) => (
+                    <div
+                      key={option.id}
+                      className="dropdown-item"
+                      onClick={() => handleSelect(option)}
+                    >
+                      <div style={{ fontWeight: '500' }}>{option.name}</div>
+                      {option.extra && (
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#666',
+                            marginTop: '4px',
+                          }}
+                        >
+                          {option.extra}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -295,6 +223,12 @@
 
         const handleSubmit = async (e) => {
           e.preventDefault();
+
+          if (!formData.participant) {
+            setError('Please select a participant from the dropdown.');
+            return;
+          }
+
           setSubmitting(true);
           setError('');
           setSuccessMessage('');
@@ -422,9 +356,10 @@
                   options={participantOptions}
                   value={formData.participant}
                   onChange={(value) => handleSelectChange('participant', value)}
-                  placeholder="Search participant by name or NDIS..."
+                  placeholder="Enter exact participant name..."
                   required={true}
                 />
+
                 <div className="form-group">
                   <label>
                     Did the incident occur under our provision of Services? *

@@ -52,7 +52,7 @@ function LoginForm({ onLogin }) {
                 dob: formData.dob,
             };
 
-            const response = await fetch('http://localhost:4000/api/app-data/staffs/sw-login', {
+            const response = await fetch('https://dc-central-api-v2.onrender.com/api/km/staffs/sw-login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),

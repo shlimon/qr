@@ -98,8 +98,8 @@
     <script type="text/babel">
       const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-      // const API_BASE = 'https://dc-central-api-v2.onrender.com/api/km';
-      const API_BASE = 'http://localhost:4000/api/app-data';
+      const API_BASE = 'https://dc-central-api-v2.onrender.com/api/km';
+      // const API_BASE = 'http://localhost:4000/api/km';
 
       // Utility functions for in-memory storage
       const storage = {
@@ -447,9 +447,9 @@
         const dropdownRef = useRef(null);
 
         const filteredParticipants = useMemo(() => {
-          if (!value.trim()) return participants;
-          return participants.filter((p) =>
-            p.name.toLowerCase().includes(value.toLowerCase())
+          if (!value.trim()) return [];
+          return participants.filter(
+            (p) => p.name.toLowerCase() === value.toLowerCase()
           );
         }, [value, participants]);
 
@@ -470,7 +470,7 @@
               autoComplete="off"
               required
             />
-            {showDropdown && (
+            {showDropdown && filteredParticipants.length > 0 && (
               <div
                 style={{
                   position: 'absolute',
@@ -487,36 +487,34 @@
                   marginTop: '4px',
                 }}
               >
-                {filteredParticipants.length > 0 ? (
-                  filteredParticipants.map((participant) => (
-                    <div
-                      key={participant._id}
-                      onClick={() => {
-                        onSelect(participant);
-                        setShowDropdown(false);
-                      }}
-                      style={{
-                        padding: '12px 16px',
-                        cursor: 'pointer',
-                        borderBottom: '1px solid #f7fafc',
-                        transition: 'background-color 0.2s',
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.target.style.backgroundColor = '#f7fafc')
-                      }
-                      onMouseLeave={(e) =>
-                        (e.target.style.backgroundColor = 'white')
-                      }
-                    >
-                      {participant.name}{' '}
-                      {participant.community && `(${participant.community})`}
-                    </div>
-                  ))
-                ) : (
-                  <div style={{ padding: '12px 16px', color: '#718096' }}>
-                    No participants found
+                {filteredParticipants.map((participant) => (
+                  <div
+                    key={participant._id}
+                    onClick={() => {
+                      onSelect(participant);
+                      setShowDropdown(false);
+                    }}
+                    style={{
+                      padding: '12px 16px',
+                      cursor: 'pointer',
+                      borderBottom: '1px solid #f7fafc',
+                      transition: 'background-color 0.2s',
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = '#f7fafc')
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = 'white')
+                    }
+                  >
+                    <div style={{ fontWeight: 500 }}>{participant.name}</div>
+                    {participant.community && (
+                      <div style={{ fontSize: '0.875rem', color: '#718096' }}>
+                        {participant.community}
+                      </div>
+                    )}
                   </div>
-                )}
+                ))}
               </div>
             )}
           </div>
@@ -531,10 +529,8 @@
         const [success, setSuccess] = useState('');
         const [showForm, setShowForm] = useState(false);
         const [searchQuery, setSearchQuery] = useState('');
-        const [participantError, setParticipantError] = useState('');
-        const [foundParticipant, setFoundParticipant] = useState(null);
+        const [selectedParticipant, setSelectedParticipant] = useState(null);
         const [formData, setFormData] = useState({
-          requestedFor: '',
           requestTravel: '',
           dateForTravel: '',
         });
@@ -579,32 +575,16 @@
           fetchData();
         }, [fetchData]);
 
-        // Validate participant by exact name (case-insensitive)
-        const handleParticipantChange = (e) => {
-          const value = e.target.value;
+        const handleParticipantSelect = (participant) => {
+          setSelectedParticipant(participant);
+          setSearchQuery(participant.name);
+        };
+
+        const handleSearchChange = (value) => {
           setSearchQuery(value);
-
-          if (!value.trim()) {
-            setFormData((prev) => ({ ...prev, requestedFor: '' }));
-            setParticipantError('');
-            setFoundParticipant(null);
-            return;
-          }
-
-          const participant = participants.find(
-            (p) => p.name.toLowerCase() === value.toLowerCase()
-          );
-
-          if (participant) {
-            setFormData((prev) => ({ ...prev, requestedFor: participant._id }));
-            setParticipantError('');
-            setFoundParticipant(participant);
-          } else {
-            setFormData((prev) => ({ ...prev, requestedFor: '' }));
-            setParticipantError(
-              'Participant not found, please ensure you have spelled the name correctly.'
-            );
-            setFoundParticipant(null);
+          // Clear selected participant if search query changes
+          if (selectedParticipant && selectedParticipant.name !== value) {
+            setSelectedParticipant(null);
           }
         };
 
@@ -619,10 +599,8 @@
           setError('');
           setSuccess('');
 
-          if (!formData.requestedFor) {
-            setError(
-              'Please enter a valid participant name before submitting.'
-            );
+          if (!selectedParticipant) {
+            setError('Please select a participant from the dropdown.');
             setSubmitting(false);
             return;
           }
@@ -644,7 +622,7 @@
                 ...authHeaders,
               },
               body: JSON.stringify({
-                requestedFor: formData.requestedFor,
+                requestedFor: selectedParticipant._id,
                 requestTravel: parseInt(formData.requestTravel),
                 dateForTravel: new Date(formData.dateForTravel).toISOString(),
               }),
@@ -653,14 +631,12 @@
             if (result.success) {
               setSuccess('Request submitted successfully!');
               setFormData({
-                requestedFor: '',
                 requestTravel: '',
                 dateForTravel: '',
               });
               setSearchQuery('');
+              setSelectedParticipant(null);
               setShowForm(false);
-              setParticipantError('');
-              setFoundParticipant(null);
               fetchData();
             } else {
               setError(result.message || 'Failed to submit request');
@@ -693,13 +669,11 @@
                   setShowForm(!showForm);
                   if (!showForm) {
                     setSearchQuery('');
+                    setSelectedParticipant(null);
                     setFormData({
-                      requestedFor: '',
                       requestTravel: '',
                       dateForTravel: '',
                     });
-                    setParticipantError('');
-                    setFoundParticipant(null);
                   }
                 }}
                 style={{ width: 'auto', padding: '8px 16px' }}
@@ -716,26 +690,21 @@
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label htmlFor="requestedFor">Participant Name</label>
-                    <input
-                      type="text"
-                      id="requestedFor"
-                      name="requestedFor"
+                    <SearchableDropdown
+                      participants={participants}
+                      onSelect={handleParticipantSelect}
                       value={searchQuery}
-                      onChange={handleParticipantChange}
-                      placeholder="Enter participant name"
-                      required
+                      onChange={handleSearchChange}
+                      placeholder="Search and select participant"
                     />
-                    {participantError && (
-                      <div className="error">{participantError}</div>
-                    )}
-                    {foundParticipant && (
+                    {selectedParticipant && (
                       <div className="participant-info">
                         <div>
-                          <strong>Name:</strong> {foundParticipant.name}
+                          <strong>Name:</strong> {selectedParticipant.name}
                         </div>
                         <div>
                           <strong>Community:</strong>{' '}
-                          {foundParticipant.community}
+                          {selectedParticipant.community}
                         </div>
                       </div>
                     )}
@@ -758,7 +727,6 @@
                     <label htmlFor="requestTravel">
                       Approximate Intended Travel KM
                     </label>
-
                     <input
                       type="number"
                       id="requestTravel"
@@ -828,7 +796,7 @@
 
       function TravelLog({ user }) {
         const [participants, setParticipants] = useState([]);
-        const [selectedParticipant, setSelectedParticipant] = useState('');
+        const [selectedParticipant, setSelectedParticipant] = useState(null);
         const [searchQuery, setSearchQuery] = useState('');
         const [travelType, setTravelType] = useState('');
         const [requestData, setRequestData] = useState(null);
@@ -843,8 +811,6 @@
         });
         const [submitting, setSubmitting] = useState(false);
         const [kmError, setKmError] = useState('');
-        const [participantError, setParticipantError] = useState('');
-        const [foundParticipant, setFoundParticipant] = useState(null);
 
         const authHeaders = useMemo(
           () => ({
@@ -919,35 +885,22 @@
           setKmError('');
         }, []);
 
-        // Participant input validation
-        const handleParticipantChange = (e) => {
-          const value = e.target.value;
+        const handleParticipantSelect = (participant) => {
+          setSelectedParticipant(participant);
+          setSearchQuery(participant.name);
+          resetForm();
+          setRequestData(null);
+          setTravelType('');
+        };
+
+        const handleSearchChange = (value) => {
           setSearchQuery(value);
-
-          if (!value.trim()) {
-            setSelectedParticipant('');
-            setParticipantError('');
-            setFoundParticipant(null);
-            return;
-          }
-
-          const participant = participants.find(
-            (p) => p.name.toLowerCase() === value.toLowerCase()
-          );
-
-          if (participant) {
-            setSelectedParticipant(participant._id);
-            setFoundParticipant(participant);
-            setParticipantError('');
-            resetForm();
-            setRequestData(null);
+          // Clear selected participant if search query changes
+          if (selectedParticipant && selectedParticipant.name !== value) {
+            setSelectedParticipant(null);
             setTravelType('');
-          } else {
-            setSelectedParticipant('');
-            setFoundParticipant(null);
-            setParticipantError(
-              'Participant not found, please ensure you have spelled the name correctly.'
-            );
+            setRequestData(null);
+            resetForm();
           }
         };
 
@@ -962,7 +915,7 @@
             setKmError('');
 
             if (type === 'over-50' && selectedParticipant) {
-              fetchRequestData(selectedParticipant);
+              fetchRequestData(selectedParticipant._id);
             } else if (type === 'under-50') {
               setRequestData(null);
             }
@@ -1001,6 +954,11 @@
         const handleSubmit = async (e) => {
           e.preventDefault();
 
+          if (!selectedParticipant) {
+            setError('Please select a participant from the dropdown.');
+            return;
+          }
+
           const kmValue = parseInt(formData.totalKm);
           const validationError = validateKm(formData.totalKm, travelType);
           if (validationError) {
@@ -1016,7 +974,7 @@
           try {
             let approval = 'Not Approved';
             const requestPayload = {
-              participant: selectedParticipant,
+              participant: selectedParticipant._id,
               staff: user._id,
               traveled: kmValue,
               date: new Date(formData.travelDate).toISOString(),
@@ -1049,11 +1007,10 @@
             if (result.success) {
               setSuccess('Travel log submitted successfully!');
               resetForm();
-              setSelectedParticipant('');
+              setSelectedParticipant(null);
               setSearchQuery('');
               setTravelType('');
               setRequestData(null);
-              setFoundParticipant(null);
             } else {
               setError(result.message || 'Failed to submit travel log');
             }
@@ -1070,9 +1027,10 @@
             formData.signature &&
             formData.totalKm &&
             formData.travelDate &&
-            !kmError
+            !kmError &&
+            selectedParticipant
           );
-        }, [formData, kmError]);
+        }, [formData, kmError, selectedParticipant]);
 
         return (
           <div>
@@ -1091,30 +1049,26 @@
 
             <div className="form-group">
               <label htmlFor="participant">Participant Name</label>
-              <input
-                type="text"
-                id="participant"
+              <SearchableDropdown
+                participants={participants}
+                onSelect={handleParticipantSelect}
                 value={searchQuery}
-                onChange={handleParticipantChange}
-                placeholder="Enter participant name"
-                required
+                onChange={handleSearchChange}
+                placeholder="Search and select participant"
               />
-              {participantError && (
-                <div className="error">{participantError}</div>
-              )}
-              {foundParticipant && (
+              {selectedParticipant && (
                 <div className="participant-info">
                   <div>
-                    <strong>Name:</strong> {foundParticipant.name}
+                    <strong>Name:</strong> {selectedParticipant.name}
                   </div>
                   <div>
-                    <strong>Community:</strong> {foundParticipant.community}
+                    <strong>Community:</strong> {selectedParticipant.community}
                   </div>
                 </div>
               )}
             </div>
 
-            {foundParticipant && (
+            {selectedParticipant && (
               <>
                 <h4
                   style={{
@@ -1286,14 +1240,22 @@
 
         const getCoordinates = useCallback((e, canvas) => {
           const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+
+          // Handle both mouse and touch events
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
           return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY,
           };
         }, []);
 
         const startDrawing = useCallback(
           (e) => {
+            e.preventDefault();
             setIsDrawing(true);
             setHasSignature(true);
             const canvas = canvasRef.current;
@@ -1308,6 +1270,7 @@
         const draw = useCallback(
           (e) => {
             if (!isDrawing) return;
+            e.preventDefault();
             const canvas = canvasRef.current;
             const ctx = canvas.getContext('2d');
             const coords = getCoordinates(e, canvas);
@@ -1345,7 +1308,11 @@
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}
                 onMouseLeave={stopDrawing}
+                onTouchStart={startDrawing}
+                onTouchMove={draw}
+                onTouchEnd={stopDrawing}
                 className="signature-canvas"
+                style={{ touchAction: 'none' }}
               />
               {!hasSignature && (
                 <div className="signature-placeholder">
