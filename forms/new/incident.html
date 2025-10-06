@@ -108,6 +108,9 @@
     <script type="text/babel">
       const { useState, useEffect, useRef, useMemo } = React;
 
+      // const API_BASE = 'https://dc-central-api-v2.onrender.com/api/km';
+      const API_BASE = 'http://localhost:4000/api/km';
+
       // Your SearchableSelect component
       function SearchableSelect({
         label,
@@ -260,9 +263,7 @@
 
         const fetchData = async () => {
           try {
-            const response = await fetch(
-              'http://localhost:4000/api/app-data/participants'
-            );
+            const response = await fetch(`${API_BASE}/participants`);
             const data = await response.json();
 
             if (data.success) {
@@ -334,14 +335,11 @@
               equipmentDetails: formData.equipmentDetails || '',
             };
 
-            const response = await fetch(
-              'http://localhost:4000/api/app-data/incident-reports',
-              {
-                method: 'POST',
-                headers: authHeaders,
-                body: JSON.stringify(formattedData),
-              }
-            );
+            const response = await fetch(`${API_BASE}/incident-reports`, {
+              method: 'POST',
+              headers: authHeaders,
+              body: JSON.stringify(formattedData),
+            });
 
             const result = await response.json();
 
