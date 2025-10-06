@@ -1240,14 +1240,22 @@
 
         const getCoordinates = useCallback((e, canvas) => {
           const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+
+          // Handle both mouse and touch events
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
           return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY,
           };
         }, []);
 
         const startDrawing = useCallback(
           (e) => {
+            e.preventDefault();
             setIsDrawing(true);
             setHasSignature(true);
             const canvas = canvasRef.current;
@@ -1262,6 +1270,7 @@
         const draw = useCallback(
           (e) => {
             if (!isDrawing) return;
+            e.preventDefault();
             const canvas = canvasRef.current;
             const ctx = canvas.getContext('2d');
             const coords = getCoordinates(e, canvas);
@@ -1299,7 +1308,11 @@
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}
                 onMouseLeave={stopDrawing}
+                onTouchStart={startDrawing}
+                onTouchMove={draw}
+                onTouchEnd={stopDrawing}
                 className="signature-canvas"
+                style={{ touchAction: 'none' }}
               />
               {!hasSignature && (
                 <div className="signature-placeholder">
