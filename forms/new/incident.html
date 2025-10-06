@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Participant Incident Report</title>
+
+    <!-- Load ALL your CSS files here -->
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="./newStyles.css" />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- React CDN -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="brand-title">Decent Care</div>
+      <a href="#" class="toggle-button">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </a>
+      <div class="navbar-links">
+        <ul>
+          <li><a href="../index.html">Forms</a></li>
+          <li><a href="../invoice.html">Invoice</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li class="drop-menu">
+            <a href="#" class="dropbtn">Download</a>
+            <div class="dropdown-content">
+              <a
+                href="https://drive.google.com/file/d/1fypqphi58uo-OPEJQGEwUzRCsnUNGgiI/view?usp=sharing"
+              >
+                <h5>Complaint Form</h5>
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1wkvr2Kjy2--Uay-XJROIoIyiGqkCrHUX/view?usp=sharing"
+              >
+                <h5>Hazard Form</h5>
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1lx6aFSwP4QMS3oYwDk0EZnqG8GtiKt6m/view?usp=sharing"
+              >
+                <h5>Incident Report</h5></a
+              >
+              <a
+                href="https://drive.google.com/file/d/1MlVzKcbBuBIfCbhPis_UxQHofenlCyST/view?usp=sharing"
+              >
+                <h5>Conflict Of Interest</h5></a
+              >
+              <a
+                href="https://drive.google.com/file/d/1t95OJ0K1G9kLUB1EbLi52kfJqK4rMrEC/view?usp=sharing"
+              >
+                <h5>Goal Plan</h5></a
+              >
+              <a
+                href="https://drive.google.com/file/d/1p-eRroVjnOEc3dre3LFf-SRQroU342MO/view?usp=sharing"
+              >
+                <h5>Finacial Transaction</h5>
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1hBU2_nFdUVQQKTnOJW4O3DBVGhX7oEkD/view?usp=sharing"
+              >
+                <h5>Media Release</h5>
+              </a>
+            </div>
+          </li>
+          <li class="drop-menu">
+            <a href="#" class="dropbtn">Emergency Numbers</a>
+            <div class="dropdown-content">
+              <a href="tel:000">Ambulance, Fire & Police</a>
+              <a href="tel:131444">Police Assistance Line</a>
+              <a href="tel:131114">Life Line</a>
+              <a href="tel:1300659467">Suicide Call Back Service</a>
+              <a href="tel:1300789978">MensLine Australia</a>
+              <a href="tel:1300224636">Beyond Blue</a>
+              <a href="tel:1800650890">Head Space</a>
+              <a href="tel:1800551800">Kids Helpline</a>
+              <a href="tel:131114">State Emergency Services (SES)</a>
+              <a href="tel:1800022">After Hours GP Helpline</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- Navigation Bar -->
+
+    <div id="root"></div>
+
+    <!-- Include the auth system -->
+    <script type="text/babel" src="./auth.js"></script>
+
+    <script type="text/babel">
+      const { useState, useEffect, useRef, useMemo } = React;
+
+      // const API_BASE = 'https://dc-central-api-v2.onrender.com/api/km';
+      const API_BASE = 'http://localhost:4000/api/km';
+
+      // Your SearchableSelect component
+      function SearchableSelect({
+        label,
+        options,
+        value,
+        onChange,
+        placeholder,
+        required,
+      }) {
+        const [searchTerm, setSearchTerm] = useState('');
+        const [isOpen, setIsOpen] = useState(false);
+        const [displayValue, setDisplayValue] = useState('');
+        const wrapperRef = useRef(null);
+
+        useEffect(() => {
+          const selected = options.find((opt) => opt.id === value);
+          setDisplayValue(selected ? selected.name : '');
+        }, [value, options]);
+
+        useEffect(() => {
+          function handleClickOutside(event) {
+            if (
+              wrapperRef.current &&
+              !wrapperRef.current.contains(event.target)
+            ) {
+              setIsOpen(false);
+              setSearchTerm('');
+            }
+          }
+          document.addEventListener('mousedown', handleClickOutside);
+          return () =>
+            document.removeEventListener('mousedown', handleClickOutside);
+        }, []);
+
+        const filteredOptions = options.filter(
+          (opt) =>
+            opt.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (opt.extra &&
+              opt.extra.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+
+        const handleSelect = (option) => {
+          onChange(option.id);
+          setDisplayValue(option.name);
+          setSearchTerm('');
+          setIsOpen(false);
+        };
+
+        const handleInputChange = (e) => {
+          setSearchTerm(e.target.value);
+          setIsOpen(true);
+          if (!e.target.value) {
+            onChange('');
+            setDisplayValue('');
+          }
+        };
+
+        return (
+          <div className="form-group">
+            <label>
+              {label} {required && '*'}
+            </label>
+            <div className="searchable-select" ref={wrapperRef}>
+              <input
+                type="text"
+                className="searchable-input"
+                value={isOpen ? searchTerm : displayValue}
+                onChange={handleInputChange}
+                onFocus={() => setIsOpen(true)}
+                placeholder={placeholder}
+                required={required}
+              />
+              {isOpen && (
+                <div className="dropdown-list">
+                  {filteredOptions.length > 0 ? (
+                    filteredOptions.map((option) => (
+                      <div
+                        key={option.id}
+                        className="dropdown-item"
+                        onClick={() => handleSelect(option)}
+                      >
+                        <div style={{ fontWeight: '500' }}>{option.name}</div>
+                        {option.extra && (
+                          <div
+                            style={{
+                              fontSize: '12px',
+                              color: '#666',
+                              marginTop: '4px',
+                            }}
+                          >
+                            {option.extra}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="no-results">No results found</div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      // Your IncidentReportForm component
+      function IncidentReportForm({ user, onLogout }) {
+        const [participantList, setParticipantList] = useState([]);
+        const [loading, setLoading] = useState(true);
+        const [error, setError] = useState('');
+        const [submitting, setSubmitting] = useState(false);
+        const [successMessage, setSuccessMessage] = useState('');
+
+        const authHeaders = useMemo(() => {
+          const stored = localStorage.getItem('kmTravelUser');
+          const user = stored ? JSON.parse(stored) : null;
+
+          return {
+            'Content-Type': 'application/json',
+            name: user?.name || '',
+            phone: user?.phone || '',
+            dob: user?.dob || '',
+          };
+        }, []);
+
+        const [formData, setFormData] = useState({
+          participant: '',
+          dateRecorded: '',
+          dateOfIncident: '',
+          timeOfIncident: '',
+          streetAddress: '',
+          streetAddress2: '',
+          incidentOnProvisionOfService: '',
+          city: '',
+          state: '',
+          postalCode: '',
+          hasWitnesses: '',
+          witnessDetails: '',
+          incidentDescription: '',
+          resultedInInjury: '',
+          treatmentProvided: '',
+          natureOfInjury: '',
+          equipmentInvolved: '',
+          equipmentDetails: '',
+        });
+
+        useEffect(() => {
+          fetchData();
+        }, []);
+
+        const fetchData = async () => {
+          try {
+            const response = await fetch(`${API_BASE}/participants`);
+            const data = await response.json();
+
+            if (data.success) {
+              setParticipantList(data.data);
+            } else {
+              setError('Failed to load participants.');
+            }
+          } catch (err) {
+            setError('Failed to load data. Please refresh the page.');
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const handleChange = (e) => {
+          const { name, value } = e.target;
+          setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+          }));
+        };
+
+        const handleSelectChange = (name, value) => {
+          setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+          }));
+        };
+
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          setSubmitting(true);
+          setError('');
+          setSuccessMessage('');
+
+          try {
+            const formattedData = {
+              participant: formData.participant,
+              incidentOnProvisionOfService:
+                formData.incidentOnProvisionOfService === 'yes' ||
+                formData.incidentOnProvisionOfService === true,
+              incidentDetails: {
+                dateOfIncident: formData.dateOfIncident,
+                timeOfIncident: formData.timeOfIncident,
+                incidentRecordDate:
+                  formData.dateRecorded ||
+                  new Date().toISOString().split('T')[0],
+                location: {
+                  street: formData.streetAddress,
+                  suburb: formData.streetAddress2 || '',
+                  city: formData.city,
+                  state: formData.state,
+                  postCode: formData.postalCode,
+                },
+              },
+              witnesses:
+                formData.hasWitnesses === 'yes' ||
+                formData.hasWitnesses === true,
+              witnessDetails: formData.witnessDetails || '',
+              descriptionOfIncident: formData.incidentDescription,
+              didInjured:
+                formData.resultedInInjury === 'yes' ||
+                formData.resultedInInjury === true,
+              treatmentProvided: formData.treatmentProvided || '',
+              natureOfInjury: formData.natureOfInjury || '',
+              equipmentInvolved:
+                formData.equipmentInvolved === 'yes' ||
+                formData.equipmentInvolved === true,
+              equipmentDetails: formData.equipmentDetails || '',
+            };
+
+            const response = await fetch(`${API_BASE}/incident-reports`, {
+              method: 'POST',
+              headers: authHeaders,
+              body: JSON.stringify(formattedData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              setSuccessMessage('Incident report submitted successfully!');
+              setFormData({
+                participant: '',
+                dateRecorded: '',
+                dateOfIncident: '',
+                timeOfIncident: '',
+                streetAddress: '',
+                streetAddress2: '',
+                city: '',
+                state: '',
+                postalCode: '',
+                hasWitnesses: '',
+                witnessDetails: '',
+                incidentDescription: '',
+                resultedInInjury: '',
+                incidentOnProvisionOfService: '',
+                treatmentProvided: '',
+                natureOfInjury: '',
+                equipmentInvolved: '',
+                equipmentDetails: '',
+              });
+              window.scrollTo(0, 0);
+            } else {
+              setError(
+                result.message || 'Failed to submit report. Please try again.'
+              );
+            }
+          } catch (err) {
+            setError(
+              'Network error. Please check your connection and try again.'
+            );
+          } finally {
+            setSubmitting(false);
+          }
+        };
+
+        if (loading) {
+          return (
+            <div className="container">
+              <div className="loading">Loading form data...</div>
+            </div>
+          );
+        }
+
+        const participantOptions = participantList.map((participant) => ({
+          id: participant._id,
+          name: participant.name,
+          extra: `NDIS: ${participant.ndis} - ${participant.community}`,
+        }));
+
+        return (
+          <div className="container">
+            <div className="card">
+              {error && <div className="error-message">{error}</div>}
+              {successMessage && (
+                <div className="success-message">{successMessage}</div>
+              )}
+
+              <div className="header-section">
+                <div className="dashboard-header">
+                  <div style={{ textAlign: 'left' }}>
+                    <h2>Incident Report</h2>
+                    <h3>{user.name}</h3>
+                    <p style={{ padding: '10px 0' }}>{user.email}</p>
+                  </div>
+                  <button onClick={onLogout} className="logout-btn">
+                    Logout
+                  </button>
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit}>
+                <h2 className="section-title">Participant Details</h2>
+                <SearchableSelect
+                  label="Select Participant"
+                  options={participantOptions}
+                  value={formData.participant}
+                  onChange={(value) => handleSelectChange('participant', value)}
+                  placeholder="Search participant by name or NDIS..."
+                  required={true}
+                />
+                <div className="form-group">
+                  <label>
+                    Did the incident occur under our provision of Services? *
+                  </label>
+                  <div className="radio-group">
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="incidentOnProvisionOfService"
+                        value="yes"
+                        checked={
+                          formData.incidentOnProvisionOfService === 'yes'
+                        }
+                        onChange={handleChange}
+                        required
+                      />
+                      Yes
+                    </label>
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="incidentOnProvisionOfService"
+                        value="no"
+                        checked={formData.incidentOnProvisionOfService === 'no'}
+                        onChange={handleChange}
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+
+                <h2 className="section-title">Incident Details</h2>
+
+                <div className="grid-2">
+                  <div className="form-group">
+                    <label htmlFor="dateRecorded">
+                      Date that the incident was recorded on *
+                    </label>
+                    <input
+                      type="date"
+                      id="dateRecorded"
+                      name="dateRecorded"
+                      value={formData.dateRecorded}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="dateOfIncident">
+                      Date of the Incident *
+                    </label>
+                    <input
+                      type="date"
+                      id="dateOfIncident"
+                      name="dateOfIncident"
+                      value={formData.dateOfIncident}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid-2">
+                  <div className="form-group">
+                    <label htmlFor="timeOfIncident">
+                      Time of the Incident *
+                    </label>
+                    <input
+                      type="time"
+                      id="timeOfIncident"
+                      placeholder="HH:MM"
+                      name="timeOfIncident"
+                      value={formData.timeOfIncident}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <h3>Exact Location of the Incident</h3>
+
+                <div className="form-group">
+                  <label htmlFor="streetAddress">Street Address *</label>
+                  <input
+                    type="text"
+                    id="streetAddress"
+                    name="streetAddress"
+                    value={formData.streetAddress}
+                    onChange={handleChange}
+                    required
+                    placeholder="Street address"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="streetAddress2">
+                    Street Address Line 2 (optional)
+                  </label>
+                  <input
+                    type="text"
+                    id="streetAddress2"
+                    name="streetAddress2"
+                    value={formData.streetAddress2}
+                    onChange={handleChange}
+                    placeholder="Street address line 2"
+                  />
+                </div>
+
+                <div className="grid-2">
+                  <div className="form-group">
+                    <label htmlFor="city">City *</label>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      required
+                      placeholder="City"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="state">State / Province *</label>
+                    <input
+                      type="text"
+                      id="state"
+                      name="state"
+                      value={formData.state}
+                      onChange={handleChange}
+                      required
+                      placeholder="State / Province"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="postalCode">Postal / Zip Code *</label>
+                  <input
+                    type="text"
+                    id="postalCode"
+                    name="postalCode"
+                    value={formData.postalCode}
+                    onChange={handleChange}
+                    required
+                    placeholder="Postal / Zip code"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Were there any witnesses? *</label>
+                  <div className="radio-group">
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="hasWitnesses"
+                        value="yes"
+                        checked={formData.hasWitnesses === 'yes'}
+                        onChange={handleChange}
+                        required
+                      />
+                      Yes
+                    </label>
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="hasWitnesses"
+                        value="no"
+                        checked={formData.hasWitnesses === 'no'}
+                        onChange={handleChange}
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+
+                {formData.hasWitnesses === 'yes' && (
+                  <div className="form-group">
+                    <label htmlFor="witnessDetails">
+                      Please List the witnesses full names as well as a contact
+                      number for each *
+                    </label>
+                    <textarea
+                      id="witnessDetails"
+                      name="witnessDetails"
+                      value={formData.witnessDetails}
+                      onChange={handleChange}
+                      required
+                      placeholder="Witness details"
+                    />
+                  </div>
+                )}
+
+                <div className="form-group">
+                  <label htmlFor="incidentDescription">
+                    Describe how the incident occurred and if there was any
+                    damage to property or equipment (include: leading up to the
+                    event, the actual event, and any equipment, work practices,
+                    tasks, or processes that may have been involved -upload a
+                    separate sheet if necessary) *
+                  </label>
+                  <textarea
+                    id="incidentDescription"
+                    name="incidentDescription"
+                    value={formData.incidentDescription}
+                    onChange={handleChange}
+                    required
+                    placeholder="Describe the incident in detail"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Did this incident result in an injury? *</label>
+                  <div className="radio-group">
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="resultedInInjury"
+                        value="yes"
+                        checked={formData.resultedInInjury === 'yes'}
+                        onChange={handleChange}
+                        required
+                      />
+                      Yes
+                    </label>
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="resultedInInjury"
+                        value="no"
+                        checked={formData.resultedInInjury === 'no'}
+                        onChange={handleChange}
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+
+                {formData.resultedInInjury === 'yes' && (
+                  <>
+                    <div className="form-group">
+                      <label htmlFor="treatmentProvided">
+                        Was any treatment provided? *
+                      </label>
+                      <textarea
+                        id="treatmentProvided"
+                        name="treatmentProvided"
+                        placeholder="If yes, please provide details (e.g., first aid given by who, referred to e.g. GP)"
+                        value={formData.treatmentProvided}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Was any equipment involved in the injury? *</label>
+                      <div className="radio-group">
+                        <label className="radio-label">
+                          <input
+                            type="radio"
+                            name="equipmentInvolved"
+                            value="yes"
+                            checked={formData.equipmentInvolved === 'yes'}
+                            onChange={handleChange}
+                            required
+                          />
+                          Yes
+                        </label>
+                        <label className="radio-label">
+                          <input
+                            type="radio"
+                            name="equipmentInvolved"
+                            value="no"
+                            checked={formData.equipmentInvolved === 'no'}
+                            onChange={handleChange}
+                          />
+                          No
+                        </label>
+                      </div>
+                    </div>
+
+                    {formData.equipmentInvolved === 'yes' && (
+                      <div className="form-group">
+                        <label htmlFor="equipmentDetails">
+                          Provide Details *
+                        </label>
+                        <textarea
+                          id="equipmentDetails"
+                          name="equipmentDetails"
+                          value={formData.equipmentDetails}
+                          onChange={handleChange}
+                          required
+                          placeholder="Details of the equipment involved"
+                        />
+                      </div>
+                    )}
+
+                    <div className="form-group">
+                      <label htmlFor="natureOfInjury">
+                        Nature of injury e.g., sprain, cut, burn *
+                      </label>
+                      <textarea
+                        id="natureOfInjury"
+                        name="natureOfInjury"
+                        value={formData.natureOfInjury}
+                        onChange={handleChange}
+                        required
+                        placeholder="Nature of injury"
+                      />
+                    </div>
+                  </>
+                )}
+
+                <button
+                  type="submit"
+                  className="submit-btn"
+                  disabled={submitting}
+                >
+                  {submitting ? 'Submitting...' : 'Submit Incident Report'}
+                </button>
+              </form>
+            </div>
+          </div>
+        );
+      }
+
+      // Wrap your component with authentication
+      const ProtectedIncidentReportForm = withAuth(IncidentReportForm);
+
+      // Render the protected component
+      ReactDOM.render(
+        <ProtectedIncidentReportForm />,
+        document.getElementById('root')
+      );
+    </script>
+  </body>
+</html>
