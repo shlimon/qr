@@ -1169,7 +1169,7 @@
                     onChange={handleFormChange}
                     required
                   />
-                  <label htmlFor="agreed">
+                  <label style={{ marginBottom: '0px' }} htmlFor="agreed">
                     I agree the KM travelled is true and accurate
                   </label>
                 </div>
@@ -1303,7 +1303,7 @@
               <canvas
                 ref={canvasRef}
                 width={400}
-                height={150}
+                height={300}
                 onMouseDown={startDrawing}
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}
