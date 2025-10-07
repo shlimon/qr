@@ -27,6 +27,79 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
   <body>
+    <!-- navigation bar -->
+    <nav class="navbar">
+      <div class="brand-title">Decent Care</div>
+      <a href="#" class="toggle-button">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </a>
+      <div class="navbar-links">
+        <ul>
+          <li><a href="../index.html">Forms</a></li>
+          <li><a href="../invoice.html">Invoice</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li class="drop-menu">
+            <a href="#" class="dropbtn">Download</a>
+            <div class="dropdown-content">
+              <a
+                href="https://drive.google.com/file/d/1fypqphi58uo-OPEJQGEwUzRCsnUNGgiI/view?usp=sharing"
+              >
+                <h5>Complaint Form</h5>
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1wkvr2Kjy2--Uay-XJROIoIyiGqkCrHUX/view?usp=sharing"
+              >
+                <h5>Hazard Form</h5>
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1lx6aFSwP4QMS3oYwDk0EZnqG8GtiKt6m/view?usp=sharing"
+              >
+                <h5>Incident Report</h5></a
+              >
+              <a
+                href="https://drive.google.com/file/d/1MlVzKcbBuBIfCbhPis_UxQHofenlCyST/view?usp=sharing"
+              >
+                <h5>Conflict Of Interest</h5></a
+              >
+              <a
+                href="https://drive.google.com/file/d/1t95OJ0K1G9kLUB1EbLi52kfJqK4rMrEC/view?usp=sharing"
+              >
+                <h5>Goal Plan</h5></a
+              >
+              <a
+                href="https://drive.google.com/file/d/1p-eRroVjnOEc3dre3LFf-SRQroU342MO/view?usp=sharing"
+              >
+                <h5>Finacial Transaction</h5>
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1hBU2_nFdUVQQKTnOJW4O3DBVGhX7oEkD/view?usp=sharing"
+              >
+                <h5>Media Release</h5>
+              </a>
+            </div>
+          </li>
+          <li class="drop-menu">
+            <a href="#" class="dropbtn">Emergency Numbers</a>
+            <div class="dropdown-content">
+              <a href="tel:000">Ambulance, Fire & Police</a>
+              <a href="tel:131444">Police Assistance Line</a>
+              <a href="tel:131114">Life Line</a>
+              <a href="tel:1300659467">Suicide Call Back Service</a>
+              <a href="tel:1300789978">MensLine Australia</a>
+              <a href="tel:1300224636">Beyond Blue</a>
+              <a href="tel:1800650890">Head Space</a>
+              <a href="tel:1800551800">Kids Helpline</a>
+              <a href="tel:131114">State Emergency Services (SES)</a>
+              <a href="tel:1800022">After Hours GP Helpline</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- navigation bar -->
+
     <div id="root"></div>
 
     <!-- Include the auth system -->
@@ -212,6 +285,9 @@
             ...prev,
             [name]: value,
           }));
+
+          // Clear errors when user starts typing
+          if (error) setError('');
         };
 
         const handleSelectChange = (name, value) => {
@@ -219,6 +295,9 @@
             ...prev,
             [name]: value,
           }));
+
+          // Clear errors when user makes selection
+          if (error) setError('');
         };
 
         const handleSubmit = async (e) => {
@@ -226,6 +305,27 @@
 
           if (!formData.participant) {
             setError('Please select a participant from the dropdown.');
+            return;
+          }
+
+          // Date validation
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          const recordedDate = new Date(formData.dateRecorded);
+          const incidentDate = new Date(formData.dateOfIncident);
+
+          if (recordedDate > today) {
+            setError(
+              'Date that the incident was recorded on cannot be in the future.'
+            );
+            return;
+          }
+
+          if (incidentDate > recordedDate) {
+            setError(
+              'Date of the Incident must be before or equal to the date it was recorded.'
+            );
             return;
           }
 
@@ -299,6 +399,12 @@
                 equipmentInvolved: '',
                 equipmentDetails: '',
               });
+
+              // Auto-hide success message after 5 seconds
+              setTimeout(() => {
+                setSuccessMessage('');
+              }, 5000);
+
               window.scrollTo(0, 0);
             } else {
               setError(
@@ -330,12 +436,14 @@
 
         return (
           <div className="container">
-            <div className="card">
-              {error && <div className="error-message">{error}</div>}
-              {successMessage && (
-                <div className="success-message">{successMessage}</div>
-              )}
+            {error && <div className="toast-message toast-error">{error}</div>}
+            {successMessage && (
+              <div className="toast-message toast-success">
+                {successMessage}
+              </div>
+            )}
 
+            <div className="card">
               <div className="header-section">
                 <div className="dashboard-header">
                   <div style={{ textAlign: 'left' }}>
@@ -395,19 +503,6 @@
 
                 <div className="grid-2">
                   <div className="form-group">
-                    <label htmlFor="dateRecorded">
-                      Date that the incident was recorded on *
-                    </label>
-                    <input
-                      type="date"
-                      id="dateRecorded"
-                      name="dateRecorded"
-                      value={formData.dateRecorded}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
                     <label htmlFor="dateOfIncident">
                       Date of the Incident *
                     </label>
@@ -417,6 +512,28 @@
                       name="dateOfIncident"
                       value={formData.dateOfIncident}
                       onChange={handleChange}
+                      onKeyDown={(e) => e.preventDefault()}
+                      max={
+                        formData.dateRecorded ||
+                        new Date().toISOString().split('T')[0]
+                      }
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="dateRecorded">
+                      Date that the incident was recorded on *
+                    </label>
+                    <input
+                      type="date"
+                      id="dateRecorded"
+                      name="dateRecorded"
+                      value={formData.dateRecorded}
+                      onChange={handleChange}
+                      onKeyDown={(e) => e.preventDefault()}
+                      min={formData.dateOfIncident || undefined}
+                      max={new Date().toISOString().split('T')[0]}
+                      disabled={!formData.dateOfIncident}
                       required
                     />
                   </div>

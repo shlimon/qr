@@ -621,6 +621,43 @@ table tr:last-child td {
   color: #666;
 }
 
+.toast-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  max-width: 400px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-success {
+  color: #38a169;
+  background: #c6f6d5;
+  border: 1px solid #9ae6b4;
+}
+
+.toast-error {
+  color: #dc3545;
+  background: #fed7d7;
+  border: 1px solid #fc8181;
+}
+
 .error,
 .error-message {
   color: #dc3545;
