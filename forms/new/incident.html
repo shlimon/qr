@@ -431,7 +431,7 @@
         const participantOptions = participantList.map((participant) => ({
           id: participant._id,
           name: participant.name,
-          extra: `NDIS: ${participant.ndis} - ${participant.community}`,
+          extra: `${participant.community}`,
         }));
 
         return (
@@ -571,20 +571,6 @@
                   />
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="streetAddress2">
-                    Street Address Line 2 (optional)
-                  </label>
-                  <input
-                    type="text"
-                    id="streetAddress2"
-                    name="streetAddress2"
-                    value={formData.streetAddress2}
-                    onChange={handleChange}
-                    placeholder="Street address line 2"
-                  />
-                </div>
-
                 <div className="grid-2">
                   <div className="form-group">
                     <label htmlFor="city">City *</label>
@@ -718,6 +704,19 @@
                 {formData.resultedInInjury === 'yes' && (
                   <>
                     <div className="form-group">
+                      <label htmlFor="natureOfInjury">
+                        Nature of injury e.g., sprain, cut, burn *
+                      </label>
+                      <textarea
+                        id="natureOfInjury"
+                        name="natureOfInjury"
+                        value={formData.natureOfInjury}
+                        onChange={handleChange}
+                        required
+                        placeholder="Nature of injury"
+                      />
+                    </div>
+                    <div className="form-group">
                       <label htmlFor="treatmentProvided">
                         Was any treatment provided? *
                       </label>
@@ -773,20 +772,6 @@
                         />
                       </div>
                     )}
-
-                    <div className="form-group">
-                      <label htmlFor="natureOfInjury">
-                        Nature of injury e.g., sprain, cut, burn *
-                      </label>
-                      <textarea
-                        id="natureOfInjury"
-                        name="natureOfInjury"
-                        value={formData.natureOfInjury}
-                        onChange={handleChange}
-                        required
-                        placeholder="Nature of injury"
-                      />
-                    </div>
                   </>
                 )}
 
