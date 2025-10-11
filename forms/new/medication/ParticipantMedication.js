@@ -96,11 +96,11 @@ const getStatusStyles = (status) => {
     }
 };
 
-function MedicationCard({ medication }) {
+function MedicationCard({ medication, setSelectedMedication }) {
     const styles = getStatusStyles(medication.status);
 
     return (
-        <div className={`${styles.bgColor} ${styles.borderColor} border rounded-lg p-4 mb-4`}>
+        <div className={`${styles.bgColor} ${styles.borderColor} border rounded-lg p-4 mb-4`} onClick={() => setSelectedMedication(medication?._id)}>
             <div className="flex flex-wrap justify-between items-start text-xs gap-1">
                 <div className="flex-1 text-left">
                     <div className="flex items-center gap-2">
@@ -134,7 +134,7 @@ function MedicationCard({ medication }) {
     );
 }
 
-function ParticipantMedication({ participantId }) {
+function ParticipantMedication({ participantId, setSelectedMedication }) {
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
@@ -222,7 +222,7 @@ function ParticipantMedication({ participantId }) {
                     Today's Medications
                 </h2>
                 {data.todayMedications.map((medication, index) => (
-                    <MedicationCard key={index} medication={medication} />
+                    <MedicationCard key={index} medication={medication} setSelectedMedication={setSelectedMedication} />
                 ))}
             </div>
         </div>

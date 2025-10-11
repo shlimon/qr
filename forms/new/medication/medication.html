@@ -36,6 +36,7 @@
     <!-- Load the reusable SearchableSelect component -->
     <script type="text/babel" src="../common/SearchableSelect.js"></script>
     <script type="text/babel" src="./ParticipantMedication.js"></script>
+    <script type="text/babel" src="./Medication.js"></script>
 
     <!-- Your page-specific code -->
     <script type="text/babel">
@@ -46,9 +47,12 @@
 
       function MedicationAdministration({ user, onLogout }) {
         const [selectedParticipant, setSelectedParticipant] = useState(null);
+        const [selectedMedication, setSelectedMedication] = useState(null);
         const [error, setError] = useState('');
         const [submitting, setSubmitting] = useState(false);
         const [successMessage, setSuccessMessage] = useState('');
+
+        console.log(selectedMedication);
 
         const authHeaders = useMemo(() => {
           const stored = localStorage.getItem('kmTravelUser');
@@ -86,7 +90,16 @@
               </div>
 
               {selectedParticipant ? (
-                <ParticipantMedication participantId={selectedParticipant} />
+                <div>
+                  {selectedMedication ? (
+                    <Medication medicationId={selectedMedication} />
+                  ) : (
+                    <ParticipantMedication
+                      setSelectedMedication={setSelectedMedication}
+                      participantId={selectedParticipant}
+                    />
+                  )}
+                </div>
               ) : (
                 <div>
                   <h2 className="section-title">Participant Details</h2>
