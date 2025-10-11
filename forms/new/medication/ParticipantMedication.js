@@ -1,0 +1,233 @@
+// Demo data - remove when API is ready
+const demoData = {
+    participantName: "Patrick Kere Giddy",
+    participantCommunity: "Community A",
+    dosesDueToday: 16,
+    administeredToday: 12,
+    todayMedications: [
+        {
+            _id: "1",
+            medicationName: "Paracetamol",
+            dosage: "500mg",
+            route: "Oral",
+            status: "Scheduled",
+            prn: true
+        },
+        {
+            _id: "2",
+            medicationName: "Paracetamol",
+            dosage: "500mg",
+            route: "Oral",
+            time: "2:00PM",
+            status: "Scheduled",
+        },
+        {
+            _id: "3",
+            medicationName: "Paracetamol",
+            dosage: "500mg",
+            route: "Oral",
+            time: "1:30PM",
+            status: "Completed",
+            actionTakenBy: "Limon Shakwat"
+        },
+        {
+            _id: "4",
+            medicationName: "Paracetamol",
+            dosage: "500mg",
+            route: "Oral",
+            time: "2:00PM",
+            status: "Refused",
+        },
+        {
+            _id: "5",
+            medicationName: "Paracetamol",
+            dosage: "500mg",
+            route: "Oral",
+            time: "1:30PM",
+            status: "Not Administered",
+            actionTakenBy: "Limon Shakwat"
+        }
+    ]
+};
+
+// Get status styling classes
+const getStatusStyles = (status) => {
+    switch (status) {
+        case "Scheduled":
+            return {
+                bgColor: "bg-gray-50",
+                borderColor: "border-gray-200",
+                badgeBg: "bg-white",
+                badgeText: "text-gray-800",
+                badgeBorder: "border-gray-300"
+            };
+        case "Completed":
+            return {
+                bgColor: "bg-green-50",
+                borderColor: "border-green-200",
+                badgeBg: "bg-green-100",
+                badgeText: "text-green-700",
+                badgeBorder: "border-green-300"
+            };
+        case "Refused":
+            return {
+                bgColor: "bg-red-50",
+                borderColor: "border-red-200",
+                badgeBg: "bg-red-100",
+                badgeText: "text-red-600",
+                badgeBorder: "border-red-300"
+            };
+        case "Not Administered":
+            return {
+                bgColor: "bg-yellow-50",
+                borderColor: "border-yellow-200",
+                badgeBg: "bg-yellow-100",
+                badgeText: "text-yellow-700",
+                badgeBorder: "border-yellow-300"
+            };
+        default:
+            return {
+                bgColor: "bg-gray-50",
+                borderColor: "border-gray-200",
+                badgeBg: "bg-white",
+                badgeText: "text-gray-800",
+                badgeBorder: "border-gray-300"
+            };
+    }
+};
+
+function MedicationCard({ medication }) {
+    const styles = getStatusStyles(medication.status);
+
+    return (
+        <div className={`${styles.bgColor} ${styles.borderColor} border rounded-lg p-4 mb-4`}>
+            <div className="flex flex-wrap justify-between items-start text-xs gap-1">
+                <div className="flex-1 text-left">
+                    <div className="flex items-center gap-2">
+                        <h3 className="text-gray-900 text-sm font-semibold">
+                            {medication.medicationName}
+                        </h3>
+                        <span className="text-gray-500">{medication.dosage}</span>
+                        {medication.prn && (
+                            <span className="px-2 py-1 font-medium text-orange-600 bg-orange-50 border border-orange-200 rounded-full">
+                                PRN
+                            </span>
+                        )}
+                    </div>
+                    <div className="space-y-2">
+                        <div className="text-gray-600 mt-2">{medication.route}</div>
+                        {
+                            medication.prn && <div className=" text-gray-700 mb-1 text-red-500">As Required</div>
+                        }
+                        <div className="text-gray-700 mb-1">{medication.time}</div>
+                        {medication.actionTakenBy && (
+                            <div className="text-sm text-blue-600">{medication.actionTakenBy}</div>
+                        )}
+                    </div>
+
+                </div>
+                <span className={`px-3 py-1 text-xs font-semibold rounded-full border whitespace-nowrap ${styles.badgeBg} ${styles.badgeText} ${styles.badgeBorder}`}>
+                    {medication.status}
+                </span>
+            </div>
+        </div>
+    );
+}
+
+function ParticipantMedication({ participantId }) {
+    const [data, setData] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState(null);
+
+    React.useEffect(() => {
+        // Commented out API call - uncomment when API is ready
+        /*
+        const fetchData = async () => {
+          try {
+            const response = await fetch(`${API_BASE}/participant/${participantId}`);
+            if (!response.ok) {
+              throw new Error('Failed to fetch data');
+            }
+            const result = await response.json();
+            setData(result);
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchData();
+        */
+
+        // Using demo data for now
+        setData(demoData);
+        setLoading(false);
+    }, [participantId]);
+
+    if (loading) {
+        return <div className="p-4">Loading...</div>;
+    }
+
+    if (error) {
+        return (
+            <div className="p-4 text-red-600">
+                Error: {error}
+            </div>
+        );
+    }
+
+    if (!data) {
+        return <div className="p-4">No data available</div>;
+    }
+
+    return (
+        <div className="mt-6">
+            {/* Header */}
+            <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-200">
+                <div className="flex justify-between items-center">
+                    <h2 className="text-gray-900 font-semibold">
+                        {data.participantName}
+                    </h2>
+                    <span className="text-gray-500 font-medium text-sm">
+                        {data.participantCommunity}
+                    </span>
+                </div>
+            </div>
+
+            {/* Stats Section */}
+            <div className="grid grid-cols-2 gap-2 mb-6 text-white">
+                <div className="bg-blue-600 rounded-2xl px-2 py-3">
+                    <div className="flex items-center gap-2">
+                        <div className="text-2xl">📋</div>
+                        <div className="space-y-4">
+                            <div className="text-xs">Doses Due Today</div>
+                            <div className="text-3xl font-bold flex justify-start">{data.dosesDueToday}</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-green-600 rounded-2xl px-2 py-3">
+                    <div className="flex items-center gap-2">
+                        <div className="text-2xl">❤️</div>
+                        <div className="space-y-4">
+                            <div className="text-xs">Administered Today</div>
+                            <div className="text-3xl font-bold flex justify-start">{data.administeredToday}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Medications List */}
+            <div>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                    Today's Medications
+                </h2>
+                {data.todayMedications.map((medication, index) => (
+                    <MedicationCard key={index} medication={medication} />
+                ))}
+            </div>
+        </div>
+    );
+}
+
+
+window.ParticipantMedication = ParticipantMedication;

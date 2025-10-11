@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Participant Incident Report</title>
 
-    <!-- Load ALL your CSS files here -->
+    <!-- CSS files -->
     <link rel="stylesheet" href="../../../styles.css" />
     <link rel="stylesheet" href="../newStyles.css" />
 
@@ -27,200 +27,25 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
   <body>
-    <!-- navigation bar -->
-    <nav class="navbar">
-      <div class="brand-title">Decent Care</div>
-      <a href="#" class="toggle-button">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </a>
-      <div class="navbar-links">
-        <ul>
-          <li><a href="../index.html">Forms</a></li>
-          <li><a href="../invoice.html">Invoice</a></li>
-          <li><a href="../contact.html">Contact</a></li>
-          <li class="drop-menu">
-            <a href="#" class="dropbtn">Download</a>
-            <div class="dropdown-content">
-              <a
-                href="https://drive.google.com/file/d/1fypqphi58uo-OPEJQGEwUzRCsnUNGgiI/view?usp=sharing"
-              >
-                <h5>Complaint Form</h5>
-              </a>
-              <a
-                href="https://drive.google.com/file/d/1wkvr2Kjy2--Uay-XJROIoIyiGqkCrHUX/view?usp=sharing"
-              >
-                <h5>Hazard Form</h5>
-              </a>
-              <a
-                href="https://drive.google.com/file/d/1lx6aFSwP4QMS3oYwDk0EZnqG8GtiKt6m/view?usp=sharing"
-              >
-                <h5>Incident Report</h5></a
-              >
-              <a
-                href="https://drive.google.com/file/d/1MlVzKcbBuBIfCbhPis_UxQHofenlCyST/view?usp=sharing"
-              >
-                <h5>Conflict Of Interest</h5></a
-              >
-              <a
-                href="https://drive.google.com/file/d/1t95OJ0K1G9kLUB1EbLi52kfJqK4rMrEC/view?usp=sharing"
-              >
-                <h5>Goal Plan</h5></a
-              >
-              <a
-                href="https://drive.google.com/file/d/1p-eRroVjnOEc3dre3LFf-SRQroU342MO/view?usp=sharing"
-              >
-                <h5>Finacial Transaction</h5>
-              </a>
-              <a
-                href="https://drive.google.com/file/d/1hBU2_nFdUVQQKTnOJW4O3DBVGhX7oEkD/view?usp=sharing"
-              >
-                <h5>Media Release</h5>
-              </a>
-            </div>
-          </li>
-          <li class="drop-menu">
-            <a href="#" class="dropbtn">Emergency Numbers</a>
-            <div class="dropdown-content">
-              <a href="tel:000">Ambulance, Fire & Police</a>
-              <a href="tel:131444">Police Assistance Line</a>
-              <a href="tel:131114">Life Line</a>
-              <a href="tel:1300659467">Suicide Call Back Service</a>
-              <a href="tel:1300789978">MensLine Australia</a>
-              <a href="tel:1300224636">Beyond Blue</a>
-              <a href="tel:1800650890">Head Space</a>
-              <a href="tel:1800551800">Kids Helpline</a>
-              <a href="tel:131114">State Emergency Services (SES)</a>
-              <a href="tel:1800022">After Hours GP Helpline</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <!-- navigation bar -->
-
     <div id="root"></div>
 
-    <!-- Include the auth system -->
+    <!-- Load dependencies first -->
     <script type="text/babel" src="../auth.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Load the reusable SearchableSelect component -->
+    <script type="text/babel" src="../common/SearchableSelect.js"></script>
+    <script type="text/babel" src="./ParticipantMedication.js"></script>
+
+    <!-- Your page-specific code -->
     <script type="text/babel">
-      const { useState, useEffect, useRef, useMemo } = React;
+      const { useState, useEffect, useMemo } = React;
 
       //   const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
       const API_BASE = 'http://localhost:4000/api/app-data';
 
-      // Your SearchableSelect component with EXACT MATCH only
-      function SearchableSelect({
-        label,
-        options,
-        value,
-        onChange,
-        placeholder,
-        required,
-      }) {
-        const [searchTerm, setSearchTerm] = useState('');
-        const [isOpen, setIsOpen] = useState(false);
-        const [displayValue, setDisplayValue] = useState('');
-        const wrapperRef = useRef(null);
-
-        useEffect(() => {
-          const selected = options.find((opt) => opt.id === value);
-          setDisplayValue(selected ? selected.name : '');
-        }, [value, options]);
-
-        useEffect(() => {
-          function handleClickOutside(event) {
-            if (
-              wrapperRef.current &&
-              !wrapperRef.current.contains(event.target)
-            ) {
-              setIsOpen(false);
-              setSearchTerm('');
-            }
-          }
-          document.addEventListener('mousedown', handleClickOutside);
-          return () =>
-            document.removeEventListener('mousedown', handleClickOutside);
-        }, []);
-
-        // EXACT MATCH ONLY - no partial matches for privacy
-        const filteredOptions = useMemo(() => {
-          if (!searchTerm.trim()) return [];
-
-          return options.filter(
-            (opt) => opt.name.toLowerCase() === searchTerm.toLowerCase()
-          );
-        }, [searchTerm, options]);
-
-        const handleSelect = (option) => {
-          onChange(option.id);
-          setDisplayValue(option.name);
-          setSearchTerm('');
-          setIsOpen(false);
-        };
-
-        const handleInputChange = (e) => {
-          const value = e.target.value;
-          setSearchTerm(value);
-          setIsOpen(true);
-
-          // Clear selection if input changes
-          if (displayValue && value !== displayValue) {
-            onChange('');
-            setDisplayValue('');
-          }
-        };
-
-        return (
-          <div className="form-group">
-            <label>
-              {label} {required && '*'}
-            </label>
-            <div className="searchable-select" ref={wrapperRef}>
-              <input
-                type="text"
-                className="searchable-input"
-                value={isOpen ? searchTerm : displayValue}
-                onChange={handleInputChange}
-                onFocus={() => setIsOpen(true)}
-                placeholder={placeholder}
-                required={required}
-              />
-              {isOpen && filteredOptions.length > 0 && (
-                <div className="dropdown-list">
-                  {filteredOptions.map((option) => (
-                    <div
-                      key={option.id}
-                      className="dropdown-item"
-                      onClick={() => handleSelect(option)}
-                    >
-                      <div style={{ fontWeight: '500' }}>{option.name}</div>
-                      {option.extra && (
-                        <div
-                          style={{
-                            fontSize: '12px',
-                            color: '#666',
-                            marginTop: '4px',
-                          }}
-                        >
-                          {option.extra}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      }
-
-      // Your MedicationAdministration component
       function MedicationAdministration({ user, onLogout }) {
-        const [participantList, setParticipantList] = useState([]);
-        const [loading, setLoading] = useState(true);
+        const [selectedParticipant, setSelectedParticipant] = useState(null);
         const [error, setError] = useState('');
         const [submitting, setSubmitting] = useState(false);
         const [successMessage, setSuccessMessage] = useState('');
@@ -236,66 +61,6 @@
             dob: user?.dob || '',
           };
         }, []);
-
-        const [formData, setFormData] = useState({
-          participant: '',
-        });
-
-        useEffect(() => {
-          fetchData();
-        }, []);
-
-        const fetchData = async () => {
-          try {
-            const response = await fetch(`${API_BASE}/participants`);
-            const data = await response.json();
-
-            if (data.success) {
-              setParticipantList(data.data);
-            } else {
-              setError('Failed to load participants.');
-            }
-          } catch (err) {
-            setError('Failed to load data. Please refresh the page.');
-          } finally {
-            setLoading(false);
-          }
-        };
-
-        const handleChange = (e) => {
-          const { name, value } = e.target;
-          setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-          }));
-
-          // Clear errors when user starts typing
-          if (error) setError('');
-        };
-
-        const handleSelectChange = (name, value) => {
-          setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-          }));
-
-          // Clear errors when user makes selection
-          if (error) setError('');
-        };
-
-        if (loading) {
-          return (
-            <div className="container">
-              <div className="loading">Loading form data...</div>
-            </div>
-          );
-        }
-
-        const participantOptions = participantList.map((participant) => ({
-          id: participant._id,
-          name: participant.name,
-          extra: `${participant.community}`,
-        }));
 
         return (
           <div className="container">
@@ -320,28 +85,31 @@
                 </div>
               </div>
 
-              <form>
-                <h2 className="section-title">Participant Details</h2>
-                <SearchableSelect
-                  label="Select Participant"
-                  options={participantOptions}
-                  value={formData.participant}
-                  onChange={(value) => handleSelectChange('participant', value)}
-                  placeholder="Enter exact participant name..."
-                  required={true}
-                />
-              </form>
+              {selectedParticipant ? (
+                <ParticipantMedication participantId={selectedParticipant} />
+              ) : (
+                <div>
+                  <h2 className="section-title">Participant Details</h2>
+                  <SearchableSelect
+                    label="Select Participant"
+                    value={selectedParticipant}
+                    onChange={(value) => setSelectedParticipant(value)}
+                    placeholder="Participant Name"
+                    displayField="name"
+                    valueField="_id"
+                    extraField="community"
+                  />
+                </div>
+              )}
             </div>
           </div>
         );
       }
 
-      // Wrap your component with authentication
       const ProtectedMedicationAdministration = withAuth(
         MedicationAdministration
       );
 
-      // Render the protected component
       ReactDOM.render(
         <ProtectedMedicationAdministration />,
         document.getElementById('root')
