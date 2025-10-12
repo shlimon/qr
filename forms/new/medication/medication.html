@@ -42,8 +42,8 @@
     <script type="text/babel">
       const { useState, useEffect, useMemo } = React;
 
-      //   const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
-      const API_BASE = 'http://localhost:4000/api/app-data';
+      const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
+      // const API_BASE = 'http://localhost:4000/api/app-data';
 
       function MedicationAdministration({ user, onLogout }) {
         const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -95,11 +95,13 @@
                     <Medication
                       medicationId={selectedMedication}
                       participantId={selectedParticipant}
+                      setSelectedMedication={setSelectedMedication}
                     />
                   ) : (
                     <ParticipantMedication
                       setSelectedMedication={setSelectedMedication}
                       participantId={selectedParticipant}
+                      setSelectedParticipant={setSelectedParticipant}
                     />
                   )}
                 </div>

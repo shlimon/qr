@@ -47,6 +47,8 @@ const getStatusStyles = (status) => {
 function MedicationCard({ medication, setSelectedMedication }) {
     const styles = getStatusStyles(medication.status);
 
+    console.log(medication);
+
     return (
         <div className={`${styles.bgColor} ${styles.borderColor} border rounded-lg p-4 mb-4`} onClick={() => setSelectedMedication(medication?.uid)}>
             <div className="flex flex-wrap justify-between items-start text-xs gap-1">
@@ -64,10 +66,7 @@ function MedicationCard({ medication, setSelectedMedication }) {
                     </div>
                     <div className="space-y-2">
                         <div className="text-gray-600 mt-2">{medication.route}</div>
-                        {
-                            medication.prn && <div className=" text-gray-700 mb-1 text-red-500">As Required</div>
-                        }
-                        <div className="text-gray-700 mb-1">{medication.time}</div>
+                        <div className={`mb-1 ${medication?.time === 'As Required' ? 'text-red-500' : 'text-gray-700 '}`}>{medication.time}</div>
                         {medication.actionTakenBy && (
                             <div className="text-sm text-blue-600">{medication.actionTakenBy}</div>
                         )}
@@ -82,13 +81,13 @@ function MedicationCard({ medication, setSelectedMedication }) {
     );
 }
 
-function ParticipantMedication({ participantId, setSelectedMedication }) {
+function ParticipantMedication({ participantId, setSelectedMedication, setSelectedParticipant }) {
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
 
-    //   const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
-    const API_BASE = 'http://localhost:4000/api/app-data';
+    const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
+    // const API_BASE = 'http://localhost:4000/api/app-data';
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -146,6 +145,16 @@ function ParticipantMedication({ participantId, setSelectedMedication }) {
 
     return (
         <div className="mt-6">
+
+            <div className="flex justify-end mb-4">
+                <button
+                    onClick={() => setSelectedParticipant(null)}
+                    className="px-3 py-2 bg-gray-400 text-white text-sm font-medium rounded hover:bg-gray-500 transition flex items-center gap-2"
+                >
+                    ← Back To Participant
+                </button>
+            </div>
+
             {/* Header */}
             <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-200">
                 <div className="flex justify-between items-center">
