@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Participant Incident Report</title>
+
+    <!-- CSS files -->
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../newStyles.css" />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- React CDN -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Load dependencies first -->
+    <script type="text/babel" src="../auth.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Load the reusable SearchableSelect component -->
+    <script type="text/babel" src="../common/SearchableSelect.js"></script>
+    <script type="text/babel" src="./ParticipantMedication.js"></script>
+    <script type="text/babel" src="./Medication.js"></script>
+
+    <!-- Your page-specific code -->
+    <script type="text/babel">
+      const { useState, useEffect, useMemo } = React;
+
+      const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
+      // const API_BASE = 'http://localhost:4000/api/app-data';
+
+      function MedicationAdministration({ user, onLogout }) {
+        const [selectedParticipant, setSelectedParticipant] = useState(null);
+        const [selectedMedication, setSelectedMedication] = useState(null);
+        const [error, setError] = useState('');
+        const [submitting, setSubmitting] = useState(false);
+        const [successMessage, setSuccessMessage] = useState('');
+
+        console.log(selectedMedication);
+
+        const authHeaders = useMemo(() => {
+          const stored = localStorage.getItem('kmTravelUser');
+          const user = stored ? JSON.parse(stored) : null;
+
+          return {
+            'Content-Type': 'application/json',
+            name: user?.name || '',
+            phone: user?.phone || '',
+            dob: user?.dob || '',
+          };
+        }, []);
+
+        return (
+          <div className="container">
+            {error && <div className="toast-message toast-error">{error}</div>}
+            {successMessage && (
+              <div className="toast-message toast-success">
+                {successMessage}
+              </div>
+            )}
+
+            <div className="card">
+              <div className="header-section">
+                <div className="dashboard-header">
+                  <div style={{ textAlign: 'left' }}>
+                    <h2>Incident Report</h2>
+                    <h3>{user.name}</h3>
+                    <p style={{ padding: '10px 0' }}>{user.email}</p>
+                  </div>
+                  <button onClick={onLogout} className="logout-btn">
+                    Logout
+                  </button>
+                </div>
+              </div>
+
+              {selectedParticipant ? (
+                <div>
+                  {selectedMedication ? (
+                    <Medication
+                      medicationId={selectedMedication}
+                      participantId={selectedParticipant}
+                      setSelectedMedication={setSelectedMedication}
+                    />
+                  ) : (
+                    <ParticipantMedication
+                      setSelectedMedication={setSelectedMedication}
+                      participantId={selectedParticipant}
+                      setSelectedParticipant={setSelectedParticipant}
+                    />
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <h2 className="section-title">Participant Details</h2>
+                  <SearchableSelect
+                    label="Select Participant"
+                    value={selectedParticipant}
+                    onChange={(value) => setSelectedParticipant(value)}
+                    placeholder="Participant Name"
+                    displayField="name"
+                    valueField="_id"
+                    extraField="community"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      const ProtectedMedicationAdministration = withAuth(
+        MedicationAdministration
+      );
+
+      ReactDOM.render(
+        <ProtectedMedicationAdministration />,
+        document.getElementById('root')
+      );
+    </script>
+  </body>
+</html>
