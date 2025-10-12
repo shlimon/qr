@@ -47,8 +47,6 @@ const getStatusStyles = (status) => {
 function MedicationCard({ medication, setSelectedMedication }) {
     const styles = getStatusStyles(medication.status);
 
-    console.log(medication);
-
     return (
         <div className={`${styles.bgColor} ${styles.borderColor} border rounded-lg p-4 mb-4`} onClick={() => setSelectedMedication(medication?.uid)}>
             <div className="flex flex-wrap justify-between items-start text-xs gap-1">
