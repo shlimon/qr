@@ -92,7 +92,10 @@
               {selectedParticipant ? (
                 <div>
                   {selectedMedication ? (
-                    <Medication medicationId={selectedMedication} />
+                    <Medication
+                      medicationId={selectedMedication}
+                      participantId={selectedParticipant}
+                    />
                   ) : (
                     <ParticipantMedication
                       setSelectedMedication={setSelectedMedication}

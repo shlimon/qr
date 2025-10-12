@@ -1,4 +1,4 @@
-function Medication({ medicationId }) {
+function Medication({ medicationId, participantId }) {
     const [showModal, setShowModal] = React.useState(false);
     const [modalType, setModalType] = React.useState(null); // 'administer', 'refused', 'notAdministered'
     const [observationNotes, setObservationNotes] = React.useState('');
@@ -12,97 +12,97 @@ function Medication({ medicationId }) {
     const [isDrawing, setIsDrawing] = React.useState(false);
 
     // Demo data - Regular Medication(Active)
-    // const medicationData = {
-    //     participant: {
-    //         name: "Patrick Kere Giddy",
-    //         community: "Community A",
-    //         ndis: 517821915
-    //     },
-    //     medicationName: "Paracetamol",
-    //     strength: "500mg",
-    //     type: "medication",
-    //     status: "Active",
-    //     medicationInformation: {
-    //         medicationName: "Paracetamol",
-    //         route: "Oral",
-    //         dosage: "500mg",
-    //         maxDosage: 1,
-    //         administrationEndDate: "2025-12-31T00:00:00.000Z",
-    //         totalAdministered: 5,
-    //         nextAdministration: "SEP 29, 2025 at 1:30PM",
-    //         startDate: "2025-09-15T00:00:00.000Z",
-    //         prescribingDoctor: "Dr. Jane Smith"
-    //     },
-    //     administrationSchedule: [],
-    //     administrationHistory: [],
-    //     alerts: {
-    //         participantAllergic: "Allergic to Aspirin",
-    //         adverseEffectsSteps: "Call Participant emergency Contact. Call 000 if required. Make sure the participant is breathing. Call the team leader to inform them at once."
-    //     },
-    //     emergencyContact: {
-    //         name: "Tim Allen",
-    //         relation: "Father",
-    //         phone: "0416 638 601",
-    //         email: "tim@email.com"
-    //     },
-    //     storageInformation: "Store in locked cupboard",
-    //     note: "Provide with breakfast, and make observation"
-    // };
-
-    // Demo data - PRN Medication (Commented out)
     const medicationData = {
         participant: {
-            name: "Shahrear Participant 15",
-            community: "Community D",
+            name: "Patrick Kere Giddy",
+            community: "Community A",
             ndis: 517821915
         },
-        medicationName: "Ibuprofen",
-        strength: "400mg",
-        type: "prn",
+        medicationName: "Paracetamol",
+        strength: "500mg",
+        type: "medication",
         status: "Active",
         medicationInformation: {
-            medicationName: "Ibuprofen",
+            medicationName: "Paracetamol",
             route: "Oral",
-            dosage: "400mg",
-            maxDosage: 2,
-            administrationEndDate: null,
-            totalAdministered: 3,
-            nextAdministration: null,
-            startDate: "2025-10-01T00:00:00.000Z",
-            prescribingDoctor: "Dr. Mark Wilson"
+            dosage: "500mg",
+            maxDosage: 1,
+            administrationEndDate: "2025-12-31T00:00:00.000Z",
+            totalAdministered: 5,
+            nextAdministration: "SEP 29, 2025 at 1:30PM",
+            startDate: "2025-09-15T00:00:00.000Z",
+            prescribingDoctor: "Dr. Jane Smith"
         },
         administrationSchedule: [],
         administrationHistory: [],
         alerts: {
-            participantAllergic: "Allergic to NSAIDs",
-            adverseEffectsSteps: "Monitor for stomach upset. Contact emergency services if severe reaction occurs."
+            participantAllergic: "Allergic to Aspirin",
+            adverseEffectsSteps: "Call Participant emergency Contact. Call 000 if required. Make sure the participant is breathing. Call the team leader to inform them at once."
         },
         emergencyContact: {
-            name: "Shahrear",
-            relation: "Family Member",
-            phone: "0412 345 678",
-            email: "shahrear@navigatus.com.au"
+            name: "Tim Allen",
+            relation: "Father",
+            phone: "0416 638 601",
+            email: "tim@email.com"
         },
-        storageInformation: "Room temperature",
-        prnSteps: [
-            {
-                step: "Assess pain level (1-10 scale)",
-                order: 1,
-                _id: "68e9adcf42bddc1a20b7598d"
-            },
-            {
-                step: "If pain >= 5, administer one tablet",
-                order: 2,
-                _id: "68e9adcf42bddc1a20b7598e"
-            },
-            {
-                step: "Reassess after 1 hour",
-                order: 3,
-                _id: "68e9adcf42bddc1a20b7598f"
-            }
-        ],
-        prnNote: "Use for moderate pain relief"
+        storageInformation: "Store in locked cupboard",
+        note: "Provide with breakfast, and make observation"
     };
+
+    // Demo data - PRN Medication (Commented out)
+    // const medicationData = {
+    //     participant: {
+    //         name: "Shahrear Participant 15",
+    //         community: "Community D",
+    //         ndis: 517821915
+    //     },
+    //     medicationName: "Ibuprofen",
+    //     strength: "400mg",
+    //     type: "prn",
+    //     status: "Active",
+    //     medicationInformation: {
+    //         medicationName: "Ibuprofen",
+    //         route: "Oral",
+    //         dosage: "400mg",
+    //         maxDosage: 2,
+    //         administrationEndDate: null,
+    //         totalAdministered: 3,
+    //         nextAdministration: null,
+    //         startDate: "2025-10-01T00:00:00.000Z",
+    //         prescribingDoctor: "Dr. Mark Wilson"
+    //     },
+    //     administrationSchedule: [],
+    //     administrationHistory: [],
+    //     alerts: {
+    //         participantAllergic: "Allergic to NSAIDs",
+    //         adverseEffectsSteps: "Monitor for stomach upset. Contact emergency services if severe reaction occurs."
+    //     },
+    //     emergencyContact: {
+    //         name: "Shahrear",
+    //         relation: "Family Member",
+    //         phone: "0412 345 678",
+    //         email: "shahrear@navigatus.com.au"
+    //     },
+    //     storageInformation: "Room temperature",
+    //     prnSteps: [
+    //         {
+    //             step: "Assess pain level (1-10 scale)",
+    //             order: 1,
+    //             _id: "68e9adcf42bddc1a20b7598d"
+    //         },
+    //         {
+    //             step: "If pain >= 5, administer one tablet",
+    //             order: 2,
+    //             _id: "68e9adcf42bddc1a20b7598e"
+    //         },
+    //         {
+    //             step: "Reassess after 1 hour",
+    //             order: 3,
+    //             _id: "68e9adcf42bddc1a20b7598f"
+    //         }
+    //     ],
+    //     prnNote: "Use for moderate pain relief"
+    // };
 
     // Initialize canvas
     React.useEffect(() => {

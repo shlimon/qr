@@ -1,55 +1,3 @@
-// Demo data - remove when API is ready
-const demoData = {
-    participantName: "Patrick Kere Giddy",
-    participantCommunity: "Community A",
-    dosesDueToday: 16,
-    administeredToday: 12,
-    todayMedications: [
-        {
-            _id: "1",
-            medicationName: "Paracetamol",
-            dosage: "500mg",
-            route: "Oral",
-            status: "Scheduled",
-            prn: true
-        },
-        {
-            _id: "2",
-            medicationName: "Paracetamol",
-            dosage: "500mg",
-            route: "Oral",
-            time: "2:00PM",
-            status: "Scheduled",
-        },
-        {
-            _id: "3",
-            medicationName: "Paracetamol",
-            dosage: "500mg",
-            route: "Oral",
-            time: "1:30PM",
-            status: "Completed",
-            actionTakenBy: "Limon Shakwat"
-        },
-        {
-            _id: "4",
-            medicationName: "Paracetamol",
-            dosage: "500mg",
-            route: "Oral",
-            time: "2:00PM",
-            status: "Refused",
-        },
-        {
-            _id: "5",
-            medicationName: "Paracetamol",
-            dosage: "500mg",
-            route: "Oral",
-            time: "1:30PM",
-            status: "Not Administered",
-            actionTakenBy: "Limon Shakwat"
-        }
-    ]
-};
-
 // Get status styling classes
 const getStatusStyles = (status) => {
     switch (status) {
@@ -100,7 +48,7 @@ function MedicationCard({ medication, setSelectedMedication }) {
     const styles = getStatusStyles(medication.status);
 
     return (
-        <div className={`${styles.bgColor} ${styles.borderColor} border rounded-lg p-4 mb-4`} onClick={() => setSelectedMedication(medication?._id)}>
+        <div className={`${styles.bgColor} ${styles.borderColor} border rounded-lg p-4 mb-4`} onClick={() => setSelectedMedication(medication?.uid)}>
             <div className="flex flex-wrap justify-between items-start text-xs gap-1">
                 <div className="flex-1 text-left">
                     <div className="flex items-center gap-2">
@@ -139,29 +87,45 @@ function ParticipantMedication({ participantId, setSelectedMedication }) {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
 
+    //   const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
+    const API_BASE = 'http://localhost:4000/api/app-data';
+
     React.useEffect(() => {
-        // Commented out API call - uncomment when API is ready
-        /*
         const fetchData = async () => {
-          try {
-            const response = await fetch(`${API_BASE}/participant/${participantId}`);
-            if (!response.ok) {
-              throw new Error('Failed to fetch data');
+            try {
+                const response = await fetch(`${API_BASE}/medication-administrations/participant/${participantId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const result = await response.json();
+
+                // Transform API response to component format
+                const transformedData = {
+                    participantName: result.data.participant.name,
+                    participantCommunity: result.data.participant.community,
+                    dosesDueToday: result.data.summary.dueDoses,
+                    administeredToday: result.data.summary.administered,
+                    todayMedications: result.data.medications.map(med => ({
+                        uid: med.uid,
+                        medicationName: med.name,
+                        dosage: med.strength,
+                        route: med.route,
+                        prn: med.type === 'prn',
+                        status: med.status,
+                        time: med.scheduledTime || 'As Required',
+                        note: med.note,
+                        actionTakenBy: med.actionTakenBy
+                    }))
+                };
+
+                setData(transformedData);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
             }
-            const result = await response.json();
-            setData(result);
-          } catch (err) {
-            setError(err.message);
-          } finally {
-            setLoading(false);
-          }
         };
         fetchData();
-        */
-
-        // Using demo data for now
-        setData(demoData);
-        setLoading(false);
     }, [participantId]);
 
     if (loading) {
