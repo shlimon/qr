@@ -15,7 +15,7 @@ function Medication({ medicationId, participantId, setSelectedMedication }) {
     const [error, setError] = React.useState(null);
 
     const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
-    //const API_BASE = 'http://localhost:4000/api/app-data';
+    // const API_BASE = 'http://localhost:4000/api/app-data';
 
     // Auth headers
     const authHeaders = React.useMemo(() => {
@@ -397,12 +397,24 @@ function Medication({ medicationId, participantId, setSelectedMedication }) {
 
                         {/* Allergies Alert */}
                         {medicationData?.medication?.allergies && (
-                            <div className="border border-gray-300 rounded-lg p-4 bg-white flex items-center gap-3">
+                            <div className="border border-gray-300 rounded-lg p-4 bg-[#FEFCEB] flex items-center gap-3">
                                 <div className="text-yellow-500 text-xl flex-shrink-0">⚠️</div>
                                 <div className="flex justify-between w-full items-center gap-2">
                                     <div className="text-xs text-gray-500">Allergies</div>
                                     <div className="text-xs font-medium text-yellow-700 text-right">
                                         {medicationData.medication.allergies}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {medicationData?.medication?.allergies && (
+                            <div className="border border-gray-300 rounded-lg p-4 bg-[#FFF2E6] flex items-center gap-3">
+                                <div className="text-red-500 text-xl flex-shrink-0">🚨</div>
+                                <div className="flex justify-between w-full items-center gap-2">
+                                    <div className="text-xs text-gray-500">Emergency Steps</div>
+                                    <div className="text-xs font-medium text-yellow-700 text-right">
+                                        {medicationData.medication.adverseEffectsSteps}
                                     </div>
                                 </div>
                             </div>
