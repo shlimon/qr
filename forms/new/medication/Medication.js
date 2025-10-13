@@ -15,7 +15,7 @@ function Medication({ medicationId, participantId, setSelectedMedication }) {
     const [error, setError] = React.useState(null);
 
     const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
-    // const API_BASE = 'http://localhost:4000/api/app-data';
+    //const API_BASE = 'http://localhost:4000/api/app-data';
 
     // Auth headers
     const authHeaders = React.useMemo(() => {
@@ -69,7 +69,7 @@ function Medication({ medicationId, participantId, setSelectedMedication }) {
             canvas.height = rect.height;
             setSignatureCanvas(canvas.getContext('2d'));
         }
-    }, [showModal, modalType]);
+    }, [showModal, modalType, stepsConfirmed]);
 
     // Canvas drawing functions
     const getCoordinates = (e) => {
@@ -230,8 +230,7 @@ function Medication({ medicationId, participantId, setSelectedMedication }) {
             if (result?.success) {
                 alert('Medication administration recorded successfully!');
                 setShowModal(false);
-                // Optionally refresh the medication data
-                // You can trigger a re-fetch here if needed
+                setSelectedMedication(null); // Go back to list
             } else {
                 alert(result?.message || 'Failed to record medication administration');
             }
@@ -251,6 +250,7 @@ function Medication({ medicationId, participantId, setSelectedMedication }) {
         setStepsConfirmed(false);
         clearCanvas();
     };
+
 
     return (
         <div className="pb-8">
@@ -307,28 +307,33 @@ function Medication({ medicationId, participantId, setSelectedMedication }) {
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="flex gap-2 flex-wrap justify-end">
-                                <button
-                                    onClick={handleAdminister}
-                                    className="px-2 py-1 bg-blue-600 text-white text-[11px] font-medium rounded hover:bg-blue-700 transition"
-                                >
-                                    Administer
-                                </button>
-                                <button
-                                    onClick={handleRefused}
-                                    className="px-2 py-1 bg-red-500 text-white text-[11px] font-medium rounded hover:bg-red-600 transition"
-                                >
-                                    Refused
-                                </button>
-                                {medicationData?.medication?.type === "medication" && (
-                                    <button
-                                        onClick={handleNotAdministered}
-                                        className="px-2 py-1 bg-orange-500 text-white text-[11px] font-medium rounded hover:bg-orange-600 transition"
-                                    >
-                                        Not Administered
-                                    </button>
-                                )}
+                            <div>
+                                {
+                                    (medicationData?.medication?.status === 'Scheduled' || medicationData?.medication?.status === 'As Required') && <div className="flex gap-2 flex-wrap justify-end">
+                                        <button
+                                            onClick={handleAdminister}
+                                            className="px-2 py-1 bg-blue-600 text-white text-[11px] font-medium rounded hover:bg-blue-700 transition"
+                                        >
+                                            Administer
+                                        </button>
+                                        <button
+                                            onClick={handleRefused}
+                                            className="px-2 py-1 bg-red-500 text-white text-[11px] font-medium rounded hover:bg-red-600 transition"
+                                        >
+                                            Refused
+                                        </button>
+                                        {medicationData?.medication?.type === "medication" && (
+                                            <button
+                                                onClick={handleNotAdministered}
+                                                className="px-2 py-1 bg-orange-500 text-white text-[11px] font-medium rounded hover:bg-orange-600 transition"
+                                            >
+                                                Not Administered
+                                            </button>
+                                        )}
+                                    </div>
+                                }
                             </div>
+
                         </div>
 
                         {/* Route */}

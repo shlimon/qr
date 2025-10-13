@@ -1,4 +1,4 @@
-// Get status styling classes
+
 const getStatusStyles = (status) => {
     switch (status) {
         case "Scheduled":
@@ -85,7 +85,7 @@ function ParticipantMedication({ participantId, setSelectedMedication, setSelect
     const [error, setError] = React.useState(null);
 
     const API_BASE = 'https://dc-central-api-v2.onrender.com/api/app-data';
-    // const API_BASE = 'http://localhost:4000/api/app-data';
+    //const API_BASE = 'http://localhost:4000/api/app-data';
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -95,6 +95,18 @@ function ParticipantMedication({ participantId, setSelectedMedication, setSelect
                     throw new Error('Failed to fetch data');
                 }
                 const result = await response.json();
+
+                // Handle empty data array (no active medications)
+                if (Array.isArray(result.data) && result.data.length === 0) {
+                    setData({
+                        participantName: null,
+                        participantCommunity: null,
+                        dosesDueToday: 0,
+                        administeredToday: 0,
+                        todayMedications: []
+                    });
+                    return;
+                }
 
                 // Transform API response to component format
                 const transformedData = {
@@ -139,6 +151,47 @@ function ParticipantMedication({ participantId, setSelectedMedication, setSelect
 
     if (!data) {
         return <div className="p-4">No data available</div>;
+    }
+
+    // Check if there are no active medications
+    if (!data.todayMedications || data.todayMedications.length === 0) {
+        return (
+            <div className="mt-6">
+                <div className="flex justify-end mb-4">
+                    <button
+                        onClick={() => setSelectedParticipant(null)}
+                        className="px-3 py-2 bg-gray-400 text-white text-sm font-medium rounded hover:bg-gray-500 transition flex items-center gap-2"
+                    >
+                        ← Back To Participant
+                    </button>
+                </div>
+
+                {data.participantName && (
+                    <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-200">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-gray-900 font-semibold">
+                                {data.participantName}
+                            </h2>
+                            {data.participantCommunity && (
+                                <span className="text-gray-500 font-medium text-sm">
+                                    {data.participantCommunity}
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                    <div className="text-4xl mb-3">💊</div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        No Active Medications
+                    </h3>
+                    <p className="text-gray-600">
+                        There are no active medication records found for this participant.
+                    </p>
+                </div>
+            </div>
+        );
     }
 
     return (
