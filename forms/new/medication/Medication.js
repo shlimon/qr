@@ -309,7 +309,7 @@ function Medication({ medicationId, participantId, setSelectedMedication }) {
                             {/* Action Buttons */}
                             <div>
                                 {
-                                    (medicationData?.medication?.status === 'Scheduled' || medicationData?.medication?.status === 'As Required') && <div className="flex gap-2 flex-wrap justify-end">
+                                    (medicationData?.medication?.status === 'scheduled' || medicationData?.medication?.status === 'As Required') && <div className="flex gap-2 flex-wrap justify-end">
                                         <button
                                             onClick={handleAdminister}
                                             className="px-2 py-1 bg-blue-600 text-white text-[11px] font-medium rounded hover:bg-blue-700 transition"
