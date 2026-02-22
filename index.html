@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
@@ -25,11 +25,66 @@
       crossorigin="anonymous"
     />
 
-    <link rel="stylesheet" href="styles.css" />
+    <!-- <link rel="stylesheet" href="styles.css" /> -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f7f8fa;
+      }
+
+      .container {
+        text-align: center;
+        background: white;
+        padding: 50px 40px;
+        max-width: 700px;
+        width: 90%;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        animation: fadeIn 0.8s ease;
+      }
+
+      h1 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-size: 18px;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      .highlight {
+        font-weight: 700;
+        color: #1d4ed8;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <nav class="navbar">
+    <!-- <nav class="navbar">
       <div class="brand-title">Decent Care</div>
       <a href="#" class="toggle-button">
         <span class="bar"></span>
@@ -99,18 +154,15 @@
           <li class="log"><a href="login.html">Log In</a></li>
         </ul>
       </div>
-    </nav>
+    </nav> -->
 
-    <section class="container">
+    <!-- <section class="container">
       <div class="card">
         <div class="card-image">
           <img src="./images/hr.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">HR Appointment</h2>
-        <!-- <p>
-          Discuss any HR matters, such as leave, performance, or workplace
-          concerns, you can easily book an appointment with the HR team.
-        </p> -->
+        
 
         <a
           href="https://outlook.office365.com/owa/calendar/HRAppointment@decentcare.com.au/bookings/"
@@ -118,151 +170,92 @@
         >
       </div>
 
-      <!--Staff Handbook -->
+     
       <div class="card">
         <div class="card-image">
           <img src="./images/procedure.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Staff Handbook</h2>
-        <!-- <p>
-          Staff procedure handbook outlines all the procedure and regulation's
-          that are expected to be followed by all the team members in Decent
-          Care
-        </p> -->
-
+       
         <a href="./prcedure/handbook/staffHandbook.html">Access</a>
       </div>
 
-      <!-- structure -->
-      <!-- <div class="card">
-        <div class="card-image">
-          <img src="./images/structure.gif" alt="" />
-        </div>
-        <h2>Organisational Structure</h2>
-        <p>
-          Staff procedure handbook outlines all the procedure and regulation's
-          that are expected to be followed by all the team members in Decent
-          Care
-        </p>
-
-        <a href="./organisation/divorg.html">Access</a>
-      </div> -->
-
-      <!-- Travel Log -->
+      
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/travel.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Travel Log</h2>
-        <!-- <p>
-          Travel log must be completed at the end of your shift to claim for
-          your KM's travelled.
-        </p> -->
+        
 
         <a href="./forms/travel.html">Record KM's</a>
       </div>
 
-      <!-- Reimbursement Approval  -->
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/policy.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">DC Policy and Procedure</h2>
-        <!-- <p>
-          All the Policy and Procedure is outlined in this section. The Policy
-          communicate the connection between the organization's vision and
-          values and its day-to-day operations. A procedure explains a specific
-          action plan for carrying out a policy.
-        </p> -->
-
+       
         <a href="./policy/staffpolicy/staffpolicy.html">Access</a>
       </div>
 
-      <!-- complaint form -->
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/complaint.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Complaint Form</h2>
-        <!-- <p>
-          If a participant would like to make a complaint, you can complete the
-          "incident form" on behalf of the participant or get an advocate to
-          fill this form.
-        </p> -->
+        
 
         <a href="./forms/Complaint.html">Fill In</a>
       </div>
 
-      <!-- hazard form -->
-      <!-- <div class="card">
-        <div class="card-image">
-          <img src="./images/hazard.gif" alt="" />
-        </div>
-        <h2>Hazard Form</h2>
-        <p>
-          If you identify any potential risk or hazard that the participant is
-          exposed to, please complete the "Hazard Form".
-        </p>
+      
 
-        <a href="./forms/hazard.html">Hazard Form</a>
-      </div> -->
-
-      <!-- Incident form -->
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/incident.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Incident Form</h2>
-        <!-- <p>
-          Please complete the "Incident Form" if an incident has occurred to a
-          participant i.e. sexually abuse, accident, serious injury or death &
-          etc.
-        </p> -->
+        
         <a href="./forms/incident.html">Fill In</a>
       </div>
 
-      <!-- Conflict form -->
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/conflict.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Conflict of Interest Form</h2>
-        <!-- <p>
-          If you are provided with any presents or financial incentives, it will
-          be deemed as a conflict of interest and you will be required to
-          omplete this form.
-        </p> -->
+        
         <a href="./forms/conflict.html">Fill In</a>
       </div>
 
-      <!-- cancellation -->
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/cancelled.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Cancellation</h2>
-        <!-- <p>
-          If the participant would like to achieve a new goal, it needs to be
-          recorded in the goal plan form along with the risk associated with the
-          goals.
-        </p> -->
+        
         <a href="./forms/goal.html">Cancellation</a>
       </div>
 
-      <!-- Financial form -->
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/fin.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Financial Transaction</h2>
-        <!-- <p>
-          If you conduct any financial transaction on behalf of the participant,
-          you will be required to complete the transaction form
-        </p> -->
+        
         <a href="./forms/financialtransaction.html">Fill In</a>
       </div>
 
-      <!-- Medication Schedule-->
+     
       <div class="card">
         <div class="card-image">
           <img src="./images/medication.gif" alt="" />
@@ -270,54 +263,47 @@
         <h2 style="color: whitesmoke">
           Medication Schedule and Administration Chart
         </h2>
-        <!-- <p>
-            If you conduct any financial transaction on behalf of the participant,
-            you will be required to complete the transaction form
-          </p> -->
+        
         <a href="./forms/medication.html">Fill In</a>
       </div>
 
-      <!-- media form -->
+     
       <div class="card">
         <div class="card-image">
           <img src="./images/media.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Media Release</h2>
-        <!-- <p>
-          If a photo of a participant is taken and to be used and is to be used
-          for advertising, promotions and etc. Please fill complete the Media
-          Release Form
-        </p> -->
+        
         <a href="./forms/mediaRelease.html">Fill In</a>
       </div>
 
-      <!-- time Sheet -->
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/time.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Time Availability</h2>
-        <!-- <p>Update time availability start of every month.</p> -->
+       
         <a href="./forms/timeAvailability.html">Fill In</a>
       </div>
 
-      <!-- SW leave form -->
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/leave.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Leave Form</h2>
-        <!-- <p>Please fill in this form for taking time off from work.</p> -->
+        
         <a href="./forms/leave.html">Fill In</a>
       </div>
 
-      <!-- Resources -->
+      
       <div class="card">
         <div class="card-image">
           <img src="./images/resources.gif" alt="" />
         </div>
         <h2 style="color: whitesmoke">Resources</h2>
-        <!-- <p>Please fill in this form for taking time off from work.</p> -->
+        
         <a href="./forms/resources.html">Access</a>
       </div>
     </section>
@@ -331,6 +317,20 @@
       </div>
     </div>
 
-    <script src="index.js" charset="utf-8"></script>
+    <script src="index.js" charset="utf-8"></script> -->
+    <div class="container">
+      <h1>Notice</h1>
+      <p>
+        This app is no longer active. Please use the
+        <span class="highlight">DC APP</span> or contact
+        <span class="highlight">Decent Care</span> office at your earliest
+        convenience.
+      </p>
+    </div>
+
+    <script>
+      // Simple optional JS (can remove if not needed)
+      console.log('Notice page loaded');
+    </script>
   </body>
 </html>
